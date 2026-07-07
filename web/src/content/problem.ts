@@ -4,7 +4,7 @@ export const problem = {
   eyebrow: "Masalah",
   headline: "Pasar energi & karbon berjalan di atas kepercayaan buta.",
   lead:
-    "Triliunan nilai — klaim energi hijau, tagihan listrik, kredit karbon — masih diverifikasi melalui spreadsheet dan janji. Lambat, mahal, dan mudah dimanipulasi.",
+    "Triliunan nilai, klaim energi hijau, tagihan listrik, kredit karbon, masih diverifikasi melalui spreadsheet dan janji. Lambat, mahal, dan mudah dimanipulasi.",
   items: [
     {
       n: "01",
@@ -27,7 +27,7 @@ export const problem = {
     headline: 'Ubah "percaya saya" jadi "cek buktinya di rantai".',
     body: "Setiap pembacaan ditandatangani langsung oleh perangkatnya. AI menilai kewajarannya, lalu menuliskan alasannya ke rantai. Pembayaran diselesaikan sendiri oleh smart contract, bukan oleh manusia.",
     result:
-      "Hasilnya: data energi yang telah ditandatangani dan diperiksa AI, siap dibayar dan dijual — tanpa perantara dan tanpa perdebatan.",
+      "Hasilnya: data energi yang telah ditandatangani dan diperiksa AI, siap dibayar dan dijual, tanpa perantara dan tanpa perdebatan.",
   },
 } as const;
 

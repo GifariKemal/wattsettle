@@ -117,7 +117,7 @@ export default function Simulator() {
             <span className={isReject ? "tag-no" : "tag-ok"}>
               {isReject ? "REJECT" : "APPROVE"}
             </span>{" "}
-            — {verdict.s.verdict}
+            · {verdict.s.verdict}
             <br />
             <span className="att-line">AI attestation:</span>
             {Object.entries(verdict.s.attestation).map(([k, v]) => (

@@ -89,6 +89,8 @@ await new Promise((resolveListen, rejectListen) => {
 
 try {
   await run("node", ["tests/e2e/QA E2E.mjs"], {
+    // shell:false so the space in the script path is preserved as one argv (win32 shell would split it)
+    shell: false,
     env: { ...process.env, QA_BASE_URL: baseURL },
   });
 } finally {

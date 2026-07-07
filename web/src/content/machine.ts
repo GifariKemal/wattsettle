@@ -1,6 +1,6 @@
 // Data untuk "Mesin Settlement" interaktif (input → proses → output) · Opsi 5 & 6.
 // Mesinnya identik; mode hanya mengganti skin/sumber/penerima. Logika putusan
-// (judge) ada di island — ini source-of-truth teks + parameter skenario.
+// (judge) ada di island, ini source-of-truth teks + parameter skenario.
 
 export type Mode = "5" | "6";
 
@@ -26,7 +26,7 @@ export const machine = {
   eyebrow: "Playground · Interaktif",
   title: "Mesin settlement: main sendiri.",
   lead:
-    "Susun input, kirim ke rantai, lalu lihat AI menilai dan menyelesaikan pembayarannya sendiri. Beralih antara Opsi 5 (platform) dan Opsi 6 (Enovatek) — mesin di dalamnya sama persis.",
+    "Susun input, kirim ke rantai, lalu lihat AI menilai dan menyelesaikan pembayarannya sendiri. Beralih antara Opsi 5 (platform) dan Opsi 6 (Enovatek), mesin di dalamnya sama persis.",
   hintHonest: "Tempatkan nilai di zona hijau (rentang wajar) → AI menyetujui dan membayar otomatis.",
   hintTamper: "Aktifkan mode curang → kirim data mustahil → AI menangkap dan menolaknya.",
   stations: [

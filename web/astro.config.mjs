@@ -5,7 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://wattsettle.suriota.id',
+  site: 'https://web3.gifariksuryo.xyz',
   integrations: [react(), icon({ iconDir: 'src/icons' })],
   vite: {
     plugins: [tailwindcss()],

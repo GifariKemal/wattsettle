@@ -48,6 +48,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
       import "../lib/themeInit.ts";
     </script>
     <ClientRouter />
+    <noscript><style>.rv{opacity:1 !important;transform:none !important}</style></noscript>
   </head>
   <body>
     <div class="bg-fx" aria-hidden="true">
@@ -123,7 +124,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
           radial-gradient(60% 50% at 50% -10%, var(--wash-top), transparent 70%),
           var(--color-void);
       }
-      /* blueprint grid — tekstur ter-engineer yang memudar */
+      /* blueprint grid, tekstur ter-engineer yang memudar */
       .bg-fx::before {
         content: ""; position: absolute; inset: 0;
         background-image:
@@ -134,7 +135,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
         mask: radial-gradient(125% 85% at 50% 0%, #000 28%, transparent 72%);
         opacity: 0.55;
       }
-      /* vignette — kedalaman di tepi */
+      /* vignette, kedalaman di tepi */
       .bg-fx::after {
         content: ""; position: absolute; inset: 0;
         background: radial-gradient(125% 125% at 50% 38%, transparent 52%, color-mix(in oklab, var(--color-void) 40%, #000) 100%);
@@ -149,7 +150,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
       @keyframes drift-c { 50% { transform: translate3d(4vw, -6vh, 0) scale(1.06); } }
       @media (prefers-reduced-motion: reduce) { .orb { animation: none; } }
 
-      /* ghost numeral — ornamen angka halaman raksasa, mengisi sudut kosong */
+      /* ghost numeral, ornamen angka halaman raksasa, mengisi sudut kosong */
       .deck-ghost {
         position: fixed; left: clamp(0.3rem, 1.4vw, 1.4rem); bottom: clamp(-3rem, -2.2vw, -0.8rem);
         z-index: -1; pointer-events: none; user-select: none;

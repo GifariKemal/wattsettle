@@ -1,4 +1,4 @@
-// 8 skenario pasar — satu mesin, banyak pintu.
+// 8 skenario pasar, satu mesin, banyak pintu.
 
 export type Scenario = {
   tag: string;

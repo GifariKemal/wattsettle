@@ -15,7 +15,7 @@ export const swot = {
       "Fee-split take-rate = revenue model on-chain",
     ],
     w: [
-      "Abstrak — pembeli perlu dijelaskan",
+      "Abstrak, pembeli perlu dijelaskan",
       "Rel 2-fungsi terlihat 'tipis' vs pemain DeFi",
       "Bergantung AI verifier off-chain",
     ],
@@ -33,7 +33,7 @@ export const swot = {
 
   six: {
     s: [
-      "Konkret — perusahaan + produk + revenue nyata",
+      "Konkret, perusahaan + produk + revenue nyata",
       "Pembayar jelas (penyewa AC)",
       "Demo deterministik; after-sales sudah ada",
       "Revenue recurring (model rental)",
@@ -62,9 +62,9 @@ export const swot = {
     { name: "Powerledger", does: "Trading energi P2P (mapan)", gap: "Bukan attestation AI-verified; bukan industrial Indonesia; bukan BNB" },
     { name: "GenLayer / UMA / Kleros", does: "Oracle verifikasi optimistic / AI (umum)", gap: "General-purpose; tak sentuh last-mile trust energi fisik + device" },
     { name: "AgentKarma", does: "Reputasi agent di ERC-8004", gap: "Reputasi agent, bukan settlement energi fisik" },
-    { name: "zkPull / OwnaFarm", does: "Pattern-setter (juara Mantle / RWA)", gap: "Bukan kompetitor — referensi selera juri; kita 1 level di atas" },
+    { name: "zkPull / OwnaFarm", does: "Pattern-setter (juara Mantle / RWA)", gap: "Bukan kompetitor, referensi selera juri; kita 1 level di atas" },
   ],
 
   verdict:
-    "Kompetitor langsung di celah ini praktis tidak ada. WattSettle memerlukan lima hal langka sekaligus — hardware nyata + domain energi/OT + last-mile trust + customer/distribusi + timing regulasi Indonesia — yang tak dimiliki satu pun pemain di atas.",
+    "Kompetitor langsung di celah ini praktis tidak ada. WattSettle memerlukan lima hal langka sekaligus, hardware nyata + domain energi/OT + last-mile trust + customer/distribusi + timing regulasi Indonesia, yang tak dimiliki satu pun pemain di atas.",
 } as const;

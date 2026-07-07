@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://wattsettle.suriota.id/sitemap.xml
+Sitemap: https://web3.gifariksuryo.xyz/sitemap.xml

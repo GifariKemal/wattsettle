@@ -3,7 +3,8 @@ import { SpeakerSimpleHighIcon, SpeakerSimpleSlashIcon } from "@phosphor-icons/r
 import { sound } from "../../lib/sound";
 
 export default function SoundToggle() {
-  const [on, setOn] = useState(false);
+  // init dari singleton: state suara bertahan lintas navigasi ClientRouter
+  const [on, setOn] = useState(() => sound.enabled);
   return (
     <button
       type="button"

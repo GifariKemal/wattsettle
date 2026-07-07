@@ -182,7 +182,7 @@ export default function SettleMachine() {
                 onChange={(e) => setValue(Number(e.target.value))}
               />
             </div>
-            <div className="sm-scale"><span>0</span><span className="band-lab">wajar {src.expLo}–{src.expHi}</span><span>{src.max}</span></div>
+            <div className="sm-scale"><span>0</span><span className="band-lab">wajar {src.expLo} sampai {src.expHi}</span><span>{src.max}</span></div>
           </div>
 
           <div className="sm-tamper">
@@ -190,7 +190,7 @@ export default function SettleMachine() {
               <button type="button" className={!tamper ? "on" : ""} aria-pressed={!tamper} onClick={() => !running.current && setTamper(false)}>{machine.labels.honest}</button>
               <button type="button" className={`red ${tamper ? "on" : ""}`} aria-pressed={tamper} onClick={() => !running.current && setTamper(true)}>{machine.labels.tamper}</button>
             </div>
-            <p className="sm-thint">{tamper ? `Kirim skenario: “${src.tamperLabel}” — ${machine.hintTamper}` : machine.hintHonest}</p>
+            <p className="sm-thint">{tamper ? `Kirim skenario: “${src.tamperLabel}”, ${machine.hintTamper}` : machine.hintHonest}</p>
           </div>
 
           <button className="sm-launch" type="button" onClick={run}>
@@ -236,7 +236,7 @@ export default function SettleMachine() {
                       <div className="sm-att">
                         <span><span className="k">approved</span>: true</span>
                         <span><span className="k">reading</span>: {round(verdict.value)} {src.unit}</span>
-                        <span><span className="k">expectedRange</span>: {src.expLo}–{src.expHi} {src.unit}</span>
+                        <span><span className="k">expectedRange</span>: {src.expLo} sampai {src.expHi} {src.unit}</span>
                         <span><span className="k">anomalyBps</span>: {verdict.anomalyBps}</span>
                         <span><span className="k">crossCheck</span>: OK</span>
                         <span><span className="k">modelHash</span>: {hex(4).slice(0, 8)}…</span>
@@ -265,7 +265,7 @@ export default function SettleMachine() {
                       <div className="sm-rlines">
                         <span><span className="k">approved</span>: false · <span className="k">anomalyBps</span>: {verdict.anomalyBps}</span>
                         <span><b>0 {m.token} dibayar</b> · penolakan tercatat permanen on-chain</span>
-                        <span className="dim">garbage-in ditolak — signature valid, data tak lolos plausibilitas.</span>
+                        <span className="dim">garbage-in ditolak, signature valid, data tak lolos plausibilitas.</span>
                       </div>
                     </div>
                   )}

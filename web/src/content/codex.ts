@@ -31,7 +31,7 @@ export const codexOptions = {
     {
       k: "04",
       title: "Settle atau refund",
-      body: "AI verifier cek bukti delivery. Approve -> seller dibayar. Reject -> refund/dispute.",
+      body: "AI verifier cek bukti delivery. Approve → seller dibayar. Reject → refund/dispute.",
     },
   ],
   compare: [

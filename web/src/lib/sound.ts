@@ -1,4 +1,4 @@
-// Web Audio singleton — dibagi antar island (SoundToggle mengatur, Simulator memainkan).
+// Web Audio singleton, dibagi antar island (SoundToggle mengatur, Simulator memainkan).
 // Default MATI. Semua fungsi no-op sampai user mengaktifkan suara / browser mendukung audio.
 
 type Note = [freq: number, at: number];
