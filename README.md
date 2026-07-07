@@ -1,16 +1,10 @@
 <div align="center">
 
-<svg width="100%" height="12" viewBox="0 0 1200 12" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="accent bar">
-  <defs>
-    <linearGradient id="hubbar" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#22c55e"/>
-      <stop offset="0.5" stop-color="#06b6d4"/>
-      <stop offset="1" stop-color="#f59e0b"/>
-      <animate attributeName="x1" values="0;0.4;0" dur="5s" repeatCount="indefinite"/>
-    </linearGradient>
-  </defs>
-  <rect width="1200" height="12" rx="6" fill="url(#hubbar)"/>
-</svg>
+[![Live demo](https://img.shields.io/badge/demo-web3.gifariksuryo.xyz-22c55e?style=for-the-badge&logo=cloudflare&logoColor=white)](https://web3.gifariksuryo.xyz)
+&nbsp;
+![Track](https://img.shields.io/badge/track-Finance%20%26%20Commerce-06b6d4?style=for-the-badge)
+&nbsp;
+![BNB Chain](https://img.shields.io/badge/BNB%20Chain-Testnet%2097-f0b90b?style=for-the-badge&logo=binance&logoColor=white)
 
 # ⚡ Indonesia Web3 Hackathon 2026
 
