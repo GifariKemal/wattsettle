@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WattSettle — Opsi 5 & 6 · Indonesia Web3 Hackathon 2026</title>
+<meta name="description" content="Rel pembayaran + wasit-AI untuk energi terverifikasi. Konsep Opsi 5 (WattSettle) & Opsi 6 (Enovatek/PM20H20Q) untuk Indonesia Web3 Hackathon 2026.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="bg-fx"><div class="orb a"></div><div class="orb b"></div><div class="orb c"></div></div>
+<div class="grain"></div>
+
+<!-- NAV -->
+<nav class="nav"><div class="nav-inner">
+  <div class="brand"><span class="dot"></span>WattSettle</div>
+  <div class="nav-links">
+    <a href="#cara">Cara Kerja</a>
+    <a href="#opsi">Opsi 5 &amp; 6</a>
+    <a href="#menang">Kenapa Menang</a>
+    <a href="#pasar">Pasar</a>
+  </div>
+  <div class="nav-actions">
+    <button class="icon-btn" id="soundBtn" title="Nyalakan suara" aria-label="Toggle suara">♪</button>
+  </div>
+</div></nav>
+
+<main>
+
+<!-- HERO -->
+<header class="hero wrap" id="top">
+  <canvas id="flowCanvas"></canvas>
+  <div>
+    <span class="hero-tag rv">Indonesia Web3 Hackathon 2026 · Track <b>Finance &amp; Commerce</b></span>
+    <h1 class="rv">Bukti energi jujur,<br><span class="hl">dibayar otomatis</span> oleh <span class="flowword">AI</span> di rantai.</h1>
+    <p class="lead rv">WattSettle adalah rel pembayaran + wasit-AI untuk energi terverifikasi. Meter menandatangani angka, AI otonom memutuskan keabsahannya, dan smart contract menyelesaikan pembayaran sendiri. <b style="color:var(--ink)">"zkPull untuk energi fisik."</b></p>
+    <div class="hero-cta rv">
+      <a href="#cara" class="btn primary">Lihat simulasinya <span class="ic">→</span></a>
+      <a href="#menang" class="btn ghost">Kenapa bisa juara 1 <span class="ic">↗</span></a>
+    </div>
+    <div class="hero-meta rv">
+      <div><b>90/100</b>skor benchmark<br>(dari 6 opsi)</div>
+      <div><b>78–90%</b>peluang nominasi</div>
+      <div><b>Nyata</b>hardware + revenue<br>(SURIOTA · Enovatek)</div>
+    </div>
+  </div>
+  <div class="scroll-hint"><span>SCROLL</span><span class="bar"></span></div>
+</header>
+
+<!-- PROBLEM -->
+<section id="masalah" class="wrap">
+  <div class="shead rv">
+    <span class="eyebrow">Masalah</span>
+    <h2>Pasar energi &amp; karbon berjalan di atas kepercayaan buta.</h2>
+    <p class="lead">Triliunan klaim energi hijau, tagihan pemakaian, dan kredit karbon diverifikasi oleh spreadsheet dan janji. Lambat, mahal, dan mudah dimanipulasi.</p>
+  </div>
+  <div class="prob-grid">
+    <div class="prob-list">
+      <div class="prob-item rv"><span class="n">01</span><div><h4>Data self-reported</h4><p>Produsen melaporkan angkanya sendiri. Tidak ada yang bisa membuktikan meterannya jujur.</p></div></div>
+      <div class="prob-item rv"><span class="n">02</span><div><h4>Verifikasi manual &amp; lambat</h4><p>Auditor manusia, berminggu-minggu, biaya besar — tidak scalable untuk ribuan meter.</p></div></div>
+      <div class="prob-item rv"><span class="n">03</span><div><h4>Double-counting &amp; greenwashing</h4><p>Sertifikat hijau/karbon rawan diklaim ganda. Pembeli (CBAM/ESG) tak punya bukti tak-terpalsukan.</p></div></div>
+    </div>
+    <div class="prob-card rv">
+      <span class="kicker">SOLUSI</span>
+      <h3 style="margin:.4em 0;font-size:1.5rem">Ubah "percaya saya" jadi "verifikasi skornya".</h3>
+      <p class="lead" style="font-size:1rem">Setiap pembacaan energi ditandatangani kriptografis, dinilai oleh AI otonom yang menulis <i>alasannya</i> ke rantai, lalu diselesaikan sendiri oleh smart contract.</p>
+      <div class="solve"><b>Hasil:</b> data energi kriptografis + teraudit-AI, siap dibayar &amp; dijual — tanpa perantara, tanpa argumen.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SIMULATOR -->
+<section id="cara" class="wrap">
+  <div class="shead rv">
+    <span class="eyebrow">Cara Kerja · Interaktif</span>
+    <h2>Coba sendiri: kirim pembacaan, biarkan AI menilai.</h2>
+    <p class="lead">Klik tombol di bawah. Data mengalir dari meter → rantai → AI verifier → penyelesaian. AI menerima yang jujur dan <span style="color:var(--heat)">menolak yang palsu</span> — otomatis, di depan matamu.</p>
+  </div>
+  <div class="sim rv">
+    <div class="sim-stage" id="simStage">
+      <div class="sim-conn" id="c1"><i></i></div><div class="sim-conn" id="c2"><i></i></div><div class="sim-conn" id="c3"><i></i></div>
+      <div class="node" data-node="0"><div class="glyph">⌁</div><h4>Meter / Gateway</h4><small>PM20H20Q · SRT-MGATE</small><div class="val" id="v0"></div></div>
+      <div class="node" data-node="1"><div class="glyph">⛓</div><h4>Smart Contract</h4><small>submitReading()</small><div class="val" id="v1"></div></div>
+      <div class="node" data-node="2"><div class="glyph">◈</div><h4>AI Verifier</h4><small>otonom · cron</small><div class="val" id="v2"></div></div>
+      <div class="node" data-node="3"><div class="glyph">◎</div><h4>Settlement</h4><small>auto-pay / refund</small><div class="val" id="v3"></div></div>
+    </div>
+    <div class="sim-controls">
+      <button class="btn primary" id="btnReal">Kirim pembacaan asli <span class="ic">✓</span></button>
+      <button class="btn ghost" id="btnFake" style="border-color:rgba(255,106,61,.4)">Kirim data palsu <span class="ic">✕</span></button>
+      <span class="chip" id="simStatus">siap</span>
+    </div>
+    <div class="sim-verdict mono" id="verdict">Menunggu pembacaan… AI verifier akan menuliskan alasan keputusannya di sini, lalu menandatangani transaksinya sendiri.</div>
+  </div>
+</section>
+
+<!-- OPTIONS 5 & 6 -->
+<section id="opsi" class="wrap">
+  <div class="shead rv">
+    <span class="eyebrow">Dua Opsi · Satu Mesin</span>
+    <h2>Opsi 5 adalah rel-nya. Opsi 6 adalah rel itu di produk nyata.</h2>
+    <p class="lead">Mesin di dalamnya identik. Opsi 5 = platform horizontal. Opsi 6 = platform itu dipasang di HVAC rental Enovatek dengan meter PM20H20Q.</p>
+  </div>
+  <div class="opt-switch rv">
+    <button class="on" data-opt="5" id="tab5">Opsi 5 · WattSettle</button>
+    <button data-opt="6" id="tab6">Opsi 6 · Enovatek</button>
+  </div>
+
+  <!-- OPT 5 -->
+  <div class="opt-panel show" id="panel5">
+    <div class="opt-hero">
+      <div>
+        <span class="kicker">PLATFORM · HORIZONTAL</span>
+        <h3>WattSettle — rel M2M energy settlement</h3>
+        <p class="lead">Rel pembayaran netral untuk energi terverifikasi. Colok ke meter apa pun: solar, EV, industri, PLN. Jual <b style="color:var(--ink)">bukti</b>, bukan sekadar listrik.</p>
+        <div class="tag-row">
+          <span class="tag hot">Finance &amp; Commerce</span><span class="tag">RWA</span><span class="tag flow">Autonomous AI</span><span class="tag">BNB-native</span>
+        </div>
+      </div>
+      <div class="panelcard">
+        <span class="kicker">Attestation on-chain</span>
+        <p style="margin:.6em 0;color:var(--muted);font-size:.9rem">Yang membedakan dari "tombol approve": AI menulis alasannya ke rantai.</p>
+        <pre class="mono" style="font-size:.78rem;color:var(--flow);white-space:pre-wrap;line-height:1.7">Attestation {
+  approved:     true
+  expectedRange:480–540 kWh
+  anomalyScore: 0.02
+  crossCheck:   "irradiance OK"
+  modelHash:    0x7a1b…
+}</pre>
+      </div>
+    </div>
+    <div class="panelcard">
+      <span class="kicker">ALUR</span>
+      <div class="steps" style="margin-top:14px">
+        <div class="step"><span class="num">01</span><div><h4>Tanda tangani pembacaan</h4><p>Device tanda-tangani kWh secara kriptografis (EIP-712) — bukti data berasal dari alat terdaftar.</p></div></div>
+        <div class="step"><span class="num">02</span><div><h4>Kirim ke rantai</h4><p><span class="mono" style="color:var(--flow)">submitReading()</span> — signature, timestamp monotonik, &amp; anti-replay diverifikasi.</p></div></div>
+        <div class="step"><span class="num">03</span><div><h4>AI verifier menilai</h4><p>Agent otonom (pola Hermes) cek bounds fisik → z-score anomaly → cross-source, lalu tulis attestation.</p></div></div>
+        <div class="step"><span class="num">04</span><div><h4>Selesaikan otomatis</h4><p>Approve → transfer token ke produsen + fee 1% ke treasury. Reject → 0, alasan tercatat.</p></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPT 6 -->
+  <div class="opt-panel six" id="panel6">
+    <div class="opt-hero">
+      <div>
+        <span class="kicker" style="color:var(--flow)">PRODUK NYATA · VERTIKAL</span>
+        <h3>Enovatek × PM20H20Q — Cooling-as-a-Service</h3>
+        <p class="lead">PT Enovatek Energy menyewakan AC hybrid, dimonitor via DC meter <b style="color:var(--ink)">PM20H20Q</b>. Penyewa membayar per-pemakaian, otomatis, on-chain.</p>
+        <div class="tag-row">
+          <span class="tag flow">Produk shipping</span><span class="tag">Revenue nyata</span><span class="tag hot">Demo deterministik</span><span class="tag">B2B customer</span>
+        </div>
+      </div>
+      <div class="panelcard">
+        <span class="kicker" style="color:var(--flow)">Kenapa ini mesin demo</span>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:12px;margin-top:12px">
+          <li style="display:flex;gap:10px;color:var(--muted);font-size:.92rem"><b style="color:var(--flow)">›</b> Pembayar jelas: penyewa AC (bukan "bayangkan sebuah PLTS").</li>
+          <li style="display:flex;gap:10px;color:var(--muted);font-size:.92rem"><b style="color:var(--flow)">›</b> Produk + perusahaan + revenue nyata → skeptisisme juri runtuh.</li>
+          <li style="display:flex;gap:10px;color:var(--muted);font-size:.92rem"><b style="color:var(--flow)">›</b> After-sales sudah ada (model rental Enovatek).</li>
+        </ul>
+      </div>
+    </div>
+    <div class="panelcard">
+      <span class="kicker" style="color:var(--flow)">DUA ALIRAN NILAI</span>
+      <div class="flow2">
+        <div class="side"><h4 style="color:var(--watt)">A · Billing pemakaian</h4><p>Penyewa pakai AC → PM20H20Q ukur → auto-bayar Enovatek per-kWh. <b style="color:var(--ink)">Revenue utama.</b></p></div>
+        <div class="mid"><div class="arrow">＋</div>protokol ambil<br>fee (take-rate)</div>
+        <div class="side"><h4 style="color:var(--flow)">B · Nilai hijau/karbon</h4><p>AC efisien/hybrid → data terverifikasi jadi carbon/REC/ESG credit atau bukti CBAM. <b style="color:var(--ink)">Upside.</b></p></div>
+      </div>
+      <p style="color:var(--faint);font-size:.85rem;margin-top:18px;font-family:'JBMono'">Catatan produksi: billing nyata pakai stablecoin (bukan token volatil). Demo pakai token suriota yang sudah live.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MONEY FLOW -->
+<section id="uang" class="wrap">
+  <div class="shead rv">
+    <span class="eyebrow">Aliran Uang</span>
+    <h2>Yang punya energi tidak bayar. Mereka dibayar.</h2>
+    <p class="lead">Salah paham paling umum. Pembeli bukti energi yang membayar; produsen yang menerima. WattSettle jadi wasit + kasir di tengah dan mengambil fee kecil.</p>
+  </div>
+  <div class="money">
+    <div class="party buyer rv">
+      <span class="kicker" style="color:var(--gold)">MEMBAYAR</span>
+      <h4 style="margin-top:8px">Pembeli bukti hijau</h4>
+      <ul>
+        <li>Pabrik ekspor kena CBAM (live Jan 2026)</li>
+        <li>Korporat butuh REC / laporan ESG</li>
+        <li>Penyewa AC (Opsi 6) bayar pemakaian</li>
+      </ul>
+    </div>
+    <div class="engine rv">
+      <div class="p">WATTSETTLE</div>
+      <div style="font-family:'Sora';font-weight:700;margin:8px 0">Wasit + Kasir</div>
+      <div style="color:var(--muted);font-size:.82rem">AI verifikasi → settle otomatis → ambil fee 1%</div>
+    </div>
+    <div class="party seller rv">
+      <span class="kicker">DIBAYAR</span>
+      <h4 style="margin-top:8px">Produsen energi</h4>
+      <ul>
+        <li>Pemilik solar rooftop / IPP</li>
+        <li>Pabrik dengan pembangkit efisien</li>
+        <li>Enovatek (operator meter/HVAC)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section class="wrap">
+  <div class="shead rv"><span class="eyebrow">Opsi 5 vs Opsi 6</span><h2>Bukan pilih salah satu — dipakai berlapis.</h2></div>
+  <div class="tbl-scroll rv"><table class="tbl">
+    <tr><th>Aspek</th><th>Opsi 5 · WattSettle</th><th>Opsi 6 · Enovatek</th></tr>
+    <tr><td>Peran</td><td>Rel/platform (horizontal)</td><td>Rel yang sama di 1 produk (vertikal)</td></tr>
+    <tr><td>Konkret</td><td>Agak abstrak</td><td class="win" style="background:rgba(53,224,210,.05)">Sangat konkret — produk nyata</td></tr>
+    <tr><td>Pembeli</td><td>Perlu dijelaskan</td><td>Sudah ada (penyewa AC)</td></tr>
+    <tr><td>Pasar / TAM</td><td>Lebih besar (8 skenario)</td><td>Fokus, tapi nyata &amp; recurring</td></tr>
+    <tr><td>Peran di pitch</td><td>Visi platform (slide)</td><td>Mesin demo (panggung)</td></tr>
+  </table></div>
+  <div class="solve rv" style="margin-top:26px;max-width:none">
+    <b>Strategi:</b> di panggung tunjukkan 1 keran jalan sempurna (Enovatek/PM20H20Q); di slide ceritakan pipa ke semua pasar (WattSettle). Persis pola pemenang OwnaFarm — tapi kita 1 level di atas: hardware + revenue nyata.
+  </div>
+</section>
+
+<!-- WHY WIN -->
+<section id="menang" class="wrap">
+  <div class="shead rv">
+    <span class="eyebrow">Kenapa Menang</span>
+    <h2>Tiga lever tersembunyi yang 100% kita kontrol.</h2>
+    <p class="lead">Bukan keberuntungan — ini "blackbox" yang mendorong peluang nominasi ke &gt;90% di field yang mayoritas pemula.</p>
+  </div>
+  <div class="rv">
+    <div class="lever"><div class="no">01</div><div><h4>Track arbitrage</h4><p>Hindari track AI Agents yang penuh fork-chatbot. Masuk Finance &amp; Commerce — hampir tak ada pemula bisa ship payment-settlement contract yang jalan. Menang nyaris tanpa lawan.</p></div></div>
+    <div class="lever"><div class="no">02</div><div><h4>Moat nyata di 15 detik pertama</h4><p>Satu-satunya PT dengan hardware + revenue nyata. Tampilkan klip lapangan PM20H20Q + invoice redacted → runtuhkan skeptisisme sebelum terbentuk.</p></div></div>
+    <div class="lever"><div class="no">03</div><div><h4>AI autonomy legible on-chain</h4><p>Tulis alasan keputusan AI ke rantai, dan integrasikan registry ERC-8004/BEP-620 BNB yang sudah live — bukan tiruan. Poin teknis tertinggi vs field chatbot.</p></div></div>
+  </div>
+  <div class="warn rv"><b>Koreksi fatal:</b> jangan pernah pitch "self-contained mirror of ERC-8004" — juri BNB tahu registry-nya sudah live sejak 4 Feb 2026. Harus <b>integrasikan</b> yang asli sebagai babak kedua demo.</div>
+
+  <div style="height:56px"></div>
+  <div class="shead rv"><span class="eyebrow">Moat</span><h2>Kenapa orang lain tak bisa meniru.</h2><p class="lead">Butuh 5 hal langka sekaligus dalam satu builder. Prior art (WeatherXM/Arkreen) mengerjakan potongannya — bukan kombinasi ini untuk pasar Indonesia.</p></div>
+  <div class="bento">
+    <div class="cell big rv">
+      <div class="lab">Moat 5-lapis</div>
+      <h3>Duduk di celah yang <span class="em">tak ada</span> yang mau isi.</h3>
+      <p style="margin-bottom:18px">"Terlalu enterprise buat kerumunan crypto, terlalu crypto buat pemain energi lama." Kecuali orang yang punya kaki di dua dunia.</p>
+      <div class="moat-row"><span class="k">1</span><span>Hardware nyata — builder crypto software-only, cuma simulasi</span></div>
+      <div class="moat-row"><span class="k">2</span><span>Domain energi / OT industrial (Modbus/MQTT)</span></div>
+      <div class="moat-row"><span class="k">3</span><span>Penyelesaian last-mile trust (butuh device + fisika nyata)</span></div>
+      <div class="moat-row"><span class="k">4</span><span>Customer &amp; distribusi (siapa yang pasang meter)</span></div>
+      <div class="moat-row"><span class="k">5</span><span>Timing regulasi — CBAM &amp; OJK live Jan 2026</span></div>
+    </div>
+    <div class="cell sm rv"><div class="lab">Selera juri</div><h3>zkPull</h3><p>Juara Mantle: real-world event → verifikasi → auto-release. Struktur persis WattSettle.</p></div>
+    <div class="cell sm rv"><div class="lab">Selera juri</div><h3>OwnaFarm</h3><p>Juara RWA invoice financing dari UKDW Jogja — satu ekosistem juri kita.</p></div>
+    <div class="cell mid rv"><div class="lab">BNB 2026</div><h3 style="font-size:1.15rem">Stablecoin · RWA · Agentic Finance</h3><p>WattSettle memukul ketiganya sekaligus — rep BNB terdorong mengadvokasi internal.</p></div>
+    <div class="cell mid rv"><div class="lab">Kurikulum</div><h3 style="font-size:1.15rem">Reference architecture panitia</h3><p>Sesi 6 = "API + AI Auto-verify". Kita eksekusi jawaban kanonik kelas mereka, kualitas produksi.</p></div>
+  </div>
+
+  <div style="height:56px"></div>
+  <div class="shead rv"><span class="eyebrow">Benchmark</span><h2>Skor melawan 6 opsi.</h2></div>
+  <div class="tbl-scroll rv"><table class="tbl">
+    <tr><th>Opsi</th><th>Track</th><th>Skor</th><th>Nominasi</th><th>Juara-1</th></tr>
+    <tr class="win"><td>5 · WattSettle</td><td>Finance</td><td><div class="bar"><i style="width:90%"></i></div></td><td>78–90%</td><td>42–62%</td></tr>
+    <tr><td>1 · ProofOfWatt</td><td>AI Agents</td><td><div class="bar"><i style="width:74%"></i></div></td><td>80–86%</td><td>38–48%</td></tr>
+    <tr><td>4 · Karmakhet</td><td>AI Agents</td><td><div class="bar"><i style="width:58%"></i></div></td><td>40–50%</td><td>15–24%</td></tr>
+    <tr><td>3 · ProofOfAlpha</td><td>Finance</td><td><div class="bar"><i style="width:54%"></i></div></td><td>35–45%</td><td>12–20%</td></tr>
+    <tr><td>2 · JanjiChain</td><td>Consumer</td><td><div class="bar"><i style="width:48%"></i></div></td><td>25–35%</td><td>8–15%</td></tr>
+  </table></div>
+</section>
+
+<!-- MARKET / SCENARIOS -->
+<section id="pasar" class="wrap">
+  <div class="shead rv"><span class="eyebrow">Pasar · Satu mesin, banyak pintu</span><h2>Delapan skenario. Semua pasar, satu rel.</h2></div>
+  <div class="scen-grid">
+    <div class="scen hero-scen rv"><span class="em">DEMO</span><h4>HVAC · Enovatek</h4><p>Penyewa AC bayar per-pakai via PM20H20Q. Opsi 6.</p></div>
+    <div class="scen rv"><span class="em">REC / ESG</span><h4>Solar → pabrik</h4><p>Produsen hijau dibayar; pembeli dapat sertifikat tak-terpalsukan.</p></div>
+    <div class="scen rv"><span class="em">CBAM</span><h4>Eksportir</h4><p>Buktikan listrik hijau → hindari denda karbon Uni Eropa.</p></div>
+    <div class="scen rv"><span class="em">P2P</span><h4>Microgrid</h4><p>Tetangga ber-solar jual surplus → meter → auto-settle.</p></div>
+    <div class="scen rv"><span class="em">MOBILITY</span><h4>EV charging</h4><p>Charger ukur kWh → pengendara auto-bayar per-sesi.</p></div>
+    <div class="scen rv"><span class="em">ESCO</span><h4>Performance contract</h4><p>Bukti penghematan energi → pembayaran berbasis kinerja.</p></div>
+    <div class="scen rv"><span class="em">CARBON</span><h4>MRV otomatis</h4><p>Pembangkitan terverifikasi → penerbitan carbon credit.</p></div>
+    <div class="scen rv"><span class="em">SUBSIDI</span><h4>Diesel displacement</h4><p>Buktikan EBT menggantikan genset → klaim subsidi/kredit.</p></div>
+  </div>
+</section>
+
+<!-- PROBABILITY + PATH -->
+<section class="wrap">
+  <div class="shead rv"><span class="eyebrow">Kejujuran Angka</span><h2>Peluang nyata — tanpa dilebih-lebihkan.</h2><p class="lead">Nominasi bisa &gt;90% di ujung atas (eksekusi flawless + semua fix). Juara 1 tak bisa dijamin &gt;90% — bergantung faktor di luar kendali. Yang kita lakukan: dorong sekeras mungkin.</p></div>
+  <div class="stat-grid rv">
+    <div class="stat"><div class="big">90</div><div class="lab">skor benchmark /100</div></div>
+    <div class="stat"><div class="big flow">78–90%</div><div class="lab">peluang nominasi</div></div>
+    <div class="stat"><div class="big gold">42–62%</div><div class="lab">juara 1 in-track</div></div>
+    <div class="stat"><div class="big">USD 5K</div><div class="lab">prize pool · 3 track</div></div>
+  </div>
+  <div style="height:44px"></div>
+  <div class="shead rv"><span class="eyebrow">Path-to-90</span><h2>Yang harus benar untuk sampai ke sana.</h2></div>
+  <ul class="path rv">
+    <li><b>Integrasikan</b> registry ERC-8004 BNB yang live (jangan tiruan).</li>
+    <li>Demo pakai <b>1 signature hardware asli</b> (PM20H20Q/SRT-MGATE lapangan) sebagai seed.</li>
+    <li>Tunjukkan <b>reject + approve</b> (AI tolak anomali live), bukan approve saja.</li>
+    <li>Tutup semua <b>hard-gate sekarang</b>: commit harian public, verify contract, ≥2 tx on-chain, README + roadmap + video + tweet (tag @BNBChain @BinanceAcademy @coinvestasi @devweb3jogja).</li>
+    <li>Validasi track pakai <b>data registrasi nyata</b> akhir September.</li>
+    <li>Taruh <b>fee-split on-chain</b> — substansi Finance yang terlihat.</li>
+    <li>Demo deterministik: pre-seed state, pre-fund pool, fallback RPC + <b>video cadangan</b>, rehearse ≥5x.</li>
+  </ul>
+</section>
+
+<!-- REFS + PREDICTION -->
+<section class="wrap">
+  <div class="shead rv"><span class="eyebrow">Referensi &amp; Arah</span><h2>Berdiri di pola yang sudah terbukti menang.</h2></div>
+  <div class="ref-grid">
+    <div class="ref rv"><span class="tag flow">Juara Mantle 2025</span><h4>zkPull</h4><p>PR GitHub merged → verifikasi zkTLS → EigenLayer AVS enforce → auto-payout. Fee success-based 5%. Strukturnya identik dengan WattSettle.</p><div class="link mono">→ "WattSettle = zkPull untuk energi fisik"</div></div>
+    <div class="ref rv"><span class="tag hot">Juara · RWA</span><h4>OwnaFarm</h4><p>Invoice tani → tokenisasi jadi "benih" (game Hay Day). Founder dari UKDW Blockchain Club Yogyakarta — satu ekosistem Dev Web3 Jogja. Menang dengan 1 kasus konkret + visi besar.</p><div class="link mono">→ pola yang kita tiru, 1 level di atas</div></div>
+  </div>
+  <div style="height:28px"></div>
+  <div class="predict rv">
+    <span class="eyebrow">Prediksi Arah · Kenapa future-proof</span>
+    <h3 style="font-size:clamp(1.4rem,2.6vw,2rem);margin:.5em 0">Ke mana puck bergerak — dan kita sudah di sana.</h3>
+    <p class="lead">BNB 2026 mendorong Stablecoin, RWA, dan Agentic Finance dengan primitif native ERC-8004 &amp; x402. Regulasi Indonesia (OJK &amp; CBAM live Jan 2026) menjadikan "energi nyata terverifikasi on-chain oleh perusahaan berizin" persis Web3 matang yang regulator &amp; BNB inginkan.</p>
+    <div class="pills"><span class="pill">RWA · kWh nyata</span><span class="pill">Agentic Finance · AI verifier</span><span class="pill">Settlement · auto-pay</span><span class="pill">ERC-8004 / BEP-620</span></div>
+    <p style="color:var(--muted)">Pasca-hackathon: tiap gateway SURIOTA/Enovatek di lapangan menjadi income node — volume RWA baru, dibangun di Indonesia, di BNB Chain.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="foot wrap">
+  <span class="eyebrow" style="justify-content:center">Demo Day · 30 Agustus 2026</span>
+  <h2>Kami taruh perusahaan nyata on-chain<br>dalam satu weekend.</h2>
+  <p class="lead" style="margin:0 auto">Setiap tim lain mensimulasikan ini. Kami tidak. AI kami baru saja menolak sebuah kebohongan lalu membayar sebuah kebenaran — live, di BNB Chain.</p>
+  <div class="hero-cta" style="justify-content:center;margin-top:32px">
+    <a href="#top" class="btn primary">Kembali ke atas <span class="ic">↑</span></a>
+    <a href="#cara" class="btn ghost">Ulangi simulasi <span class="ic">↻</span></a>
+  </div>
+  <div class="bism">بسم الله · Bismillah — WattSettle × Enovatek</div>
+  <div class="fmeta">PT Surya Inovasi Prioritas (SURIOTA) · Gifari Kemal Suryo · Indonesia Web3 Hackathon 2026</div>
+</footer>
+
+</main>
+
+<script src="assets/lib/gsap.min.js"></script>
+<script src="assets/lib/ScrollTrigger.min.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

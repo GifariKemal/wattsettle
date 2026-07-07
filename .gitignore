@@ -1,28 +1,22 @@
-# Dependencies
+# Kredensial, jangan pernah commit
+.secrets/
+**/.env
+**/.env.*
+*.key
+*.pem
+
+# Build artifacts
 node_modules/
+web/dist/
+web/.astro/
+proofofwatt/out/
+proofofwatt/cache/
+output/
 
-# Build output
-dist/
-.astro/
-
-# Local environment
-.env
-.env.*
-!.env.example
-
-# Logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-
-# OS and editor noise
-.DS_Store
+# OS
 Thumbs.db
-.vscode/
-.idea/
+.DS_Store
 
-# Optional local test output
-test-results/
-playwright-report/
+# Contract deps (restore via forge install)
+proofofwatt/lib/
+proofofwatt/broadcast/
