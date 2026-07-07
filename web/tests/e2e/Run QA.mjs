@@ -88,7 +88,7 @@ await new Promise((resolveListen, rejectListen) => {
 });
 
 try {
-  await run("node", ["tests/e2e/qa-e2e.mjs"], {
+  await run("node", ["tests/e2e/QA E2E.mjs"], {
     env: { ...process.env, QA_BASE_URL: baseURL },
   });
 } finally {
