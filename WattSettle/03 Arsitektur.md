@@ -26,42 +26,9 @@ WattSettle dibangun di atas satu keyakinan arsitektural: **yang di-settle adalah
 
 ## 🗺️ Peta Tiga Layer
 
-```mermaid
-flowchart TD
-  subgraph L1["🔌 Layer 1 · Physical / Edge"]
-    DEV["SRT-MGATE-1210<br>ESP32 · Modbus ke MQTT"]
-    METER["Enovatek PM20H20Q<br>DC meter"]
-    KEY["ECDSA key<br>di device"]
-    FIX["Fixture Reading<br>ter-sign EIP-712<br>pre-seeded untuk demo"]
-    METER --> DEV
-    KEY --> DEV
-    DEV --> FIX
-  end
-
-  subgraph L2["📄 Layer 2 · Settlement Contract"]
-    SUB["submitReading<br>EIP-712 recover + replay + monotonic guard"]
-    ATT["attestAndSettle<br>ruleset gate + fee split"]
-    TOK["suriota ERC20<br>SafeERC20 payout"]
-    SUB --> ATT --> TOK
-  end
-
-  subgraph L3["🤖 Layer 3 · Autonomous Verifier"]
-    LIS["Hermes agent<br>subscribe ReadingSubmitted"]
-    REC["recompute delta + anomaly<br>vs baseline"]
-    BUILD["build Attestation<br>panggil attestAndSettle"]
-    LIS --> REC --> BUILD
-  end
-
-  FIX -->|relay ter-sign| SUB
-  SUB -->|event ReadingSubmitted| LIS
-  BUILD -->|VERIFIER_ROLE, zero click| ATT
-  TOK -->|approve| PAY["💸 bayar produsen<br>fee 1% ke protokol"]
-  TOK -->|reject| REJ["🚫 0 token<br>anomali tercatat"]
-
-  style L1 fill:#0b3d2e,stroke:#22c55e,color:#e6fff2
-  style L2 fill:#0b2d3d,stroke:#06b6d4,color:#e6fbff
-  style L3 fill:#3d2f0b,stroke:#f0b90b,color:#fff8e6
-```
+<div align="center">
+<img src="assets/mmd-03-1.png" alt="Diagram 03 Arsitektur 1">
+</div>
 
 ---
 
@@ -114,25 +81,9 @@ Di panggung, state di-seed deterministik sehingga hasil sudah bisa diprediksi, t
 
 ## 🔁 Satu Loop, End to End
 
-```mermaid
-sequenceDiagram
-  participant D as 🔌 Device SRT-MGATE
-  participant C as 📄 WattSettle.sol
-  participant H as 🤖 Hermes Verifier
-  participant P as 💸 Produsen / Protokol
-
-  D->>C: submitReading (Reading ter-sign EIP-712)
-  C-->>H: emit ReadingSubmitted
-  H->>H: recompute delta + anomaly vs baseline
-  H->>C: attestAndSettle (Attestation, VERIFIER_ROLE)
-  alt approved
-    C->>P: safeTransfer suriota ke produsen
-    C->>P: fee 1% ke treasury
-    C-->>C: emit ReadingAttested (rationale decoded)
-  else rejected
-    C-->>C: status Rejected, 0 token, anomali tercatat
-  end
-```
+<div align="center">
+<img src="assets/mmd-03-2.png" alt="Diagram 03 Arsitektur 2">
+</div>
 
 ---
 

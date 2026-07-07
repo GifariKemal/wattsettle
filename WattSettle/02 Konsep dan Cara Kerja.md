@@ -64,25 +64,9 @@ Dua field terakhir penting untuk kredibilitas. Karena `modelVersionHash` dan `ru
 
 Berikut satu putaran lengkap dari perangkat menandatangani sampai pembayaran atau penolakan tercatat di rantai. Aktor manusia sama sekali tidak menyentuh tombol di jalur kritis ini.
 
-```mermaid
-sequenceDiagram
-  participant D as 🔌 Device SRT-MGATE-1210
-  participant C as 📄 Kontrak WattSettle
-  participant V as 🤖 AI Verifier (Hermes)
-  participant P as 💸 Produsen Energi
-  D->>C: submitReading(Reading EIP-712)
-  Note over C: cek tanda tangan, replay guard, monotonic guard
-  C-->>V: emit event ReadingSubmitted
-  Note over V: recompute delta vs baseline, hitung anomaly, bangun Attestation
-  V->>C: attestAndSettle(id, Attestation)
-  Note over C: cek ruleset gate on-chain
-  alt approve
-    C->>P: safeTransfer token ke produsen
-    C->>C: pungut fee protokol, emit ReadingAttested
-  else reject
-    C->>C: 0 token dibayar, anomali tercatat, emit ReadingAttested
-  end
-```
+<div align="center">
+<img src="assets/mmd-02-1.png" alt="Diagram 02 Konsep dan Cara Kerja 1">
+</div>
 
 Urutan langkahnya. Perangkat memanggil `submitReading` dengan `Reading` yang sudah ditandatangani. Kontrak memverifikasi tanda tangan lalu melewatkannya melalui replay guard dan monotonic guard, kemudian memancarkan event `ReadingSubmitted`. Verifier AI Hermes yang berlangganan event itu bangun sendiri lewat cron tanpa klik, menghitung ulang delta terhadap baseline, mengukur anomali, lalu membangun `Attestation`. Verifier memanggil `attestAndSettle` dengan `VERIFIER_ROLE`. Kontrak memeriksa ruleset gate on-chain. Jika lolos, kontrak membayar produsen memakai `safeTransfer` dan memungut fee protokol. Jika tidak lolos, nol token dibayar dan anomali tetap tercatat sebagai bukti abadi. Kedua cabang sama-sama memancarkan `ReadingAttested` dengan rationale yang bisa didecode di BscScan.
 

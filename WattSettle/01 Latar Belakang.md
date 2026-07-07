@@ -43,15 +43,9 @@ WattSettle dibangun untuk **Indonesia Web3 Hackathon 2026**, kolaborasi Binance 
 
 Timeline resmi (terverifikasi dari kanal Coinvestasi dan Luma, mengoreksi asumsi awal yang keliru):
 
-```mermaid
-flowchart LR
-  R["1 Jul<br/>Registrasi dibuka"] --> W["5 Jul sampai 30 Ags<br/>9 sesi workshop"]
-  W --> P["30 Ags<br/>Sesi 9 pitch training"]
-  P --> S1["1 Sep<br/>Submission dibuka"]
-  S1 --> S2["30 Sep<br/>Submission ditutup"]
-  S2 --> F["14 Okt<br/>Pengumuman finalis"]
-  F --> DD["31 Okt<br/>Demo Day final live"]
-```
+<div align="center">
+<img src="assets/mmd-01-1.png" alt="Diagram 01 Latar Belakang 1">
+</div>
 
 > 💡 Implikasi terbesar dari timeline ini: ada **satu bulan penuh di September** untuk membangun setelah 9 sesi workshop selesai, lalu dua minggu penjurian sebelum finalis diumumkan. Jadwalnya longgar, sehingga tidak ada alasan gate hygiene tidak tuntas.
 

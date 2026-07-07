@@ -28,16 +28,11 @@ WattSettle adalah **rel settlement on-chain untuk energi fisik**. Perangkat SURI
 <img src="assets/loop-settlement.svg" alt="Alur satu loop WattSettle" width="100%">
 </div>
 
-> 💡 Diagram di atas beranimasi. Bila GitHub menampilkannya statis, versi presisi ada di diagram Mermaid berikut.
+> 💡 Diagram di atas beranimasi. Versi diagram statis yang presisi ada di bawah.
 
-```mermaid
-flowchart LR
-  D["🔌 Device menandatangani<br>Reading EIP-712"] --> C["📄 Kontrak WattSettle<br>submitReading"]
-  C -->|event ReadingSubmitted| V["🤖 AI Verifier<br>recompute delta dan anomaly"]
-  V -->|Attestation on-chain| S["📄 attestAndSettle"]
-  S -->|approve| P["💸 bayar suriota ke produsen<br>fee 1% ke protokol"]
-  S -->|reject| X["🚫 0 token<br>anomali tercatat"]
-```
+<div align="center">
+<img src="assets/mmd-00-1.png" alt="Diagram alur satu loop WattSettle (statis)">
+</div>
 
 Karena yang di-settle adalah bacaan meter itu sendiri, tidak ada celah oracle antara bukti fisik dan pembayaran. Meter **adalah** transaksi.
 

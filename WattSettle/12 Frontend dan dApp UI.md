@@ -50,16 +50,9 @@ Situs `web/` melayani penonton yang berbeda dari BscScan. Situs itu menceritakan
 
 Aturan disiplin dua tab (lihat runbook di [15 Demo dan Pitch](<15 Demo dan Pitch.md>)). Sepanjang loop demo, layar hanya berisi dua tab, tidak ada tab hunting.
 
-```mermaid
-flowchart LR
-  subgraph T1["Tab 1, Agent"]
-    A["🤖 Log verifier Hermes<br>plus trigger reading"]
-  end
-  subgraph T2["Tab 2, BscScan"]
-    B["📄 Halaman kontrak WattSettle<br>event ReadingAttested terdekode"]
-  end
-  A -->|cron zero click| B
-```
+<div align="center">
+<img src="assets/mmd-12-1.png" alt="Diagram 12 Frontend dan dApp UI 1">
+</div>
 
 **Tab 1, log dan trigger agent.** Terminal atau panel yang menampilkan verifier Hermes bangun sendiri lewat cron, membaca event `ReadingSubmitted`, menghitung ulang delta dan anomaly, lalu memanggil `attestAndSettle` tanpa klik manusia. Ini bukti autonomy, bukan tombol yang ditekan presenter.
 

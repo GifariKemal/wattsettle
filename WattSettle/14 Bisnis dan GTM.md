@@ -30,13 +30,9 @@ SURIOTA menjual dan men-deploy **SRT-MGATE-1210** serta mengoperasikan produk en
 
 Karena SURIOTA menguasai seluruh stack, dari silicon, firmware, gateway, verifier Hermes, smart contract, sampai settlement token, tidak ada oracle, facilitator, atau vendor eksternal yang ikut memotong margin atau bisa memblokir aliran. Setiap gateway yang sudah terpasang berubah dari penjualan satu kali menjadi sumber recurring, sebab tiap kWh yang lewat memicu settlement yang memungut fee.
 
-```mermaid
-flowchart LR
-  R["🪒 RAZOR<br>SRT-MGATE-1210<br>dijual dan dipasang"] --> INST["🏭 Installed base<br>customer B2B nyata"]
-  INST --> B["🔪 BLADE<br>WattSettle settlement layer"]
-  B -->|tiap kWh terverifikasi| REV["💸 recurring revenue<br>take-rate plus SaaS"]
-  REV -->|kas dan case study| R
-```
+<div align="center">
+<img src="assets/mmd-14-1.png" alt="Diagram 14 Bisnis dan GTM 1">
+</div>
 
 Alur ini adalah flywheel. Hardware menaburkan blade, blade menghasilkan recurring, recurring membiayai penjualan hardware berikutnya. Field pesaing yang berupa software murni tidak punya razor, jadi tidak pernah bisa memasuki loop ini.
 
@@ -73,14 +69,9 @@ Pertanyaan sustainability dari juri hampir selalu roboh di startup software. Unt
 
 ## 🧭 Go To Market Enam Langkah
 
-```mermaid
-flowchart TD
-  G1["1. Beachhead<br>installed base SURIOTA"] --> G2["2. Design-partner<br>1 sampai 3 pilot berbayar"]
-  G2 --> G3["3. Land-and-expand<br>meter ke site ke multi-site"]
-  G3 --> G4["4. Regulatory wedge<br>OJK sandbox plus Perpres 110/2025"]
-  G4 --> G5["5. Ecosystem channel<br>via BNB"]
-  G5 --> G6["6. White-label<br>fase 2, lisensi rail"]
-```
+<div align="center">
+<img src="assets/mmd-14-2.png" alt="Diagram 14 Bisnis dan GTM 2">
+</div>
 
 1. **Beachhead sama dengan installed base SURIOTA sendiri.** WattSettle dijual sebagai upgrade berbayar berupa verifiable auto-settled billing plus audit trail di gateway yang sudah ter-deploy. Cold-start nol, karena hardware, relasi, kontrak support, dan data metered sudah ada. Ini unfair advantage terbesar dibanding field manapun.
 2. **Design-partner motion.** Konversi satu sampai tiga customer menjadi pilot berbayar, dalam skala puluhan gateway. Hasilnya adalah case study plus PO atau invoice yang di-redaksi, dua-duanya menjadi collateral pitch sekaligus amunisi sales enterprise.
@@ -103,15 +94,9 @@ Angka pasar besar dipakai untuk menunjukkan ceiling, bukan untuk dijanjikan. M2M
 
 WattSettle adalah rel generik. Enovatek adalah tempat rel itu dipasang di satu produk nyata, sehingga demo memiliki perusahaan, produk, dan revenue yang benar-benar ada. PT Enovatek Energy adalah mitra green energy dengan lini solar, wind turbine, LED, serta Hybrid HVAC. Produk **PM20H20Q** adalah DC meter untuk model rental AC yang disebut Cooling as a Service. Penyewa membayar per pemakaian, meter mengukur, kontrak dan AI memverifikasi, lalu pembayaran mengalir otomatis ke Enovatek beserta fee protokol.
 
-```mermaid
-flowchart LR
-  T["🧊 Penyewa memakai AC<br>Cooling as a Service"] --> M["📟 PM20H20Q<br>mengukur pemakaian DC"]
-  M -->|menandatangani reading EIP-712| C["📄 Kontrak WattSettle"]
-  C --> V["🤖 AI verify anti-tamper"]
-  V -->|approve| PAY["💸 penyewa auto membayar<br>Enovatek per pemakaian"]
-  PAY --> FEE["🏦 protokol memungut fee 1 persen<br>take-rate"]
-  V -->|reject| REC["🚫 0 token, anomali tercatat on-chain"]
-```
+<div align="center">
+<img src="assets/mmd-14-3.png" alt="Diagram 14 Bisnis dan GTM 3">
+</div>
 
 Ada dua aliran nilai. Pertama, billing pemakaian sebagai revenue utama per kWh terukur. Kedua, carbon, REC, ESG, dan CBAM sebagai upside dari data yang sudah terverifikasi.
 

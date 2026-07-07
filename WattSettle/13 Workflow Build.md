@@ -62,12 +62,9 @@ Kolom **Gate ditutup** menandai hard submission gate yang diselesaikan di sesi i
 
 ## 🗓️ Milestone Resmi dan Timeline
 
-```mermaid
-flowchart LR
-  A["Workshop<br/>5 Jul sampai 30 Ags<br/>9 sesi, gate hygiene dari Sesi 1"] --> B["Build dan Submit<br/>1 sampai 30 Sep<br/>rehearse 20 kali, submit sebelum 30 Sep"]
-  B --> C["Finalist<br/>14 Okt"]
-  C --> D["Demo Day<br/>31 Okt, final live"]
-```
+<div align="center">
+<img src="assets/mmd-13-1.png" alt="Diagram 13 Workflow Build 1">
+</div>
 
 > ⚠️ Koreksi fatal terhadap asumsi awal. Demo Day **bukan** 30 Agustus. Sesi 9 (30 Ags) adalah pitch training. Submission dibuka 1 September dan ditutup 30 September, finalis diumumkan 14 Oktober, Demo Day live 31 Oktober 2026. Ada satu bulan penuh untuk build setelah workshop, jadwal jauh lebih longgar dari yang diasumsikan. Tidak ada alasan gate hygiene tidak tuntas.
 

@@ -28,16 +28,9 @@
 
 ## 🗺️ Peta Baca
 
-```mermaid
-flowchart TD
-  A["00 Ikhtisar"] --> B["01 Latar Belakang"]
-  B --> C["02 Konsep dan Cara Kerja"]
-  C --> D["Teknis 03 sampai 12"]
-  D --> E["13 Workflow Build<br>tulang punggung per sesi"]
-  E --> F["14 Bisnis · 15 Demo"]
-  F --> G["16 Risiko · 17 SWOT · 18 Roadmap"]
-  G --> H["Lampiran 19 sampai 22"]
-```
+<div align="center">
+<img src="assets/mmd-README-1.png" alt="Diagram README 1">
+</div>
 
 Pembaca baru mulai dari `00`. Saat membangun tiap sesi workshop, buka `13 Workflow Build` sebagai peta, lalu lompat ke bab teknis yang dirujuk.
 

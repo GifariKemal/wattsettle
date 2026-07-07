@@ -26,15 +26,9 @@ Sebagian besar entri hackathon mati bukan karena idenya lemah, melainkan karena 
 
 ## 🗺️ Peta Enam Kill-shot
 
-```mermaid
-flowchart TD
-  KS1["KS1 · Framing fatal<br>self-contained mirror"] --> FIX1["INTEGRASI ERC-8004 live"]
-  KS2["KS2 · Autonomy theater<br>gate cuma if-statement"] --> FIX2["Tunjukkan satu rejection"]
-  KS3["KS3 · Moat melayang<br>klip tidak terhubung tx"] --> FIX3["Tangkap satu signature nyata"]
-  KS4["KS4 · Track arbitrage<br>bisa jadi liability"] --> FIX4["Scout densitas + fee on-chain"]
-  KS5["KS5 · Demo self-brick<br>replay guard revert"] --> FIX5["Fixture fresh + video fallback"]
-  KS6["KS6 · Gate-hygiene fiksi<br>disqualifier tersembunyi"] --> FIX6["Tutup semua gate + screenshot"]
-```
+<div align="center">
+<img src="assets/mmd-16-1.png" alt="Diagram 16 Risiko dan Kill-shots 1">
+</div>
 
 ---
 
