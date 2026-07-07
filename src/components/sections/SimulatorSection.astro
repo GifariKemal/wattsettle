@@ -1,0 +1,24 @@
+---
+import Section from "../ui/Section.astro";
+import Simulator from "../islands/Simulator.tsx";
+import { simulator } from "../../content/simulator";
+---
+<Section
+  id="cara"
+  label="Simulator"
+  desc="Coba live: kirim reading, AI menilai & bayar sendiri"
+  eyebrow={simulator.eyebrow}
+  title={simulator.headline}
+  lead={simulator.lead}
+>
+  <div class="bezel sim-wrap rv">
+    <div class="core">
+      <Simulator client:load />
+    </div>
+  </div>
+</Section>
+
+<style>
+  .sim-wrap { width: 100%; }
+  .sim-wrap .core { padding: clamp(1.2rem, 2.5vw, 2rem); }
+</style>

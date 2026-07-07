@@ -1,0 +1,51 @@
+---
+// Slide: header ringkas (auto) + body yang MENGISI sisa tinggi viewport.
+// header via props (eyebrow/title/lead); konten via <slot/>. Ikon tematik per id.
+import { Icon } from "astro-icon/components";
+interface Props {
+  id?: string;
+  label?: string;
+  desc?: string;
+  eyebrow?: string;
+  title?: string;
+  lead?: string;
+  class?: string;
+}
+const { id, label, desc, eyebrow, title, lead, class: cls = "" } = Astro.props;
+
+const ICONS: Record<string, string> = {
+  masalah: "ph:warning",
+  cara: "ph:flow-arrow",
+  opsi: "ph:squares-four",
+  codex: "ph:shopping-cart-simple",
+  mesin: "ph:cpu",
+  uang: "ph:scales",
+  banding: "ph:git-diff",
+  swot: "ph:crosshair",
+  menang: "ph:sliders-horizontal",
+  moat: "ph:shield-check",
+  skor: "ph:chart-bar",
+  pasar: "ph:map-trifold",
+  peluang: "ph:percent",
+  path: "ph:list-checks",
+  referensi: "ph:trophy",
+  prediksi: "ph:compass",
+};
+const icon = id ? ICONS[id] : undefined;
+---
+<section id={id} data-label={label} data-desc={desc} class:list={["deck-page", cls]}>
+  <div class="slide container">
+    {(eyebrow || title || lead) && (
+      <header class="slide-head">
+        {eyebrow && <span class="eyebrow rv">{icon && <Icon name={icon} class="eb-ic" />}{eyebrow}</span>}
+        {title && <h2 class="slide-title rv" data-delay="60" set:html={title} />}
+        {lead && <p class="slide-lead rv" data-delay="110">{lead}</p>}
+      </header>
+    )}
+    <div class="slide-body"><slot /></div>
+  </div>
+</section>
+
+<style>
+  .eb-ic { font-size: 1rem; color: var(--color-flow); flex-shrink: 0; }
+</style>

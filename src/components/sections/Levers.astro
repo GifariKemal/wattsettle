@@ -1,0 +1,79 @@
+---
+import Section from "../ui/Section.astro";
+import { levers as l } from "../../content/why";
+---
+<Section
+  id="menang"
+  label="Kenapa Menang"
+  desc="Tiga lever blackbox yang 100% kita kontrol"
+  eyebrow={l.eyebrow}
+  title={l.headline}
+  lead={l.lead}
+>
+  <div class="lever-wrap">
+    <div class="levers">
+      {l.items.map((it, i) => (
+        <div class="lever rv" data-delay={i * 90}>
+          <div class="no">{it.no}</div>
+          <h4>{it.title}</h4>
+          <p>{it.body}</p>
+        </div>
+      ))}
+    </div>
+
+    <div class="warn rv" data-delay="120">
+      <span class="warn-label">{l.warn.label}</span>
+      <p>{l.warn.body}</p>
+    </div>
+  </div>
+</Section>
+
+<style>
+  .lever-wrap { display: flex; flex-direction: column; gap: 1.1rem; width: 100%; }
+  .levers { display: grid; gap: 1.1rem; grid-template-columns: 1fr; flex: 1; }
+  @media (min-width: 860px) { .levers { grid-template-columns: repeat(3, 1fr); } }
+  .lever {
+    padding: 1.6rem;
+    border-radius: 1.3rem;
+    border: 1px solid var(--edge);
+    background:
+      radial-gradient(120% 80% at 0% 0%, color-mix(in oklab, var(--color-watt) 8%, transparent), transparent 55%),
+      linear-gradient(180deg, color-mix(in oklab, var(--color-ink) 3%, transparent), transparent);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.4s var(--ease-out-quint), border-color 0.4s ease;
+  }
+  .lever:hover { transform: translateY(-4px); border-color: var(--edge-strong); }
+  .lever .no {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: transparent;
+    -webkit-text-stroke: 1px color-mix(in oklab, var(--color-watt) 55%, transparent);
+    line-height: 1;
+    margin-bottom: 0.9rem;
+  }
+  .lever h4 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+  .lever p { color: var(--color-muted); font-size: 0.9rem; line-height: 1.55; }
+
+  .warn {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    padding: 1.15rem 1.4rem;
+    border-radius: 1.1rem;
+    border: 1px solid color-mix(in oklab, var(--color-heat) 32%, transparent);
+    background: color-mix(in oklab, var(--color-heat) 7%, transparent);
+  }
+  .warn-label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-heat);
+    flex-shrink: 0;
+    padding-top: 0.15rem;
+  }
+  .warn p { color: var(--color-ink); font-size: 0.92rem; line-height: 1.55; flex: 1 1 300px; }
+</style>

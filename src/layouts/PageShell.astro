@@ -1,0 +1,189 @@
+---
+import { ClientRouter } from "astro:transitions";
+import "@fontsource-variable/bricolage-grotesque";
+import "@fontsource-variable/jetbrains-mono";
+import "@fontsource/geist-sans/400.css";
+import "@fontsource/geist-sans/500.css";
+import "@fontsource/geist-sans/600.css";
+import "@fontsource/geist-sans/700.css";
+import "../styles/global.css";
+import { site } from "../content/site";
+import { pages, href, total } from "../content/nav";
+import SoundToggle from "../components/islands/SoundToggle.tsx";
+import ThemeToggle from "../components/islands/ThemeToggle.tsx";
+
+interface Props { slug?: string }
+const { slug = "" } = Astro.props;
+const idx = Math.max(0, pages.findIndex((p) => p.slug === slug));
+const page = pages[idx];
+const prev = pages[idx - 1];
+const next = pages[idx + 1];
+const title = idx === 0 ? site.title : `${page.label} · WattSettle`;
+const ogImage = new URL("/og.png", Astro.site).href;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+---
+
+<!doctype html>
+<html lang="id" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonical} />
+    <title>{title}</title>
+    <meta name="description" content={site.description} />
+    <meta name="robots" content="index,follow" />
+    <meta name="theme-color" content="#060708" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={site.description} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={site.description} />
+    <meta name="twitter:image" content={ogImage} />
+    <script>
+      import "../lib/themeInit.ts";
+    </script>
+    <ClientRouter />
+  </head>
+  <body>
+    <div class="bg-fx" aria-hidden="true">
+      <span class="orb orb-a"></span><span class="orb orb-b"></span><span class="orb orb-c"></span><span class="orb orb-d"></span>
+    </div>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="deck-ghost" aria-hidden="true">{String(idx + 1).padStart(2, "0")}</div>
+
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="menu-btn" data-menu-toggle aria-label="Buka daftar halaman" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+        <a href="/" class="brand"><span class="brand-dot"></span>{site.name}</a>
+      </div>
+      <div class="controls">
+        <ThemeToggle client:load />
+        <SoundToggle client:load />
+      </div>
+    </header>
+
+    <!-- Page menu overlay -->
+    <aside class="deck-menu" data-menu aria-hidden="true">
+      <div class="deck-menu-inner">
+        <span class="eyebrow menu-eyebrow">Daftar Halaman · WattSettle</span>
+        <ol class="menu-list">
+          {pages.map((p, i) => (
+            <li>
+              <a class="menu-item" href={href(p.slug)} aria-current={p.slug === slug ? "true" : "false"}>
+                <span class="mi-num">{String(i + 1).padStart(2, "0")}</span>
+                <span><span class="mi-title">{p.label}</span><span class="mi-desc">{p.desc}</span></span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </aside>
+
+    <!-- Progress -->
+    <div class="deck-progress"><i style={`width:${((idx + 1) / total) * 100}%`}></i></div>
+
+    <!-- Rail dots -->
+    <nav class="deck-rail" aria-label="Navigasi halaman">
+      {pages.map((p) => (
+        <a href={href(p.slug)} data-label={p.label} aria-label={p.label} aria-current={p.slug === slug ? "true" : "false"}></a>
+      ))}
+    </nav>
+
+    <!-- Prev / next + counter -->
+    <div class="deck-nav">
+      <span class="counter"><b>{String(idx + 1).padStart(2, "0")}</b> / {String(total).padStart(2, "0")}</span>
+      {prev
+        ? <a class="nav-btn" data-nav-prev href={href(prev.slug)} aria-label={`Ke ${prev.label}`}>‹</a>
+        : <span class="nav-btn" aria-disabled="true">‹</span>}
+      {next
+        ? <a class="nav-btn" data-nav-next href={href(next.slug)} aria-label={`Ke ${next.label}`}>›</a>
+        : <span class="nav-btn" aria-disabled="true">›</span>}
+    </div>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <script>
+      import "../lib/nav.ts";
+    </script>
+
+    <style>
+      .bg-fx {
+        position: fixed; inset: 0; z-index: -1; overflow: hidden;
+        background:
+          radial-gradient(60% 50% at 50% -10%, var(--wash-top), transparent 70%),
+          var(--color-void);
+      }
+      /* blueprint grid — tekstur ter-engineer yang memudar */
+      .bg-fx::before {
+        content: ""; position: absolute; inset: 0;
+        background-image:
+          linear-gradient(to right, color-mix(in oklab, var(--color-ink) 5%, transparent) 1px, transparent 1px),
+          linear-gradient(to bottom, color-mix(in oklab, var(--color-ink) 5%, transparent) 1px, transparent 1px);
+        background-size: 62px 62px;
+        -webkit-mask: radial-gradient(125% 85% at 50% 0%, #000 28%, transparent 72%);
+        mask: radial-gradient(125% 85% at 50% 0%, #000 28%, transparent 72%);
+        opacity: 0.55;
+      }
+      /* vignette — kedalaman di tepi */
+      .bg-fx::after {
+        content: ""; position: absolute; inset: 0;
+        background: radial-gradient(125% 125% at 50% 38%, transparent 52%, color-mix(in oklab, var(--color-void) 40%, #000) 100%);
+      }
+      .orb { position: absolute; border-radius: 50%; filter: blur(90px); opacity: var(--orb-opacity, 0.4); will-change: transform; }
+      .orb-a { width: 44vw; height: 44vw; top: -12vw; left: -6vw; background: radial-gradient(circle, color-mix(in oklab, var(--color-watt) 55%, transparent), transparent 65%); animation: drift-a 26s ease-in-out infinite; }
+      .orb-b { width: 40vw; height: 40vw; top: 30vh; right: -12vw; background: radial-gradient(circle, color-mix(in oklab, var(--color-flow) 50%, transparent), transparent 65%); animation: drift-b 32s ease-in-out infinite; }
+      .orb-c { width: 38vw; height: 38vw; bottom: -10vw; left: 20vw; background: radial-gradient(circle, color-mix(in oklab, var(--color-volt) 42%, transparent), transparent 65%); animation: drift-c 38s ease-in-out infinite; }
+      .orb-d { width: 32vw; height: 32vw; top: 2vh; left: 38vw; background: radial-gradient(circle, color-mix(in oklab, var(--color-gold) 32%, transparent), transparent 65%); animation: drift-a 30s ease-in-out infinite reverse; }
+      @keyframes drift-a { 50% { transform: translate3d(6vw, 5vh, 0) scale(1.08); } }
+      @keyframes drift-b { 50% { transform: translate3d(-7vw, -4vh, 0) scale(1.1); } }
+      @keyframes drift-c { 50% { transform: translate3d(4vw, -6vh, 0) scale(1.06); } }
+      @media (prefers-reduced-motion: reduce) { .orb { animation: none; } }
+
+      /* ghost numeral — ornamen angka halaman raksasa, mengisi sudut kosong */
+      .deck-ghost {
+        position: fixed; left: clamp(0.3rem, 1.4vw, 1.4rem); bottom: clamp(-3rem, -2.2vw, -0.8rem);
+        z-index: -1; pointer-events: none; user-select: none;
+        font-family: var(--font-display); font-weight: 800; line-height: 0.7;
+        font-size: clamp(11rem, 27vw, 25rem); letter-spacing: -0.05em;
+        color: transparent;
+        -webkit-text-stroke: 1.5px color-mix(in oklab, var(--color-ink) 7%, transparent);
+      }
+      @media (max-width: 720px) { .deck-ghost { font-size: 40vw; bottom: -3vw; } }
+
+      .topbar {
+        position: fixed; top: 0; left: 0; right: 0; z-index: 46;
+        display: flex; align-items: center; justify-content: space-between;
+        padding: clamp(1rem, 2.5vh, 1.5rem) clamp(1rem, 3vw, 2rem);
+        pointer-events: none;
+      }
+      .topbar > * { pointer-events: auto; }
+      .brand {
+        display: inline-flex; align-items: center; gap: 0.55rem;
+        padding: 0.5rem 1rem; border-radius: 999px;
+        border: 1px solid var(--edge);
+        background: color-mix(in oklab, var(--color-void) 55%, transparent);
+        backdrop-filter: blur(14px);
+        font-family: var(--font-display); font-weight: 700; letter-spacing: -0.02em;
+        color: var(--color-ink); text-decoration: none;
+      }
+      .brand-dot { width: 0.55rem; height: 0.55rem; border-radius: 50%; background: var(--color-watt); box-shadow: 0 0 14px var(--color-watt); animation: dot-pulse 2.6s ease-in-out infinite; }
+      @keyframes dot-pulse { 0%, 100% { box-shadow: 0 0 12px var(--color-watt); } 50% { box-shadow: 0 0 22px var(--color-watt), 0 0 6px var(--color-watt); } }
+      .controls {
+        display: flex; gap: 0.5rem; padding: 0.35rem; border-radius: 999px;
+        border: 1px solid var(--edge);
+        background: color-mix(in oklab, var(--color-void) 55%, transparent);
+        backdrop-filter: blur(14px);
+      }
+    </style>
+  </body>
+</html>

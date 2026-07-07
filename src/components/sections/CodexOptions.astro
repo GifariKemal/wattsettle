@@ -1,0 +1,232 @@
+---
+import Section from "../ui/Section.astro";
+import { codexOptions as c } from "../../content/codex";
+---
+<Section
+  id="codex"
+  label="Opsi Codex"
+  desc="AgentCart TrustPay: challenger finance/ecommerce dari riset Codex"
+  eyebrow={c.eyebrow}
+  title={c.headline}
+  lead={c.lead}
+>
+  <div class="codex-grid">
+    <article class="verdict rv">
+      <div class="score-pill">
+        <b>{c.verdict.score}</b>
+        <span>{c.verdict.label}</span>
+      </div>
+      <span class="lab">Pivot candidate · bukan build utama</span>
+      <h3>{c.verdict.title}</h3>
+      <p>{c.verdict.body}</p>
+      <div class="tags">
+        <span class="tag tag-flow">Agentic Commerce</span>
+        <span class="tag tag-watt">Escrow</span>
+        <span class="tag tag-gold">Refund Layer</span>
+      </div>
+    </article>
+
+    <div class="flow-stack">
+      {c.flow.map((step, i) => (
+        <article class="flow-card rv" data-delay={i * 70}>
+          <span class="num">{step.k}</span>
+          <div>
+            <h4>{step.title}</h4>
+            <p>{step.body}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+
+  <div class="compare-strip">
+    {c.compare.map((item, i) => (
+      <article class:list={["compare-card rv", item.winner && "winner"]} data-delay={140 + i * 70}>
+        <div class="compare-head">
+          <h4>{item.name}</h4>
+          <b>{item.score}</b>
+        </div>
+        <p>{item.body}</p>
+      </article>
+    ))}
+  </div>
+
+  <div class="bottom-grid">
+    <article class="demo rv" data-delay="220">
+      <span class="lab">Demo 3 menit</span>
+      <p>{c.demo}</p>
+    </article>
+    <article class="demo rv" data-delay="280">
+      <span class="lab">Keputusan</span>
+      <p>{c.recommendation}</p>
+    </article>
+  </div>
+
+  <div class="swot-mini">
+    {c.swot.map(([k, body], i) => (
+      <div class="swot-cell rv" data-delay={260 + i * 55}>
+        <span>{k}</span>
+        <p>{body}</p>
+      </div>
+    ))}
+  </div>
+</Section>
+
+<style>
+  .codex-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    width: 100%;
+  }
+  @media (min-width: 920px) {
+    .codex-grid { grid-template-columns: 0.9fr 1.1fr; align-items: stretch; }
+  }
+
+  .verdict {
+    position: relative;
+    min-height: 100%;
+    padding: 1.45rem;
+    border-radius: 1.35rem;
+    border: 1px solid color-mix(in oklab, var(--color-flow) 34%, transparent);
+    background:
+      radial-gradient(100% 80% at 0% 0%, color-mix(in oklab, var(--color-flow) 15%, transparent), transparent 58%),
+      radial-gradient(90% 80% at 100% 100%, color-mix(in oklab, var(--color-watt) 10%, transparent), transparent 58%),
+      linear-gradient(180deg, var(--color-panel), var(--color-panel-2));
+    overflow: hidden;
+  }
+  .verdict::after {
+    content: "7.5";
+    position: absolute;
+    right: -0.2rem;
+    bottom: -1.1rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(5rem, 10vw, 8rem);
+    line-height: 0.8;
+    color: transparent;
+    -webkit-text-stroke: 1px color-mix(in oklab, var(--color-flow) 22%, transparent);
+    pointer-events: none;
+  }
+  .score-pill {
+    width: max-content;
+    display: flex;
+    align-items: baseline;
+    gap: 0.45rem;
+    padding: 0.45rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid color-mix(in oklab, var(--color-watt) 35%, transparent);
+    background: color-mix(in oklab, var(--color-watt) 10%, transparent);
+    margin-bottom: 1.05rem;
+  }
+  .score-pill b { font-family: var(--font-display); font-size: 1.45rem; color: var(--color-watt); line-height: 1; }
+  .score-pill span { font-family: var(--font-mono); font-size: 0.66rem; color: var(--color-muted); letter-spacing: 0.08em; text-transform: uppercase; }
+  .lab {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-faint);
+  }
+  .verdict h3 { font-size: clamp(1.35rem, 2.1vw, 1.8rem); margin: 0.45rem 0 0.65rem; max-width: 14ch; }
+  .verdict p { color: var(--color-muted); font-size: 0.9rem; line-height: 1.55; max-width: 50ch; }
+  .tags { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 1rem; position: relative; z-index: 1; }
+
+  .flow-stack {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+  }
+  @media (min-width: 620px) {
+    .flow-stack { grid-template-columns: 1fr 1fr; }
+  }
+  .flow-card {
+    display: flex;
+    gap: 0.85rem;
+    align-items: flex-start;
+    padding: 1rem;
+    border-radius: 1rem;
+    border: 1px solid var(--edge);
+    background: color-mix(in oklab, var(--color-ink) 3%, transparent);
+  }
+  .flow-card .num {
+    font-family: var(--font-mono);
+    color: var(--color-flow);
+    border: 1px solid color-mix(in oklab, var(--color-flow) 30%, transparent);
+    border-radius: 0.65rem;
+    padding: 0.35rem 0.42rem;
+    font-size: 0.72rem;
+    flex-shrink: 0;
+  }
+  .flow-card h4 { font-size: 1rem; margin-bottom: 0.35rem; }
+  .flow-card p { color: var(--color-muted); font-size: 0.82rem; line-height: 1.45; }
+
+  .compare-strip {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    margin-top: 0.95rem;
+    width: 100%;
+  }
+  @media (min-width: 850px) {
+    .compare-strip { grid-template-columns: repeat(3, 1fr); }
+  }
+  .compare-card {
+    padding: 1rem;
+    border-radius: 1rem;
+    border: 1px solid var(--edge);
+    background: linear-gradient(180deg, color-mix(in oklab, var(--color-ink) 3%, transparent), transparent);
+  }
+  .compare-card.winner {
+    border-color: color-mix(in oklab, var(--color-watt) 42%, transparent);
+    background:
+      radial-gradient(90% 90% at 100% 0%, color-mix(in oklab, var(--color-watt) 11%, transparent), transparent 62%),
+      color-mix(in oklab, var(--color-watt) 4%, transparent);
+  }
+  .compare-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 0.35rem; }
+  .compare-head h4 { font-size: 1rem; }
+  .compare-head b { font-family: var(--font-display); color: var(--color-watt); font-size: 1.15rem; }
+  .compare-card p { color: var(--color-muted); font-size: 0.82rem; line-height: 1.45; }
+
+  .bottom-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+  }
+  @media (min-width: 820px) { .bottom-grid { grid-template-columns: 1fr 1fr; } }
+  .demo {
+    padding: 1rem 1.1rem;
+    border-radius: 1rem;
+    border: 1px solid var(--edge);
+    background: color-mix(in oklab, var(--color-ink) 2%, transparent);
+  }
+  .demo p { margin-top: 0.35rem; color: var(--color-muted); font-size: 0.84rem; line-height: 1.5; }
+
+  .swot-mini {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+    margin-top: 0.75rem;
+  }
+  @media (min-width: 900px) { .swot-mini { grid-template-columns: repeat(4, 1fr); } }
+  .swot-cell {
+    display: flex;
+    gap: 0.65rem;
+    padding: 0.8rem 0.9rem;
+    border-radius: 0.85rem;
+    border: 1px solid var(--edge);
+    background: color-mix(in oklab, var(--color-ink) 2%, transparent);
+  }
+  .swot-cell span {
+    font-family: var(--font-display);
+    color: var(--color-flow);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .swot-cell p { color: var(--color-muted); font-size: 0.76rem; line-height: 1.4; }
+
+  @media (max-width: 760px) {
+    .swot-mini { display: none; }
+  }
+</style>

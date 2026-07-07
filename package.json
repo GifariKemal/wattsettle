@@ -1,0 +1,40 @@
+{
+  "name": "wattsettle-web",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "WattSettle — concept explainer (Opsi 5 & 6) untuk Indonesia Web3 Hackathon 2026",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "security:audit": "npm audit",
+    "test:e2e": "node tests/e2e/qa-e2e.mjs",
+    "test:qa": "npm run check && npm run build && node tests/e2e/run-qa.mjs"
+  },
+  "dependencies": {
+    "@astrojs/react": "^6.0.1",
+    "@fontsource-variable/bricolage-grotesque": "^5.1.0",
+    "@fontsource-variable/jetbrains-mono": "^5.1.0",
+    "@fontsource/geist-sans": "^5.1.0",
+    "@iconify-json/ph": "^1.2.2",
+    "@phosphor-icons/react": "^2.1.10",
+    "@tailwindcss/vite": "^4.0.0",
+    "astro": "^7.0.6",
+    "astro-icon": "^1.1.5",
+    "gsap": "^3.12.5",
+    "lenis": "^1.1.18",
+    "motion": "^12.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwindcss": "^4.0.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "playwright": "^1.61.1",
+    "typescript": "^6.0.3"
+  }
+}

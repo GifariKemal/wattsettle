@@ -1,0 +1,3 @@
+Contact: mailto:security@suriota.id
+Preferred-Languages: id, en
+Canonical: https://wattsettle.suriota.id/.well-known/security.txt

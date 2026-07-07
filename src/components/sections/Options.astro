@@ -1,0 +1,16 @@
+---
+import Section from "../ui/Section.astro";
+import OptionToggle from "../islands/OptionToggle.tsx";
+import { options } from "../../content/options";
+---
+<Section
+  id="opsi"
+  label="Opsi 5 & 6"
+  desc="Rel platform (5) vs produk nyata Enovatek (6)"
+  eyebrow={options.eyebrow}
+  title={options.headline}
+>
+  <div class="rv" style="width:100%">
+    <OptionToggle client:load />
+  </div>
+</Section>

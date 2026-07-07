@@ -1,0 +1,163 @@
+.sim {
+  --node-glow: var(--color-flow);
+}
+
+.sim-stage {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+}
+.sim-node {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 1.1rem 1rem;
+  border-radius: 1.1rem;
+  border: 1px solid var(--edge);
+  background: linear-gradient(180deg, var(--color-panel), var(--color-panel-2));
+  text-align: center;
+  transition: border-color 0.4s var(--ease-out-quint), box-shadow 0.4s var(--ease-out-quint), transform 0.4s var(--ease-out-quint);
+}
+.sim-node .glyph {
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--color-faint);
+  transition: color 0.4s ease;
+}
+.sim-node h4 { font-size: 0.95rem; margin: 0.55rem 0 0.15rem; }
+.sim-node .sub {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  color: var(--color-faint);
+  text-transform: uppercase;
+}
+.sim-node .val {
+  margin-top: 0.6rem;
+  min-height: 1.05rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--color-muted);
+}
+.sim-node.active {
+  border-color: color-mix(in oklab, var(--node-glow) 55%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--node-glow) 30%, transparent), 0 12px 40px -18px var(--node-glow);
+  transform: translateY(-3px);
+}
+.sim-node.active .glyph { color: var(--node-glow); }
+.sim-node.approve {
+  --node-glow: var(--color-watt);
+  border-color: color-mix(in oklab, var(--color-watt) 60%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--color-watt) 34%, transparent), 0 14px 44px -18px var(--color-watt);
+}
+.sim-node.approve .glyph { color: var(--color-watt); }
+.sim-node.approve .val { color: var(--color-watt); }
+.sim-node.reject {
+  --node-glow: var(--color-heat);
+  border-color: color-mix(in oklab, var(--color-heat) 60%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--color-heat) 34%, transparent), 0 14px 44px -18px var(--color-heat);
+}
+.sim-node.reject .glyph { color: var(--color-heat); }
+.sim-node.reject .val { color: var(--color-heat); }
+
+.sim-conn {
+  flex: 0 0 clamp(1.2rem, 4vw, 3rem);
+  align-self: center;
+  height: 2px;
+  background: var(--edge);
+  position: relative;
+  overflow: hidden;
+  border-radius: 2px;
+}
+.sim-conn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform-origin: left center;
+  transform: scaleX(var(--p, 0));
+  background: linear-gradient(90deg, var(--color-flow), var(--color-watt), var(--color-flow));
+  background-size: 220% 100%;
+  animation: sim-flow 1.1s linear infinite;
+  transition: transform 0.5s var(--ease-out-quint);
+}
+.sim-conn.reject::after {
+  background: linear-gradient(90deg, var(--color-flow), var(--color-heat), var(--color-flow));
+  background-size: 220% 100%;
+}
+@keyframes sim-flow { to { background-position: -220% 0; } }
+
+/* pulse ring pada node aktif — nuansa live workflow */
+.sim-node.active { animation: sim-pulse 1.6s ease-out infinite; }
+@keyframes sim-pulse {
+  0% { box-shadow: 0 0 0 1px color-mix(in oklab, var(--node-glow) 40%, transparent), 0 0 0 0 color-mix(in oklab, var(--node-glow) 45%, transparent); }
+  70%, 100% { box-shadow: 0 0 0 1px color-mix(in oklab, var(--node-glow) 30%, transparent), 0 0 0 14px transparent; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sim-conn::after, .sim-node.active { animation: none !important; }
+}
+
+.sim-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+.sim-chip {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  color: var(--color-muted);
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--edge);
+  border-radius: 999px;
+}
+
+.sim-verdict {
+  margin-top: 1.25rem;
+  padding: 1.15rem 1.25rem;
+  border-radius: 1.1rem;
+  border: 1px solid var(--edge);
+  background: color-mix(in oklab, var(--color-void) 40%, transparent);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  line-height: 1.75;
+  color: var(--color-muted);
+}
+.sim-verdict.ok { border-color: color-mix(in oklab, var(--color-watt) 40%, transparent); }
+.sim-verdict.no { border-color: color-mix(in oklab, var(--color-heat) 40%, transparent); }
+.sim-verdict .tag-ok { color: var(--color-watt); font-weight: 700; }
+.sim-verdict .tag-no { color: var(--color-heat); font-weight: 700; }
+.sim-verdict .k { color: var(--color-flow); }
+.sim-verdict .tx {
+  color: var(--color-gold);
+  word-break: break-all;
+}
+.sim-verdict .att-line { display: block; white-space: pre-wrap; }
+
+@media (max-width: 720px) {
+  .sim-stage { flex-direction: column; }
+  /* node kompak: ikon kiri + teks kanan, tinggi mengikuti isi (bukan meregang) */
+  .sim-node {
+    flex: 0 0 auto;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 0.85rem;
+    align-items: center;
+    text-align: left;
+    padding: 0.8rem 1rem;
+  }
+  .sim-node .glyph { grid-row: 1 / -1; align-self: center; font-size: 1.35rem; }
+  .sim-node h4 { margin: 0 0 0.1rem; }
+  .sim-node .val { margin-top: 0.15rem; min-height: 0; }
+  .sim-conn {
+    flex-basis: clamp(0.8rem, 4vw, 1.3rem);
+    width: 2px;
+    height: auto;
+    align-self: center;
+  }
+  .sim-conn::after {
+    transform-origin: top center;
+    transform: scaleY(var(--p, 0));
+  }
+}
