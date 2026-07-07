@@ -83,13 +83,13 @@ Lisensikan kontrak plus verifier ke operator energy-DePIN SEA lain sebagai softw
 ## 🗓️ Timeline Roadmap Indikatif
 
 ```mermaid
-timeline
-  title Dari Demo Day ke produk komersial
-  Q4 2026 : Demo Day 31 Okt : Finalist window : Harden WattSettle core di testnet
-  Q1 2027 : Pilot berbayar 1 s.d 3 customer : Case study plus PO redacted : Fee split live
-  Q2 2027 : VeriFaktur dogfood invoice SURIOTA : Device-NFT digital-twin PoC
-  Q3 2027 : WattBond yield-note pilot : White-label pertama ke operator SEA
-  Q4 2027 : Land-and-expand multi-site : Jalur mainnet dan stablecoin produksi
+flowchart LR
+  Q1["Q4 2026<br/>Demo Day 31 Okt<br/>Finalist window<br/>Harden core di testnet"]
+  Q2["Q1 2027<br/>Pilot berbayar 1 s.d 3 customer<br/>Case study plus PO redacted<br/>Fee split live"]
+  Q3["Q2 2027<br/>VeriFaktur dogfood invoice SURIOTA<br/>Device-NFT digital-twin PoC"]
+  Q4["Q3 2027<br/>WattBond yield-note pilot<br/>White-label pertama ke operator SEA"]
+  Q5["Q4 2027<br/>Land-and-expand multi-site<br/>Jalur mainnet dan stablecoin produksi"]
+  Q1 --> Q2 --> Q3 --> Q4 --> Q5
 ```
 
 | Fase | Fokus | Sifat |

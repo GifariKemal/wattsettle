@@ -63,15 +63,10 @@ Kolom **Gate ditutup** menandai hard submission gate yang diselesaikan di sesi i
 ## 🗓️ Milestone Resmi dan Timeline
 
 ```mermaid
-timeline
-  title Timeline WattSettle sampai Demo Day
-  section Workshop
-    5 Jul sampai 30 Ags : 9 sesi mentoring : gate hygiene dari Sesi 1
-  section Build dan Submit
-    1 sampai 30 Sep : September build month : rehearse 20 kali, submit sebelum 30 Sep
-  section Penjurian
-    14 Okt : Finalist Announcement
-    31 Okt : DEMO DAY final live
+flowchart LR
+  A["Workshop<br/>5 Jul sampai 30 Ags<br/>9 sesi, gate hygiene dari Sesi 1"] --> B["Build dan Submit<br/>1 sampai 30 Sep<br/>rehearse 20 kali, submit sebelum 30 Sep"]
+  B --> C["Finalist<br/>14 Okt"]
+  C --> D["Demo Day<br/>31 Okt, final live"]
 ```
 
 > ⚠️ Koreksi fatal terhadap asumsi awal. Demo Day **bukan** 30 Agustus. Sesi 9 (30 Ags) adalah pitch training. Submission dibuka 1 September dan ditutup 30 September, finalis diumumkan 14 Oktober, Demo Day live 31 Oktober 2026. Ada satu bulan penuh untuk build setelah workshop, jadwal jauh lebih longgar dari yang diasumsikan. Tidak ada alasan gate hygiene tidak tuntas.
