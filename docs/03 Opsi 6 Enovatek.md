@@ -1,12 +1,8 @@
 <div align="center">
 
-<svg width="100%" height="12" viewBox="0 0 1200 12" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="accent">
-  <defs><linearGradient id="e6bar" x1="0" y1="0" x2="1" y2="0">
-    <stop offset="0" stop-color="#06b6d4"/><stop offset="1" stop-color="#0ea5e9"/>
-    <animate attributeName="x2" values="1;1.6;1" dur="4s" repeatCount="indefinite"/>
-  </linearGradient></defs>
-  <rect width="1200" height="12" rx="6" fill="url(#e6bar)"/>
-</svg>
+![Opsi 6](https://img.shields.io/badge/Opsi%206-Enovatek%20PM20H20Q-06b6d4?style=for-the-badge)
+&nbsp;
+![Peran](https://img.shields.io/badge/peran-mesin%20demo-22c55e?style=for-the-badge)
 
 # 🌬️ Opsi 6, WattSettle × Enovatek / PM20H20Q
 
@@ -38,10 +34,10 @@
 
 ```mermaid
 flowchart LR
-  T["🧊 Penyewa pakai AC<br/>(Cooling as a Service)"] --> M["📟 PM20H20Q<br/>ukur pemakaian DC"]
-  M -->|"tanda tangani reading"| C["📄 Kontrak WattSettle"]
-  C --> V["🤖 AI verify<br/>anti-tamper, bounds fisik"]
-  V -->|approve| PAY["💸 penyewa auto bayar Enovatek<br/>per pakai"]
+  T["🧊 Penyewa pakai AC (Cooling as a Service)"] --> M["📟 PM20H20Q<br>ukur pemakaian DC"]
+  M -->|tanda tangani reading| C["📄 Kontrak WattSettle"]
+  C --> V["🤖 AI verify anti-tamper"]
+  V -->|approve| PAY["💸 penyewa auto bayar Enovatek per pakai"]
   PAY --> FEE["🏦 protokol / Enovatek ambil fee (take rate)"]
   V -->|reject| REC["🚫 0 token, anomali tercatat on-chain"]
 ```

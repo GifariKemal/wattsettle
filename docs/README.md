@@ -1,12 +1,8 @@
 <div align="center">
 
-<svg width="100%" height="10" viewBox="0 0 1200 10" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="accent">
-  <defs><linearGradient id="docsbar" x1="0" y1="0" x2="1" y2="0">
-    <stop offset="0" stop-color="#06b6d4"/><stop offset="1" stop-color="#22c55e"/>
-    <animate attributeName="x2" values="1;1.5;1" dur="4s" repeatCount="indefinite"/>
-  </linearGradient></defs>
-  <rect width="1200" height="10" rx="5" fill="url(#docsbar)"/>
-</svg>
+![Dokumen](https://img.shields.io/badge/dokumen-strategi-06b6d4?style=for-the-badge)
+&nbsp;
+![Track](https://img.shields.io/badge/track-Finance%20Commerce-f0b90b?style=for-the-badge)
 
 # 📚 Dokumen Strategi
 
@@ -22,11 +18,11 @@ Kembali ke [hub utama](../README.md).
 
 ```mermaid
 flowchart TD
-  A["01 Master Strategi<br/>peta seluruh opsi"] --> B["02 Opsi 5 WattSettle<br/>detail penuh + kill-shots"]
-  A --> C["03 Opsi 6 Enovatek<br/>produk demo konkret"]
-  B --> D["04 SWOT Opsi 5 dan 6<br/>+ peta kompetitor"]
+  A["01 Master Strategi<br>peta seluruh opsi"] --> B["02 Opsi 5 WattSettle<br>detail penuh, kill-shots"]
+  A --> C["03 Opsi 6 Enovatek<br>produk demo konkret"]
+  B --> D["04 SWOT Opsi 5 dan 6<br>peta kompetitor"]
   C --> D
-  A -.pivot.-> E["Codex Opsi 7 dan 8<br/>challenger agentic commerce"]
+  A -.pivot.-> E["Codex Opsi 7 dan 8<br>challenger agentic commerce"]
 ```
 
 ---

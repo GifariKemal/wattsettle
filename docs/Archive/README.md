@@ -1,12 +1,6 @@
 <div align="center">
 
-<svg width="100%" height="10" viewBox="0 0 1200 10" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="accent">
-  <defs><linearGradient id="arbar" x1="0" y1="0" x2="1" y2="0">
-    <stop offset="0" stop-color="#94a3b8"/><stop offset="1" stop-color="#64748b"/>
-    <animate attributeName="x2" values="1;1.4;1" dur="6s" repeatCount="indefinite"/>
-  </linearGradient></defs>
-  <rect width="1200" height="10" rx="5" fill="url(#arbar)"/>
-</svg>
+![Arsip](https://img.shields.io/badge/status-arsip-94a3b8?style=for-the-badge)
 
 # 🗄️ Arsip Opsi dan Riset
 

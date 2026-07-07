@@ -61,11 +61,11 @@ Opsi 2   JanjiChain           ██████████░░░░░░�
 
 ```mermaid
 flowchart LR
-  D["🔌 Device<br/>SRT-MGATE / PM20H20Q"] -->|"Reading EIP-712<br/>deviceId, kWh, ts, nonce, sig"| C["📄 Kontrak<br/>ProofOfWatt"]
-  C -->|Pending| V["🤖 AI Verifier<br/>otonom, pola Hermes"]
-  V -->|"Attestation on-chain<br/>anomalyScore, modelHash"| C
-  C -->|"approve: transfer suriota + fee 1%"| P["🏭 Produsen / Enovatek"]
-  C -->|"reject: 0 token, alasan tercatat"| X["🔎 BscScan audit trail"]
+  D["🔌 Device<br>SRT-MGATE / PM20H20Q"] -->|Reading EIP-712| C["📄 Kontrak ProofOfWatt"]
+  C -->|Pending| V["🤖 AI Verifier otonom"]
+  V -->|Attestation on-chain| C
+  C -->|approve| P["🏭 Produsen / Enovatek<br>transfer suriota + fee 1%"]
+  C -->|reject| X["🔎 0 token, tercatat di BscScan"]
 ```
 
 Setiap langkah menghasilkan transaksi on-chain. Meter **adalah** transaksi yang di-settle, sehingga tidak ada celah oracle antara bukti fisik dan pembayaran.

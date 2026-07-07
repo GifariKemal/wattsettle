@@ -1,12 +1,6 @@
 <div align="center">
 
-<svg width="100%" height="12" viewBox="0 0 1200 12" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="accent">
-  <defs><linearGradient id="cxbar" x1="0" y1="0" x2="1" y2="0">
-    <stop offset="0" stop-color="#a855f7"/><stop offset="1" stop-color="#06b6d4"/>
-    <animate attributeName="x1" values="0;0.4;0" dur="5s" repeatCount="indefinite"/>
-  </linearGradient></defs>
-  <rect width="1200" height="12" rx="6" fill="url(#cxbar)"/>
-</svg>
+![Codex](https://img.shields.io/badge/riset-Codex%20Opsi%207%20dan%208-a855f7?style=for-the-badge)
 
 </div>
 
@@ -287,16 +281,16 @@ Payment rail besar seperti Visa/Mastercard/Google/Stripe bisa membangun ini untu
 
 ```mermaid
 flowchart LR
-  U[User] -->|sign intent| W[Policy Wallet]
-  W --> A[AI Shopping Agent]
-  A -->|query offers| M1[Merchant A]
-  A -->|query offers| M2[Merchant B]
-  A -->|cart commitment| C[TrustPay Escrow Contract]
-  C -->|lock stablecoin| E[Escrow Vault]
-  L[Logistics Oracle / Mock Courier] -->|delivery proof| V[AI Risk Verifier]
-  V -->|approve/reject + reason hash| C
-  C -->|release/refund/dispute| S[Seller / Buyer]
-  C --> R[Agent and Merchant Reputation]
+  U["User"] -->|sign intent| W["Policy Wallet"]
+  W --> A["AI Shopping Agent"]
+  A -->|query offers| M1["Merchant A"]
+  A -->|query offers| M2["Merchant B"]
+  A -->|cart commitment| C["TrustPay Escrow Contract"]
+  C -->|lock stablecoin| E["Escrow Vault"]
+  L["Logistics Oracle, Mock Courier"] -->|delivery proof| V["AI Risk Verifier"]
+  V -->|approve reject, reason hash| C
+  C -->|release refund dispute| S["Seller, Buyer"]
+  C --> R["Agent and Merchant Reputation"]
 ```
 
 ### Smart contract modules

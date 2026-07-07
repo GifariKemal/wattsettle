@@ -1,12 +1,10 @@
 <div align="center">
 
-<svg width="100%" height="12" viewBox="0 0 1200 12" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="accent">
-  <defs><linearGradient id="cbar" x1="0" y1="0" x2="1" y2="0">
-    <stop offset="0" stop-color="#22c55e"/><stop offset="1" stop-color="#06b6d4"/>
-    <animate attributeName="x2" values="1;1.5;1" dur="4s" repeatCount="indefinite"/>
-  </linearGradient></defs>
-  <rect width="1200" height="12" rx="6" fill="url(#cbar)"/>
-</svg>
+![Foundry](https://img.shields.io/badge/built%20with-Foundry-orange?style=for-the-badge)
+&nbsp;
+![Tests](https://img.shields.io/badge/tests-6%20passing-brightgreen?style=for-the-badge)
+&nbsp;
+![Solidity](https://img.shields.io/badge/Solidity-0.8.24-363636?style=for-the-badge)
 
 # 📄 ProofOfWatt.sol
 
@@ -24,11 +22,11 @@
 
 ```mermaid
 flowchart LR
-  DEV["🔌 Device"] -->|"sign Reading EIP-712"| REL["relayer"]
+  DEV["🔌 Device"] -->|sign Reading EIP-712| REL["relayer"]
   REL -->|submitReading| C["📄 ProofOfWatt"]
   C -->|Pending| V["🤖 VERIFIER_ROLE"]
-  V -->|"verifyReading(approve)"| PAY["💸 transfer suriota ke owner"]
-  V -->|"verifyReading(reject)"| Z["🚫 0 token"]
+  V -->|approve| PAY["💸 transfer suriota ke owner"]
+  V -->|reject| Z["🚫 0 token"]
 ```
 
 | Fungsi | Akses | Peran |

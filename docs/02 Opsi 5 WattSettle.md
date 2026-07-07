@@ -1,12 +1,8 @@
 <div align="center">
 
-<svg width="100%" height="12" viewBox="0 0 1200 12" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="accent">
-  <defs><linearGradient id="wsbar" x1="0" y1="0" x2="1" y2="0">
-    <stop offset="0" stop-color="#22c55e"/><stop offset="0.5" stop-color="#06b6d4"/><stop offset="1" stop-color="#f59e0b"/>
-    <animate attributeName="x1" values="0;0.5;0" dur="6s" repeatCount="indefinite"/>
-  </linearGradient></defs>
-  <rect width="1200" height="12" rx="6" fill="url(#wsbar)"/>
-</svg>
+![Opsi 5](https://img.shields.io/badge/Opsi%205-WattSettle-22c55e?style=for-the-badge)
+&nbsp;
+![Skor](https://img.shields.io/badge/skor-90%2F100-06b6d4?style=for-the-badge)
 
 # ⚡ WattSettle, Master Document
 

@@ -1,12 +1,6 @@
 <div align="center">
 
-<svg width="100%" height="12" viewBox="0 0 1200 12" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="accent">
-  <defs><linearGradient id="swbar" x1="0" y1="0" x2="1" y2="0">
-    <stop offset="0" stop-color="#22c55e"/><stop offset="0.33" stop-color="#eab308"/><stop offset="0.66" stop-color="#06b6d4"/><stop offset="1" stop-color="#ef4444"/>
-    <animate attributeName="x1" values="0;0.4;0" dur="7s" repeatCount="indefinite"/>
-  </linearGradient></defs>
-  <rect width="1200" height="12" rx="6" fill="url(#swbar)"/>
-</svg>
+![SWOT](https://img.shields.io/badge/SWOT-Opsi%205%20dan%206-a855f7?style=for-the-badge)
 
 # 🧠 SWOT dan Peta Kompetitor
 
