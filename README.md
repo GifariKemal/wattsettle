@@ -21,6 +21,8 @@
 
 `AI Agents` · `Finance & Commerce` · `Consumer Apps` · Prize pool USD 5.000 (3 track)
 
+🔗 **Repo:** [github.com/GifariKemal/wattsettle](https://github.com/GifariKemal/wattsettle) · 🌐 **Live:** [web3.gifariksuryo.xyz](https://web3.gifariksuryo.xyz)
+
 </div>
 
 ---
