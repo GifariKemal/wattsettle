@@ -7,7 +7,8 @@ import { footer as f, site } from "../../content/site";
     <h2 class="rv" data-delay="80">
       {f.headline.map((l) => <span class="line">{l}</span>)}
     </h2>
-    <p class="lead rv" data-delay="160">{f.lead}</p>
+    <p class="punch rv" data-delay="140">{f.punch}</p>
+    <p class="lead rv" data-delay="200">{f.lead}</p>
 
     <div class="foot-cta rv" data-delay="220">
       <a href="/" class="btn btn-primary">Kembali ke awal <span class="ic">↑</span></a>
@@ -33,6 +34,16 @@ import { footer as f, site } from "../../content/site";
     max-width: 20ch;
   }
   .foot h2 .line { display: block; }
+  .foot .punch {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.2rem, 2.6vw, 1.85rem);
+    color: var(--color-ink);
+    max-width: 30ch;
+    margin: 1.3rem auto 0;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+  }
   .foot .lead {
     color: var(--color-muted);
     font-size: clamp(1rem, 1.7vw, 1.2rem);

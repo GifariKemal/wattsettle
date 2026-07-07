@@ -402,10 +402,13 @@
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
-    justify-content: safe center; /* pusatkan grup head+body → tak ada void bawah di halaman sparse; halaman tinggi fallback ke atas (aman, tak keklip) */
+    justify-content: flex-start; /* fold buka di headline, bukan void; halaman sparse sisakan ruang bawah (kurang terlihat mata) */
+    padding-top: clamp(0.5rem, 5vh, 3.5rem);
     gap: clamp(0.85rem, 2.2vh, 1.75rem);
     min-height: 0;
   }
+  /* halaman ringkas 1-blok tetap enak di tengah */
+  .deck-page.center-slide .slide { justify-content: center; padding-top: 0; }
   .slide-head { flex: none; max-width: 72ch; }
   .slide-title {
     font-size: clamp(1.5rem, 3vw, 2.5rem);

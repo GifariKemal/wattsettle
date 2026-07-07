@@ -14,10 +14,10 @@ const sideCells = m.cells.slice(2); // BNB 2026 + Kurikulum (zkPull/OwnaFarm ada
       <span class="lab">Moat 5-lapis</span>
       <h3>{m.bigTitle}</h3>
       <div class="layers">
-        {m.layers.map((L) => (
+        {m.layers.map((L, i) => (
           <div class="moat-row">
-            <span class="k">{L.k}</span>
-            <span>{L.body}</span>
+            <span class="num">{String(i + 1).padStart(2, "0")}</span>
+            <span class="bd">{L.body}</span>
           </div>
         ))}
       </div>
@@ -71,7 +71,14 @@ const sideCells = m.cells.slice(2); // BNB 2026 + Kurikulum (zkPull/OwnaFarm ada
     font-size: 0.9rem;
     line-height: 1.4;
   }
-  .moat-row .k { font-family: var(--font-mono); color: var(--color-watt); font-size: 0.85rem; flex-shrink: 0; }
+  .moat-row .num {
+    font-family: var(--font-display); font-weight: 800; font-size: 1.3rem; line-height: 1;
+    color: color-mix(in oklab, var(--color-watt) 85%, var(--color-ink));
+    flex-shrink: 0; width: 1.7rem;
+  }
+  .moat-row .k { font-weight: 700; color: var(--color-ink); font-size: 0.95rem; flex-shrink: 0; }
+  .moat-row .bd { color: var(--color-muted); }
+  .moat-row:hover { border-left-color: var(--color-watt); }
 
   .moat-side { display: grid; gap: 1.1rem; grid-template-columns: 1fr; }
   @media (min-width: 500px) and (max-width: 939px) { .moat-side { grid-template-columns: 1fr 1fr; } }

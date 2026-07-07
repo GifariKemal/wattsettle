@@ -27,7 +27,7 @@ export const problem = {
     headline: 'Ubah "percaya saya" jadi "cek buktinya di rantai".',
     body: "Setiap pembacaan ditandatangani langsung oleh perangkatnya. AI menilai kewajarannya, lalu menuliskan alasannya ke rantai. Pembayaran diselesaikan sendiri oleh smart contract, bukan oleh manusia.",
     result:
-      "Hasilnya: data energi yang telah ditandatangani dan diperiksa AI, siap dibayar dan dijual, tanpa perantara dan tanpa perdebatan.",
+      "data energi yang telah ditandatangani dan diperiksa AI, siap dibayar dan dijual, tanpa perantara dan tanpa perdebatan.",
   },
 } as const;
 

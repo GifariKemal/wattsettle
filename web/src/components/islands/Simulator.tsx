@@ -1,4 +1,4 @@
-import { Fragment, useRef, useState, type CSSProperties } from "react";
+import { Fragment, useEffect, useRef, useState, type CSSProperties } from "react";
 import { GaugeIcon, FileCodeIcon, CpuIcon, CoinsIcon } from "@phosphor-icons/react/dist/ssr";
 import { simNodes, scenarios, simulator, type SimScenario } from "../../content/simulator";
 import { sound } from "../../lib/sound";
@@ -69,6 +69,12 @@ export default function Simulator() {
 
     running.current = false;
   }
+
+  // auto-play sekali saat mount supaya halaman tak terlihat "belum load" (reduced-motion: isi instan)
+  useEffect(() => {
+    const t = setTimeout(() => run("approve"), REDUCE ? 0 : 750);
+    return () => clearTimeout(t);
+  }, []);
 
   const isReject = verdict?.s.key === "reject";
 

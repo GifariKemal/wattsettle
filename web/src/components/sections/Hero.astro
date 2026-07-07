@@ -6,39 +6,66 @@ import { hero, site } from "../../content/site";
   <canvas id="heroCanvas" aria-hidden="true"></canvas>
 
   <div class="container hero-inner">
-    <span class="hero-kicker rv" data-delay="0">
-      <Icon name="ph:lightning-fill" />{hero.kicker}
-    </span>
+    <div class="hero-text">
+      <span class="hero-kicker rv" data-delay="0">
+        <Icon name="ph:lightning-fill" />{hero.kicker}
+      </span>
 
-    <h1 class="hero-h1">
-      {hero.headline.map((line, i) => (
-        <span class="line rv" data-delay={120 + i * 90}>
-          {i === 1 ? <span class="text-gradient-watt">{line}</span> : line}
-        </span>
-      ))}
-    </h1>
+      <h1 class="hero-h1">
+        {hero.headline.map((line, i) => (
+          <span class="line rv" data-delay={120 + i * 90}>
+            {i === 1 ? <span class="text-gradient-watt">{line}</span> : line}
+          </span>
+        ))}
+      </h1>
 
-    <p class="hero-lead rv" data-delay="420">
-      {hero.lead} <b class="tagline">“{site.tagline}”</b>
-    </p>
+      <p class="hero-lead rv" data-delay="420">
+        {hero.lead} <b class="tagline">“{site.tagline}”</b>
+      </p>
 
-    <div class="hero-cta rv" data-delay="500">
-      {hero.ctas.map((c) => (
-        <a href={c.href} class:list={["btn", c.kind === "primary" ? "btn-primary" : "btn-ghost"]}>
-          {c.label}
-          <span class="ic"><Icon name={c.kind === "primary" ? "ph:arrow-right" : "ph:arrow-up-right"} /></span>
-        </a>
-      ))}
+      <div class="hero-cta rv" data-delay="500">
+        {hero.ctas.map((c) => (
+          <a href={c.href} class:list={["btn", c.kind === "primary" ? "btn-primary" : "btn-ghost"]}>
+            {c.label}
+            <span class="ic"><Icon name={c.kind === "primary" ? "ph:arrow-right" : "ph:arrow-up-right"} /></span>
+          </a>
+        ))}
+      </div>
+
+      <div class="hero-stats rv" data-delay="580">
+        {hero.stats.map((s) => (
+          <div class="hstat">
+            <b><span data-count={s.value} data-suffix={s.suffix}>{s.value}{s.suffix}</span></b>
+            <span>{s.label}</span>
+          </div>
+        ))}
+      </div>
     </div>
 
-    <div class="hero-stats rv" data-delay="580">
-      {hero.stats.map((s) => (
-        <div class="hstat">
-          <b><span data-count={s.value} data-suffix={s.suffix}>{s.value}{s.suffix}</span></b>
-          <span>{s.label}</span>
+    <!-- Visual anchor: contoh attestation on-chain (menjadikan tesis "bukti dulu, baru dibayar" terlihat dalam 5 detik) -->
+    <aside class="hero-visual rv" data-delay="660" aria-label="Contoh attestation on-chain">
+      <div class="att-card">
+        <div class="att-head">
+          <span class="att-dot" aria-hidden="true"></span>
+          <span class="att-title">ATTESTATION ON-CHAIN</span>
+          <span class="att-live">live</span>
         </div>
-      ))}
-    </div>
+        <div class="att-rows">
+          <div><span class="k">device</span><span>SRT-MGATE-1210 #001</span></div>
+          <div><span class="k">reading</span><span>512 kWh <em class="ok">✓ EIP-712</em></span></div>
+          <div class="att-sep">AI verifier</div>
+          <div><span class="k">approved</span><span class="ok">true</span></div>
+          <div><span class="k">anomalyBps</span><span>34</span></div>
+          <div><span class="k">expectedRange</span><span>480 sampai 540 kWh</span></div>
+          <div><span class="k">crossCheck</span><span class="ok">OK</span></div>
+          <div class="att-sep">settlement</div>
+          <div><span class="k">payout</span><span class="watt">+512 suriota → Produsen</span></div>
+          <div><span class="k">fee</span><span>1% → treasury</span></div>
+        </div>
+        <div class="att-tx">tx <span class="hash">0x9f3a…c2e1</span> <em class="ok">✓ confirmed</em></div>
+        <span class="att-scan" aria-hidden="true"></span>
+      </div>
+    </aside>
   </div>
 </section>
 
@@ -65,7 +92,17 @@ import { hero, site } from "../../content/site";
     opacity: 0.5;
     mask-image: linear-gradient(180deg, transparent, #000 18%, #000 82%, transparent);
   }
-  .hero-inner { position: relative; z-index: 1; }
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(1.6rem, 4vw, 3.2rem);
+    align-items: center;
+  }
+  @media (min-width: 921px) {
+    .hero-inner { grid-template-columns: 1.05fr 0.95fr; }
+  }
   .hero-kicker {
     display: inline-flex;
     align-items: center;
@@ -83,25 +120,25 @@ import { hero, site } from "../../content/site";
   .hero-kicker [data-icon] { color: var(--color-watt); font-size: 0.9rem; }
   .hero-h1 {
     margin-top: 1.4rem;
-    font-size: clamp(2.4rem, 6.8vw, 5.4rem);
+    font-size: clamp(2.4rem, 5.6vw, 4.6rem);
     line-height: 0.98;
     letter-spacing: -0.03em;
   }
   .hero-h1 .line { display: block; }
   .hero-lead {
     margin-top: 1.2rem;
-    max-width: 60ch;
-    font-size: clamp(1.02rem, 1.7vw, 1.22rem);
+    max-width: 54ch;
+    font-size: clamp(1.02rem, 1.7vw, 1.18rem);
     line-height: 1.55;
     color: var(--color-muted);
   }
-  .hero-lead .tagline { color: var(--color-ink); }
+  .hero-lead .tagline { color: var(--color-ink); font-weight: 600; }
   .hero-cta { display: flex; flex-wrap: wrap; gap: 0.9rem; margin-top: 1.7rem; }
   .hero-cta .ic { font-size: 0.95rem; }
   .hero-stats {
     display: flex;
     flex-wrap: wrap;
-    gap: clamp(1.5rem, 5vw, 3.5rem);
+    gap: clamp(1.5rem, 5vw, 3rem);
     margin-top: 1.8rem;
     padding-top: 1.4rem;
     border-top: 1px solid var(--edge);
@@ -115,36 +152,93 @@ import { hero, site } from "../../content/site";
   }
   .hstat span { font-size: 0.82rem; color: var(--color-faint); max-width: 16ch; line-height: 1.4; }
 
+  /* Attestation card */
+  .hero-visual { justify-self: center; width: 100%; max-width: 460px; }
+  .att-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1.15rem;
+    border: 1px solid color-mix(in oklab, var(--color-watt) 26%, var(--edge-strong));
+    background:
+      radial-gradient(120% 100% at 100% 0%, color-mix(in oklab, var(--color-flow) 12%, transparent), transparent 55%),
+      color-mix(in oklab, var(--color-void) 78%, transparent);
+    box-shadow: 0 24px 60px -30px color-mix(in oklab, var(--color-watt) 45%, transparent),
+                inset 0 1px 0 color-mix(in oklab, #fff 8%, transparent);
+    backdrop-filter: blur(14px);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    padding: 1.15rem 1.25rem 1.05rem;
+  }
+  .att-head {
+    display: flex; align-items: center; gap: 0.55rem;
+    font-size: 0.72rem; letter-spacing: 0.06em;
+    color: var(--color-muted);
+    padding-bottom: 0.85rem; margin-bottom: 0.85rem;
+    border-bottom: 1px solid var(--edge);
+  }
+  .att-dot {
+    width: 8px; height: 8px; border-radius: 999px;
+    background: var(--color-watt);
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-watt) 70%, transparent);
+    animation: att-pulse 2.2s ease-out infinite;
+  }
+  .att-title { color: var(--color-ink); }
+  .att-live {
+    margin-left: auto; font-size: 0.64rem; letter-spacing: 0.14em;
+    color: var(--color-watt);
+    border: 1px solid color-mix(in oklab, var(--color-watt) 40%, transparent);
+    border-radius: 999px; padding: 0.1rem 0.5rem;
+  }
+  .att-rows { display: flex; flex-direction: column; gap: 0.42rem; }
+  .att-rows > div { display: flex; justify-content: space-between; gap: 1rem; color: var(--color-ink); }
+  .att-rows .k { color: var(--color-flow); }
+  .att-rows .ok { color: var(--color-watt); font-style: normal; }
+  .att-rows .watt { color: var(--color-watt); }
+  .att-sep {
+    justify-content: flex-start !important;
+    color: var(--color-faint); font-size: 0.64rem; letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-top: 0.35rem; padding-top: 0.5rem;
+    border-top: 1px dashed var(--edge);
+  }
+  .att-tx {
+    margin-top: 0.95rem; padding-top: 0.8rem;
+    border-top: 1px solid var(--edge);
+    color: var(--color-muted); font-size: 0.74rem;
+  }
+  .att-tx .hash { color: var(--color-ink); }
+  .att-tx .ok { color: var(--color-watt); font-style: normal; }
+  .att-scan {
+    position: absolute; left: 0; right: 0; top: 0; height: 34%;
+    background: linear-gradient(180deg, color-mix(in oklab, var(--color-watt) 16%, transparent), transparent);
+    pointer-events: none;
+    animation: att-scanmove 4.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  }
+  @keyframes att-pulse {
+    0% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-watt) 70%, transparent); }
+    70% { box-shadow: 0 0 0 8px transparent; }
+    100% { box-shadow: 0 0 0 0 transparent; }
+  }
+  @keyframes att-scanmove { 0% { transform: translateY(-110%); } 60%,100% { transform: translateY(320%); } }
+  @media (prefers-reduced-motion: reduce) {
+    .att-dot { animation: none; }
+    .att-scan { display: none; }
+  }
+
+  @media (max-width: 920px) {
+    .hero-visual { max-width: 100%; order: 3; margin-top: 0.4rem; }
+  }
   @media (max-width: 720px) {
     .hero-inner {
       width: calc(100vw - 2rem);
       margin-inline: auto;
     }
-    .hero-kicker {
-      max-width: 100%;
-      padding: 0.36rem 0.75rem;
-      font-size: 0.64rem;
-      letter-spacing: 0.02em;
-    }
-    .hero-h1 {
-      margin-top: 1rem;
-      font-size: clamp(2.25rem, 11vw, 3.1rem);
-      line-height: 0.98;
-    }
-    .hero-lead {
-      margin-top: 1rem;
-      font-size: 0.98rem;
-      line-height: 1.48;
-    }
-    .hero-cta {
-      gap: 0.65rem;
-      margin-top: 1.35rem;
-    }
-    .hero-stats {
-      gap: 1.1rem 2.2rem;
-      margin-top: 1.35rem;
-      padding-top: 1.1rem;
-    }
+    .hero-kicker { max-width: 100%; padding: 0.36rem 0.75rem; font-size: 0.64rem; letter-spacing: 0.02em; }
+    .hero-h1 { margin-top: 1rem; font-size: clamp(2.25rem, 11vw, 3.1rem); line-height: 0.98; }
+    .hero-lead { margin-top: 1rem; font-size: 0.98rem; line-height: 1.48; }
+    .hero-cta { gap: 0.65rem; margin-top: 1.35rem; }
+    .hero-stats { gap: 1.1rem 2.2rem; margin-top: 1.35rem; padding-top: 1.1rem; }
     .hstat b { font-size: 1.35rem; }
+    .att-card { font-size: 0.72rem; }
   }
 </style>

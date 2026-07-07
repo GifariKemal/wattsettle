@@ -4,6 +4,7 @@ import { prediction as pr } from "../../content/why";
 ---
 <Section
   id="prediksi"
+  class="center-slide"
 >
   <div class="predict rv">
     <span class="eyebrow">{pr.eyebrow}</span>
@@ -38,5 +39,10 @@ import { prediction as pr } from "../../content/why";
     font-size: 0.82rem;
     color: var(--color-ink);
   }
-  .predict .close { color: var(--color-muted); font-size: 0.92rem; line-height: 1.6; max-width: 70ch; }
+  .predict .close {
+    margin-top: 1.3rem; padding-top: 1.1rem;
+    border-top: 1px solid var(--edge);
+    color: var(--color-ink); font-weight: 600;
+    font-size: clamp(1rem, 1.4vw, 1.12rem); line-height: 1.55; max-width: 70ch;
+  }
 </style>

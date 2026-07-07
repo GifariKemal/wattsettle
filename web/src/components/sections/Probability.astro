@@ -27,7 +27,7 @@ const accentVar = (a: string) =>
   .stat-grid { display: grid; gap: 1rem; grid-template-columns: repeat(2, 1fr); width: 100%; }
   @media (min-width: 820px) { .stat-grid { grid-template-columns: repeat(4, 1fr); } }
   .stat {
-    padding: 2rem 1.5rem;
+    padding: 1.7rem 1.2rem;
     border-radius: 1.3rem;
     border: 1px solid var(--edge);
     background:
@@ -42,6 +42,6 @@ const accentVar = (a: string) =>
     transition: transform 0.4s var(--ease-out-quint), border-color 0.4s;
   }
   .stat:hover { transform: translateY(-4px); border-color: var(--edge-strong); }
-  .stat .big { font-family: var(--font-display); font-weight: 700; font-size: clamp(2rem, 4vw, 3rem); letter-spacing: -0.02em; }
+  .stat .big { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.5rem, 3.2vw, 2.35rem); letter-spacing: -0.02em; text-wrap: balance; line-height: 1.05; }
   .stat .lab { color: var(--color-faint); font-size: 0.84rem; line-height: 1.35; }
 </style>

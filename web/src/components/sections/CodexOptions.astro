@@ -1,6 +1,7 @@
 ---
 import Section from "../ui/Section.astro";
 import { codexOptions as c } from "../../content/codex";
+const swotLabel: Record<string, string> = { S: "Strengths", W: "Weakness", O: "Opportunity", T: "Threat" };
 ---
 <Section
   id="codex"
@@ -54,7 +55,7 @@ import { codexOptions as c } from "../../content/codex";
       <span class="lab">Demo 3 menit</span>
       <p>{c.demo}</p>
     </article>
-    <article class="demo rv" data-delay="280">
+    <article class="demo demo-key rv" data-delay="280">
       <span class="lab">Keputusan</span>
       <p>{c.recommendation}</p>
     </article>
@@ -62,8 +63,8 @@ import { codexOptions as c } from "../../content/codex";
 
   <div class="swot-mini">
     {c.swot.map(([k, body], i) => (
-      <div class="swot-cell rv" data-delay={260 + i * 55}>
-        <span>{k}</span>
+      <div class:list={["swot-cell rv", `sw-${k}`]} data-delay={260 + i * 55}>
+        <span>{swotLabel[k] ?? k}</span>
         <p>{body}</p>
       </div>
     ))}
@@ -217,11 +218,19 @@ import { codexOptions as c } from "../../content/codex";
     background: color-mix(in oklab, var(--color-ink) 2%, transparent);
   }
   .swot-cell span {
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     color: var(--color-flow);
-    font-weight: 700;
-    flex-shrink: 0;
+    font-weight: 700; font-size: 0.7rem; letter-spacing: 0.06em;
+    flex-shrink: 0; min-width: 5.2rem;
   }
+  .sw-S span { color: var(--color-watt); }
+  .sw-W span { color: var(--color-heat); }
+  .sw-O span { color: var(--color-flow); }
+  .sw-T span { color: var(--color-gold); }
+  .demo-key { border-color: color-mix(in oklab, var(--color-watt) 40%, transparent); background: color-mix(in oklab, var(--color-watt) 6%, transparent); }
+  .demo-key .lab { color: var(--color-watt); }
+  .compare-card.winner .compare-head b { font-size: 1.55rem; }
+  .compare-card.winner .compare-head h4 { color: var(--color-ink); }
   .swot-cell p { color: var(--color-muted); font-size: 0.76rem; line-height: 1.4; }
 
   @media (max-width: 760px) {

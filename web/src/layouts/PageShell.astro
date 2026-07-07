@@ -157,9 +157,10 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
         font-family: var(--font-display); font-weight: 800; line-height: 0.7;
         font-size: clamp(11rem, 27vw, 25rem); letter-spacing: -0.05em;
         color: transparent;
-        -webkit-text-stroke: 1.5px color-mix(in oklab, var(--color-ink) 7%, transparent);
+        -webkit-text-stroke: 1.5px color-mix(in oklab, var(--color-ink) 4.5%, transparent);
       }
-      @media (max-width: 720px) { .deck-ghost { font-size: 40vw; bottom: -3vw; } }
+      /* mobile: watermark sering menabrak teks kartu, sembunyikan */
+      @media (max-width: 720px) { .deck-ghost { display: none; } }
 
       .topbar {
         position: fixed; top: 0; left: 0; right: 0; z-index: 46;

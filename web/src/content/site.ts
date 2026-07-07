@@ -43,7 +43,8 @@ export const hero = {
 export const footer = {
   eyebrow: "Demo Day · 31 Oktober 2026",
   headline: ["Kami menaruh perusahaan nyata on-chain", "dalam satu akhir pekan."],
+  punch: "Setiap tim lain mensimulasikan ini. Kami tidak.",
   lead:
-    "Setiap tim lain mensimulasikan ini. Kami tidak. AI kami baru saja menolak satu reading palsu dan membayar satu reading sah, live, di BNB Chain.",
+    "AI kami baru saja menolak satu reading palsu dan membayar satu reading sah, live, di BNB Chain.",
   bismillah: "بسم الله · Bismillah, WattSettle × Enovatek",
 } as const;
