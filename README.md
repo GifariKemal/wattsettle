@@ -23,13 +23,14 @@
 
 ## 🎯 Fokus Aktif
 
-Workspace ini menyimpan banyak opsi. Yang **aktif dikerjakan** hanya tiga blok berikut. Sisanya sudah dipindah ke [`docs/Archive/`](docs/Archive/) sebagai referensi dan amunisi roadmap.
+Dokumentasi lengkap WattSettle kini ada di **[`WattSettle/`](WattSettle/README.md)**, sebuah build bible 24 bab (latar belakang, konsep, arsitektur, kontrak, AI verifier, workflow per sesi, bisnis, pitch, risiko, dan lampiran). Seluruh dokumen strategi lama sudah diarsipkan ke [`docs/Archive/`](docs/Archive/).
 
 | Fokus | Peran | Dokumen | Status |
 |:--|:--|:--|:--:|
-| ⭐ **Opsi 5 WattSettle** | Visi platform (rel M2M energy settlement) | [`docs/02 Opsi 5 WattSettle.md`](<docs/02 Opsi 5 WattSettle.md>) | 🟢 Aktif |
-| ⭐ **Opsi 6 Enovatek** | Mesin demo (PM20H20Q, Cooling as a Service) | [`docs/03 Opsi 6 Enovatek.md`](<docs/03 Opsi 6 Enovatek.md>) | 🟢 Aktif |
-| 🔬 **Codex Opsi 7 dan 8** | Analisa challenger agentic commerce | [`docs/Codex Opsi 7 8/`](<docs/Codex Opsi 7 8/>) | 🟡 Riset |
+| ⚡ **WattSettle Build Bible** | Rumah dokumentasi aktif, 24 bab | [`WattSettle/README.md`](WattSettle/README.md) | 🟢 Aktif |
+| ⭐ Opsi 5 WattSettle | Visi platform (rel M2M energy settlement) | [`WattSettle/02 Konsep dan Cara Kerja.md`](<WattSettle/02 Konsep dan Cara Kerja.md>) | 🟢 Aktif |
+| ⭐ Opsi 6 Enovatek | Mesin demo (PM20H20Q, Cooling as a Service) | [`WattSettle/14 Bisnis dan GTM.md`](<WattSettle/14 Bisnis dan GTM.md>) | 🟢 Aktif |
+| 🔬 Codex Opsi 7 dan 8 | Analisa challenger agentic commerce | [`docs/Archive/Codex Opsi 7 8/`](<docs/Archive/Codex Opsi 7 8/>) | 🗄️ Arsip |
 
 > 🧭 **Keputusan submission:** bangun **Opsi 6** sebagai mesin demo (satu kasus konkret, deterministik, live), pitch **Opsi 5** sebagai visi platform. Codex Opsi 7 dan 8 disimpan sebagai kandidat pivot jika track energi ternyata padat.
 > *"Di panggung: satu keran jalan sempurna (Enovatek). Di slide: pipa ke semua pasar (WattSettle)."*
@@ -77,17 +78,17 @@ Setiap langkah menghasilkan transaksi on-chain. Meter **adalah** transaksi yang 
 ```
 Web3 Hackathon 2026/
 ├── README.md                     👈 hub ini
-├── docs/
-│   ├── README.md                 index dokumen + cara baca
-│   ├── 01 Master Strategi.md     ⭐ ringkasan strategi lintas opsi
-│   ├── 02 Opsi 5 WattSettle.md   ⭐ master doc WattSettle (detail penuh)
-│   ├── 03 Opsi 6 Enovatek.md     ⭐ produk demo Enovatek / PM20H20Q
-│   ├── 04 SWOT Opsi 5 6.md       ⭐ SWOT + peta kompetitor
-│   ├── Codex Opsi 7 8/           🔬 analisa challenger agentic commerce
-│   └── Archive/                  🗄️ opsi 1, 2, 3, 4, 9 sampai 13 (referensi)
+├── WattSettle/                   ⚡ DOKUMENTASI AKTIF: build bible 24 bab
+│   ├── README.md                 hub + style guide + peta baca
+│   ├── 00 Ikhtisar.md ... 22 Decision Log.md
+│   └── assets/                   diagram dan aset visual
 ├── proofofwatt/                  📄 kontrak Foundry (ProofOfWatt.sol, 6 test PASS)
 ├── web/                          🌐 website pemaparan produksi (Astro, 17 halaman)
-├── Presentasi Opsi 5 6/           🌐 website statis v1 (fallback offline)
+├── scripts/                      🧪 docs-check.mjs (validator dokumentasi)
+├── docs/                         🗄️ arsip strategi + spec dan plan
+│   ├── Archive/                  opsi 1 sampai 13, master, SWOT, Codex 7 dan 8
+│   └── superpowers/              spec dan plan pengembangan
+├── Presentasi Opsi 5 6/          🌐 website statis v1 (fallback offline)
 └── .secrets/                     🔐 kredensial testnet (gitignored, jangan commit)
 ```
 
