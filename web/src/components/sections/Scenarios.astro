@@ -38,6 +38,11 @@ import { scenarios as sc } from "../../content/scenarios";
     flex-direction: column;
     gap: 0.7rem;
   }
+  .scen[data-accent="watt"] { background: radial-gradient(85% 70% at 100% 0%, color-mix(in oklab, var(--color-watt) 7%, transparent), transparent 62%), color-mix(in oklab, var(--color-ink) 2%, transparent); }
+  .scen[data-accent="flow"] { background: radial-gradient(85% 70% at 100% 0%, color-mix(in oklab, var(--color-flow) 7%, transparent), transparent 62%), color-mix(in oklab, var(--color-ink) 2%, transparent); }
+  .scen[data-accent="gold"] { background: radial-gradient(85% 70% at 100% 0%, color-mix(in oklab, var(--color-gold) 7%, transparent), transparent 62%), color-mix(in oklab, var(--color-ink) 2%, transparent); }
+  .scen[data-accent="heat"] { background: radial-gradient(85% 70% at 100% 0%, color-mix(in oklab, var(--color-heat) 7%, transparent), transparent 62%), color-mix(in oklab, var(--color-ink) 2%, transparent); }
+  .scen[data-accent="volt"] { background: radial-gradient(85% 70% at 100% 0%, color-mix(in oklab, var(--color-volt) 7%, transparent), transparent 62%), color-mix(in oklab, var(--color-ink) 2%, transparent); }
   .scen:hover { transform: translateY(-4px); }
   .scen[data-accent="watt"]:hover { border-color: color-mix(in oklab, var(--color-watt) 45%, transparent); }
   .scen[data-accent="flow"]:hover { border-color: color-mix(in oklab, var(--color-flow) 45%, transparent); }

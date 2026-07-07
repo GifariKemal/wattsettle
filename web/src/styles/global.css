@@ -53,18 +53,18 @@
     color-scheme: light;
     --color-void: #f4f6f3;
     --color-panel: #ffffff;
-    --color-panel-2: #eef1ec;
+    --color-panel-2: #e6eae3;
     --color-line: #dfe4dc;
     --color-ink: #12181a;
-    --color-muted: #3f483f;
-    --color-faint: #545e55;
+    --color-muted: #333c34;
+    --color-faint: #48524a;
     --color-watt: #4f8f10;
     --color-flow: #067f77;
     --color-heat: #d1481f;
     --color-gold: #a9781a;
     --color-volt: #5a45d8;
-    --edge: color-mix(in oklab, var(--color-ink) 12%, transparent);
-    --edge-strong: color-mix(in oklab, var(--color-ink) 20%, transparent);
+    --edge: color-mix(in oklab, var(--color-ink) 15%, transparent);
+    --edge-strong: color-mix(in oklab, var(--color-ink) 28%, transparent);
     --on-watt: #ffffff;
     --on-flow: #ffffff;
     --on-ink: #ffffff;
@@ -393,7 +393,7 @@
     min-height: 100dvh;
     display: flex;
     flex-direction: column;
-    padding: clamp(4.25rem, 6.5vh, 5rem) 0 clamp(2rem, 4vh, 3rem);
+    padding: clamp(4.25rem, 6.5vh, 5rem) 0 clamp(4.5rem, 8vh, 6rem);
   }
   .deck-page > .container { width: min(1200px, 92vw); }
 
@@ -472,7 +472,7 @@
     position: fixed; bottom: clamp(1rem, 3vh, 1.8rem); right: clamp(1rem, 3vw, 2rem);
     z-index: 44; display: flex; align-items: center; gap: 0.5rem;
   }
-  .deck-nav .counter { font-family: var(--font-mono); font-size: 0.74rem; color: var(--color-muted); padding-right: 0.35rem; }
+  .deck-nav .counter { font-family: var(--font-mono); font-size: 0.74rem; color: var(--color-muted); padding: 0.32rem 0.62rem; background: color-mix(in oklab, var(--color-void) 74%, transparent); border: 1px solid var(--edge); border-radius: 999px; backdrop-filter: blur(10px); }
   .deck-nav .counter b { color: var(--color-ink); }
   .deck-nav .nav-btn {
     width: 2.6rem; height: 2.6rem; display: grid; place-items: center;

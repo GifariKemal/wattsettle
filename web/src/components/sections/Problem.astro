@@ -50,11 +50,12 @@ import { problem } from "../../content/problem";
     padding: 1.1rem 1.3rem;
     border-radius: 1.1rem;
     border: 1px solid var(--edge);
+    border-left: 2px solid color-mix(in oklab, var(--color-heat) 45%, transparent);
     background: color-mix(in oklab, var(--color-ink) 2%, transparent);
     transition: border-color 0.4s ease, transform 0.4s var(--ease-out-quint);
   }
-  .prob-item:hover { border-color: var(--edge-strong); transform: translateX(4px); }
-  .prob-item .n { font-family: var(--font-mono); font-size: 0.9rem; color: var(--color-heat); flex-shrink: 0; }
+  .prob-item:hover { border-left-color: var(--color-heat); transform: translateX(4px); }
+  .prob-item .n { font-family: var(--font-display); font-weight: 700; font-size: 1.35rem; line-height: 1; color: var(--color-heat); flex-shrink: 0; }
   .prob-item h4 { font-size: 1.05rem; margin-bottom: 0.25rem; }
   .prob-item p { color: var(--color-muted); font-size: 0.9rem; line-height: 1.5; }
 
