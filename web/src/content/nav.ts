@@ -13,7 +13,7 @@ export const pages: NavPage[] = [
   { slug: "aliran-uang", label: "Aliran Uang", desc: "Siapa bayar siapa, WattSettle jadi wasit + kasir" },
   { slug: "banding", label: "5 vs 6", desc: "Perbandingan Opsi 5 (platform) vs Opsi 6 (produk)" },
   { slug: "swot", label: "SWOT", desc: "Kekuatan, celah & peta kompetitor" },
-  { slug: "menang", label: "Kenapa Menang", desc: "Tiga lever blackbox yang 100% kita kontrol" },
+  { slug: "menang", label: "Kenapa Menang", desc: "Tiga lever blackbox yang 100% kami kontrol" },
   { slug: "moat", label: "Moat", desc: "Lima hal langka sekaligus, tak bisa ditiru" },
   { slug: "benchmark", label: "Benchmark", desc: "Keputusan build utama + opsi pivot Codex" },
   { slug: "skenario", label: "Skenario", desc: "8 pasar, satu rel: solar, CBAM, EV, karbon" },

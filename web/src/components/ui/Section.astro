@@ -4,28 +4,26 @@
 import { Icon } from "astro-icon/components";
 interface Props {
   id?: string;
-  label?: string;
-  desc?: string;
   eyebrow?: string;
   title?: string;
   lead?: string;
   class?: string;
 }
-const { id, label, desc, eyebrow, title, lead, class: cls = "" } = Astro.props;
+const { id, eyebrow, title, lead, class: cls = "" } = Astro.props;
 
 const ICONS: Record<string, string> = {
   masalah: "ph:warning",
-  cara: "ph:flow-arrow",
+  simulator: "ph:flow-arrow",
   opsi: "ph:squares-four",
   codex: "ph:shopping-cart-simple",
   mesin: "ph:cpu",
-  uang: "ph:scales",
+  "aliran-uang": "ph:scales",
   banding: "ph:git-diff",
   swot: "ph:crosshair",
   menang: "ph:sliders-horizontal",
   moat: "ph:shield-check",
-  skor: "ph:chart-bar",
-  pasar: "ph:map-trifold",
+  benchmark: "ph:chart-bar",
+  skenario: "ph:map-trifold",
   peluang: "ph:percent",
   path: "ph:list-checks",
   referensi: "ph:trophy",
@@ -33,7 +31,7 @@ const ICONS: Record<string, string> = {
 };
 const icon = id ? ICONS[id] : undefined;
 ---
-<section id={id} data-label={label} data-desc={desc} class:list={["deck-page", cls]}>
+<section id={id} class:list={["deck-page", cls]}>
   <div class="slide container">
     {(eyebrow || title || lead) && (
       <header class="slide-head">

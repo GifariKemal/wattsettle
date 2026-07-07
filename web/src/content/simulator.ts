@@ -2,13 +2,13 @@
 // untuk teks tiap node + dua skenario putusan AI (approve / reject).
 // Field attestation mengikuti struct on-chain di WattSettle.sol (§3.3 master doc).
 
-export type SimNode = { glyph: string; title: string; sub: string };
+export type SimNode = { title: string; sub: string };
 
 export const simNodes: SimNode[] = [
-  { glyph: "⌁", title: "Meter / Gateway", sub: "PM20H20Q · SRT-MGATE" },
-  { glyph: "⛓", title: "Smart Contract", sub: "submitReading()" },
-  { glyph: "◈", title: "AI Verifier", sub: "otonom · cron" },
-  { glyph: "◎", title: "Settlement", sub: "auto-pay / refund" },
+  { title: "Meter / Gateway", sub: "PM20H20Q · SRT-MGATE" },
+  { title: "Smart Contract", sub: "submitReading()" },
+  { title: "AI Verifier", sub: "otonom · cron" },
+  { title: "Settlement", sub: "auto-pay / refund" },
 ];
 
 export type SimScenario = {

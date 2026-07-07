@@ -74,7 +74,7 @@ export const references = {
 
 export const prediction = {
   eyebrow: "Prediksi Arah · Kenapa future-proof",
-  headline: "Arah pasar sudah kelihatan, dan kita sudah di titiknya.",
+  headline: "Arah pasar sudah kelihatan, dan kami sudah di titiknya.",
   lead:
     "Arah BNB 2026 telah jelas: Stablecoin, RWA, dan Agentic Finance, lengkap dengan primitif native seperti ERC-8004 & x402. Bersamaan, regulasi Indonesia (OJK & CBAM berlaku Jan 2026) menjadikan 'energi nyata, terverifikasi on-chain, oleh perusahaan berizin' sebagai contoh Web3 dewasa yang justru dicari regulator maupun BNB.",
   pills: [

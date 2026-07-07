@@ -62,7 +62,7 @@ export const swot = {
     { name: "Powerledger", does: "Trading energi P2P (mapan)", gap: "Bukan attestation AI-verified; bukan industrial Indonesia; bukan BNB" },
     { name: "GenLayer / UMA / Kleros", does: "Oracle verifikasi optimistic / AI (umum)", gap: "General-purpose; tak sentuh last-mile trust energi fisik + device" },
     { name: "AgentKarma", does: "Reputasi agent di ERC-8004", gap: "Reputasi agent, bukan settlement energi fisik" },
-    { name: "zkPull / OwnaFarm", does: "Pattern-setter (juara Mantle / RWA)", gap: "Bukan kompetitor, referensi selera juri; kita 1 level di atas" },
+    { name: "zkPull / OwnaFarm", does: "Pattern-setter (juara Mantle / RWA)", gap: "Bukan kompetitor, referensi selera juri; kami 1 level di atas" },
   ],
 
   verdict:

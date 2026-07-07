@@ -58,7 +58,7 @@ export const codexOptions = {
     ["S", "Selaras dengan BNB 2026: ERC-8004, x402, ERC-8183, stablecoin, agent commerce."],
     ["W", "Tidak punya hardware moat seperti WattSettle; perlu demo yang sangat rapi agar tidak terlihat mock."],
     ["O", "Social commerce Indonesia, COD risk, refund abuse, dan agentic checkout sedang menuju titik ledak."],
-    ["T", "Visa/Mastercard/Google/Stripe bergerak cepat; posisi kita harus local trust layer, bukan AP2 universal."],
+    ["T", "Visa/Mastercard/Google/Stripe bergerak cepat; posisi kami harus local trust layer, bukan AP2 universal."],
   ],
   demo:
     "Demo panggung: user minta AI beli powerbank <250 ribu; agent pilih merchant valid; contract lock escrow; proof delivery masuk; AI approve; dana settle. Failure path: agent coba beli di atas budget, contract reject.",

@@ -115,7 +115,7 @@ export const probability = {
   eyebrow: "Kejujuran Angka",
   headline: "Peluang nyata, tanpa dilebih-lebihkan.",
   lead:
-    "Setelah semua fix: nominasi 84 sampai 90%, juara-1 in-track 45 sampai 58%, bukan >90%. Angka ini sudah di-red-team; sisanya faktor di luar kendali. Yang kita lakukan: dorong sekeras mungkin.",
+    "Setelah semua fix: nominasi 84 sampai 90%, juara-1 in-track 45 sampai 58%, bukan >90%. Angka ini sudah di-red-team; sisanya faktor di luar kendali. Yang kami lakukan: dorong sekeras mungkin.",
   stats: [
     { value: "90", suffix: "", label: "skor benchmark /100", accent: "watt" },
     { value: "84", suffix: " sampai 90%", label: "peluang nominasi", accent: "flow" },
