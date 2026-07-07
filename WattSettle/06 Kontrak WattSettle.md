@@ -175,21 +175,9 @@ function _abs(int256 x) internal pure returns (uint256) {
 
 ### Alur logika, dibaca dari atas ke bawah
 
-```mermaid
-flowchart TD
-  A["attestAndSettle id, Attestation"] --> B{"status == Pending?"}
-  B -->|tidak| R1["revert NotPending"]
-  B -->|ya| C{"anomalyScoreBps <= maxAnomalyBps<br>DAN abs delta <= maxDeltaBound?"}
-  C -->|tidak| D["status = Rejected<br>rejectedReadings++"]
-  C -->|ya| E["status = Approved<br>approvedReadings++"]
-  D --> F["emit ReadingAttested approved=false"]
-  E --> G["reward = kWh * rewardPerKwh<br>fee = reward * feeBps / 10000"]
-  G --> H{"balance kontrak >= reward?"}
-  H -->|tidak| R2["revert InsufficientRewardPool"]
-  H -->|ya| I["safeTransfer reward-fee ke owner<br>safeTransfer fee ke treasury"]
-  I --> J["emit SettlementFeeTaken"]
-  J --> F
-```
+<div align="center">
+<img src="assets/mmd-06-1.png" alt="Diagram 06 Kontrak WattSettle 1">
+</div>
 
 ### Apa yang membuat fungsi ini benar
 

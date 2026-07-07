@@ -90,22 +90,9 @@ Struktur yang ditandatangani adalah `Reading{deviceId, kWh, timestamp, nonce}`. 
 
 Alur signing di device mengikuti pola EIP-712 standar:
 
-```mermaid
-sequenceDiagram
-  participant M as 🌡️ PM20H20Q
-  participant F as 🔌 Firmware SRT-MGATE
-  participant K as 🔑 Private key ECDSA
-  participant C as 📄 WattSettle.sol
-
-  M->>F: angka kWh mentah
-  F->>F: rakit Reading{deviceId, kWh, timestamp, nonce}
-  F->>F: structHash = keccak256(abi.encode(READING_TYPEHASH, ...))
-  F->>F: digest = EIP-712 (domain ProofOfWatt/1 + structHash)
-  F->>K: sign(digest)
-  K-->>F: signature (r, s, v)
-  F->>C: relay submitReading(deviceId, kWh, timestamp, nonce, sig)
-  C->>C: ECDSA.recover(digest, sig) == signer terdaftar ?
-```
+<div align="center">
+<img src="assets/mmd-05-1.png" alt="Diagram 05 Device dan Firmware 1">
+</div>
 
 Di sisi kontrak, `submitReading` merekonstruksi digest dari field yang dikirim, lalu `ECDSA.recover` memastikan tanda tangan cocok dengan signer yang terdaftar untuk `deviceId`. Ditambah replay guard (`usedDigest`) dan monotonic guard (`lastTs`), sistem menolak bacaan palsu, bacaan yang diulang, dan bacaan dengan timestamp mundur.
 

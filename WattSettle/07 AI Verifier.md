@@ -22,16 +22,9 @@ Kontrak di [06 Kontrak WattSettle](<06 Kontrak WattSettle.md>) menyediakan `atte
 
 Agent dibangun di atas infrastruktur Hermes yang sudah beroperasi di VPS SURIOTA. Hermes sudah punya pola cron plus tool-calling, sudah punya watchdog, dan sudah menjadi asisten otonom yang jalan tanpa pengawasan. Kita tidak membangun agent dari nol, kita menambahkan satu kemampuan baru ke infra yang sudah teruji operasional. Ini moat operasional yang tidak bisa ditiru field pemula dalam timeline hackathon.
 
-```mermaid
-flowchart LR
-  C["📄 Kontrak WattSettle<br>emit ReadingSubmitted"] -->|web3.py event scan| H["🤖 Hermes Verifier<br>di VPS SURIOTA"]
-  H --> R["recompute kwhDeltaVsBaseline<br>vs baseline device"]
-  R --> A["jalankan anomaly ruleset<br>bangun Attestation"]
-  A -->|VERIFIER_ROLE, zero click| S["📄 attestAndSettle id, Attestation"]
-  S -->|emit ReadingAttested| V["🔗 validationResponse<br>ke ERC-8004 Registry LIVE"]
-  S -->|approve| P["💸 bayar produsen, fee 1%"]
-  S -->|reject| X["🚫 0 token, anomali tercatat"]
-```
+<div align="center">
+<img src="assets/mmd-07-1.png" alt="Diagram 07 AI Verifier 1">
+</div>
 
 ---
 

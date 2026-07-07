@@ -38,13 +38,9 @@ Scope hackathon dibekukan pada permukaan sekecil mungkin di atas base yang sudah
 | Fee split take-rate on-chain | Yield note, insurance pool, carbon accounting sebagai fitur |
 | Integrasi ERC-8004 live sebagai act-2 | Investor retail, pool crowd, financing on critical path |
 
-```mermaid
-flowchart LR
-  subgraph FROZEN["🧊 Scope Hackathon (frozen)"]
-    A["1 signer"] --> B["1 verifier"] --> C["1 contract"] --> D["1 loop + fee"]
-  end
-  FROZEN -.->|hanya setelah Demo Day| ROADMAP["🔭 Roadmap produk"]
-```
+<div align="center">
+<img src="assets/mmd-18-1.png" alt="Diagram 18 Roadmap Pasca-Hackathon 1">
+</div>
 
 > 💡 Aturan praktis, kalau sebuah fitur menambah aktor kedua yang harus dijaga deterministik atau menambah accounting edge-case, ia otomatis roadmap, bukan hackathon. Itulah kenapa varian settlement-rail dipilih di atas varian yang lebih kaya.
 
@@ -54,13 +50,9 @@ flowchart LR
 
 Empat arah di bawah menaikkan ceiling tanpa mengubah moat inti. Semuanya duduk di atas kombinasi lima hal langka yang sama, yaitu hardware nyata, domain OT, last mile trust, customer, dan timing regulasi.
 
-```mermaid
-flowchart TD
-  CORE["⚡ WattSettle core<br>settlement rail (hackathon)"] --> R1["🏦 WattBond<br>machine-yield note"]
-  CORE --> R2["🧾 Device-NFT<br>revenue-share financing"]
-  CORE --> R3["📄 VeriFaktur<br>machine-verified receivable"]
-  CORE --> R4["🌐 White-label<br>ke operator energy-DePIN lain"]
-```
+<div align="center">
+<img src="assets/mmd-18-2.png" alt="Diagram 18 Roadmap Pasca-Hackathon 2">
+</div>
 
 ### 🏦 WattBond, machine-yield note
 
@@ -82,15 +74,9 @@ Lisensikan kontrak plus verifier ke operator energy-DePIN SEA lain sebagai softw
 
 ## 🗓️ Timeline Roadmap Indikatif
 
-```mermaid
-flowchart LR
-  Q1["Q4 2026<br/>Demo Day 31 Okt<br/>Finalist window<br/>Harden core di testnet"]
-  Q2["Q1 2027<br/>Pilot berbayar 1 s.d 3 customer<br/>Case study plus PO redacted<br/>Fee split live"]
-  Q3["Q2 2027<br/>VeriFaktur dogfood invoice SURIOTA<br/>Device-NFT digital-twin PoC"]
-  Q4["Q3 2027<br/>WattBond yield-note pilot<br/>White-label pertama ke operator SEA"]
-  Q5["Q4 2027<br/>Land-and-expand multi-site<br/>Jalur mainnet dan stablecoin produksi"]
-  Q1 --> Q2 --> Q3 --> Q4 --> Q5
-```
+<div align="center">
+<img src="assets/mmd-18-3.png" alt="Diagram 18 Roadmap Pasca-Hackathon 3">
+</div>
 
 | Fase | Fokus | Sifat |
 |:--|:--|:--|
