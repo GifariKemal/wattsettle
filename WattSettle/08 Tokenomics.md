@@ -36,7 +36,7 @@ Ada dua kandidat settlement token. Yang default adalah `suriota`, yang cadangan 
 | Desimal | 18 | 6 |
 | Standar | OZ ERC20 plus Ownable, ada `mint onlyOwner` | ERC20 sederhana untuk demo |
 | Risiko token baru | nol, sudah ada dan teruji | ada satu artefak baru untuk dijaga |
-| Kapan dipakai | selalu, kecuali panel condong regulator | saat sensitivitas keyword "stablecoin" tinggi di hari-H |
+| Kapan dipakai | selalu, kecuali panel condong ke regulator | saat sensitivitas keyword "stablecoin" tinggi di hari-H |
 | Cara ganti | default | one-line constructor swap |
 
 <details>

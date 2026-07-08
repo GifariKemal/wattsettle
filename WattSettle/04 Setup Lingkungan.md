@@ -143,7 +143,7 @@ Output yang benar menunjukkan **6 test PASS**, mencakup:
 
 | Test | Yang diuji |
 |:--|:--|
-| `test_HappyPath_SignSubmitApprovePay` | sign, submit, approve, bayar 100 kWh ke owner |
+| `test_HappyPath_SignSubmitApprovePay` | sign, submit, approve, bayar reward untuk 100 kWh ke owner |
 | `test_Reject_NoPayout` | reject tanpa payout |
 | `test_Revert_BadSignature` | tanda tangan tidak cocok ditolak |
 | `test_Revert_Replay` | bacaan yang sama ditolak (anti replay) |
