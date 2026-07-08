@@ -1,0 +1,218 @@
+---
+import { Icon } from "astro-icon/components";
+import { intro, partner, loop, streams, production, grounding } from "../../content/enovatek";
+---
+
+<!-- INTRO -->
+<section class="section-pad hero-sec">
+  <div class="container intro-grid">
+    <div class="intro-copy">
+      <span class="eyebrow rv">{intro.kicker}</span>
+      <h1 class="intro-head">
+        {intro.headline.map((line, i) => (
+          <span class="block rv">{i === intro.headline.length - 1 ? <span class="text-gradient-watt">{line}</span> : line}</span>
+        ))}
+      </h1>
+      <p class="intro-lead rv">{intro.lead}</p>
+      <div class="intro-ctas rv">
+        <a href={intro.cta.href} class="btn btn-primary">{intro.cta.label}<span class="ic">→</span></a>
+      </div>
+    </div>
+
+    <ul class="facts">
+      {intro.facts.map((f) => (
+        <li class="fact-card bezel rv" data-spot>
+          <div class="core">
+            <span class="fact-k tag tag-flow">{f.k}</span>
+            <strong class="fact-v">{f.v}</strong>
+            <span class="fact-d">{f.d}</span>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<!-- PARTNER PROFILE -->
+<section class="section-pad">
+  <div class="container">
+    <header class="sec-head rv">
+      <span class="eyebrow">{partner.eyebrow}</span>
+      <h2 class="sec-title">{partner.title}</h2>
+      <p class="sec-lead">{partner.lead}</p>
+    </header>
+    <ul class="lines">
+      {partner.lines.map((l) => (
+        <li class={`line-card rv tone-${l.tone}`} data-spot>
+          <Icon name={l.ic} class="line-ic" />
+          <strong class="line-t">{l.t}</strong>
+          <span class="line-d">{l.d}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<!-- VALUE LOOP -->
+<section class="section-pad">
+  <div class="container">
+    <header class="sec-head rv">
+      <span class="eyebrow">{loop.eyebrow}</span>
+      <h2 class="sec-title">{loop.title}</h2>
+      <p class="sec-lead">{loop.lead}</p>
+    </header>
+    <ol class="loop-flow">
+      {loop.steps.map((s, i) => (
+        <li class={`loop-card rv tone-${s.tone}`} data-spot>
+          <span class="loop-num">{s.k}</span>
+          <Icon name={s.ic} class="loop-ic" />
+          <strong class="loop-t">{s.t}</strong>
+          <span class="loop-d">{s.d}</span>
+          {i < loop.steps.length - 1 && <span class="loop-arrow" aria-hidden="true">→</span>}
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<!-- TWO VALUE STREAMS -->
+<section class="section-pad">
+  <div class="container">
+    <header class="sec-head rv">
+      <span class="eyebrow">{streams.eyebrow}</span>
+      <h2 class="sec-title">{streams.title}</h2>
+      <p class="sec-lead">{streams.lead}</p>
+    </header>
+    <div class="streams">
+      {streams.cards.map((c) => (
+        <article class={`stream-card bezel rv tone-${c.tone}`} data-spot>
+          <div class="core">
+            <div class="stream-top">
+              <Icon name={c.ic} class="stream-ic" />
+              <span class={`tag tag-${c.tone}`}>{c.tag}</span>
+            </div>
+            <strong class="stream-t">{c.t}</strong>
+            <p class="stream-d">{c.d}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTION NOTE -->
+<section class="section-pad">
+  <div class="container">
+    <blockquote class="thesis bezel rv" data-spot>
+      <div class="core">
+        <span class="eyebrow">{production.eyebrow}</span>
+        <p class="thesis-q">{production.quote}</p>
+        <p class="thesis-b">{production.body}</p>
+      </div>
+    </blockquote>
+  </div>
+</section>
+
+<!-- GROUNDING + CTA -->
+<section class="section-pad">
+  <div class="container ground-grid">
+    <aside class="ground rv" data-spot>
+      <span class="ground-tag tag tag-heat">
+        <Icon name="ph:warning" class="ground-ic" />{grounding.title}
+      </span>
+      <p class="ground-b">{grounding.body}</p>
+    </aside>
+    <div class="ground-cta rv">
+      <p class="ground-lead">Lihat aliran nilai ini berjalan di layar: kirim reading, saksikan AI approve atau reject.</p>
+      <a href={intro.cta.href} class="btn btn-primary">{intro.cta.label}<span class="ic">→</span></a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-sec { padding-top: clamp(2.5rem, 7vw, 5rem); }
+  .intro-grid { display: grid; gap: clamp(2rem, 5vw, 4rem); align-items: center; }
+  @media (min-width: 960px) { .intro-grid { grid-template-columns: 1.15fr 0.85fr; } }
+  .intro-head { font-size: clamp(2.2rem, 5.4vw, 4rem); line-height: 1.03; }
+  .intro-head .block { display: block; }
+  .eyebrow.rv { margin-bottom: 1.1rem; }
+  .intro-lead { margin: 1.4rem 0 2rem; max-width: 56ch; color: var(--color-muted); font-size: clamp(1rem, 1.5vw, 1.18rem); line-height: 1.6; }
+  .intro-ctas { display: flex; flex-wrap: wrap; gap: 0.7rem; }
+
+  .facts { list-style: none; display: grid; gap: 0.9rem; }
+  .fact-card .core { padding: 1.15rem 1.25rem; display: flex; flex-direction: column; gap: 0.35rem; }
+  .fact-k { align-self: flex-start; }
+  .fact-v { font-family: var(--font-display); font-size: 1.35rem; }
+  .fact-d { color: var(--color-faint); font-size: 0.9rem; line-height: 1.5; }
+
+  .sec-head { max-width: 62ch; margin-bottom: clamp(2rem, 4vw, 3rem); }
+  .sec-title { font-size: clamp(1.7rem, 3.5vw, 2.7rem); margin-top: 0.6rem; }
+  .sec-lead { margin-top: 0.8rem; color: var(--color-muted); font-size: clamp(0.98rem, 1.4vw, 1.12rem); line-height: 1.6; }
+
+  /* Partner lines, 4 kartu ringan */
+  .lines { list-style: none; display: grid; gap: 1rem; }
+  @media (min-width: 720px) { .lines { grid-template-columns: repeat(4, 1fr); gap: 0.75rem; } }
+  .line-card {
+    padding: 1.4rem 1.25rem; border-radius: 1.25rem;
+    border: 1px solid var(--edge); background: color-mix(in oklab, var(--color-ink) 3%, transparent);
+    display: flex; flex-direction: column; gap: 0.5rem;
+  }
+  .line-ic { width: 1.9rem; height: 1.9rem; }
+  .tone-flow .line-ic, .tone-flow .loop-ic { color: var(--color-flow); }
+  .tone-gold .line-ic, .tone-gold .loop-ic { color: var(--color-gold); }
+  .tone-volt .line-ic, .tone-volt .loop-ic { color: var(--color-volt); }
+  .tone-watt .line-ic, .tone-watt .loop-ic { color: var(--color-watt); }
+  .line-t { font-family: var(--font-display); font-size: 1.14rem; }
+  .line-d { color: var(--color-faint); font-size: 0.88rem; line-height: 1.5; }
+
+  /* Value loop, pola loop-flow Home, 5 langkah */
+  .loop-flow { list-style: none; display: grid; gap: 1rem; }
+  @media (min-width: 720px) { .loop-flow { grid-template-columns: repeat(5, 1fr); gap: 0.7rem; } }
+  .loop-card {
+    position: relative; padding: 1.35rem 1.15rem; border-radius: 1.25rem;
+    border: 1px solid var(--edge); background: color-mix(in oklab, var(--color-ink) 3%, transparent);
+    display: flex; flex-direction: column; gap: 0.5rem;
+  }
+  .loop-num { font-family: var(--font-mono); font-size: 0.78rem; color: var(--color-faint); }
+  .loop-ic { width: 1.9rem; height: 1.9rem; }
+  .loop-t { font-family: var(--font-display); font-size: 1.12rem; }
+  .loop-d { color: var(--color-faint); font-size: 0.86rem; line-height: 1.5; }
+  .loop-arrow { position: absolute; right: -0.5rem; top: 50%; transform: translateY(-50%); color: var(--color-line); font-size: 1.1rem; z-index: 2; }
+  @media (max-width: 719px) { .loop-arrow { right: 50%; top: auto; bottom: -0.9rem; transform: translateX(50%) rotate(90deg); } }
+
+  /* Dua aliran nilai, kartu bezel besar */
+  .streams { display: grid; gap: 1.1rem; }
+  @media (min-width: 820px) { .streams { grid-template-columns: 1fr 1fr; } }
+  .stream-card .core { padding: clamp(1.5rem, 3vw, 2.2rem); display: flex; flex-direction: column; gap: 0.75rem; height: 100%; }
+  .stream-top { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
+  .stream-ic { width: 2.1rem; height: 2.1rem; }
+  .stream-card.tone-watt .stream-ic { color: var(--color-watt); }
+  .stream-card.tone-flow .stream-ic { color: var(--color-flow); }
+  .stream-t { font-family: var(--font-display); font-size: clamp(1.25rem, 2.4vw, 1.6rem); }
+  .stream-d { color: var(--color-muted); font-size: 0.98rem; line-height: 1.6; }
+
+  /* Catatan produksi, reuse thesis */
+  .thesis .core { padding: clamp(1.6rem, 4vw, 2.8rem); }
+  .thesis-q { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.4rem, 3vw, 2.1rem); line-height: 1.18; letter-spacing: -0.02em; margin-top: 0.6rem; }
+  .thesis-b { margin-top: 1rem; max-width: 70ch; color: var(--color-muted); line-height: 1.65; }
+
+  /* Grounding + CTA */
+  .ground-grid { display: grid; gap: 1.1rem; align-items: start; }
+  @media (min-width: 820px) { .ground-grid { grid-template-columns: 1.4fr 1fr; align-items: stretch; } }
+  .ground {
+    padding: clamp(1.4rem, 3vw, 2rem); border-radius: 1.4rem;
+    border: 1px solid color-mix(in oklab, var(--color-heat) 30%, var(--edge));
+    background: color-mix(in oklab, var(--color-heat) 6%, transparent);
+    display: flex; flex-direction: column; gap: 0.85rem;
+  }
+  .ground-tag { align-self: flex-start; gap: 0.4rem; }
+  .ground-ic { width: 0.95rem; height: 0.95rem; }
+  .ground-b { color: var(--color-muted); font-size: 0.95rem; line-height: 1.65; max-width: 66ch; }
+  .ground-cta {
+    padding: clamp(1.4rem, 3vw, 2rem); border-radius: 1.4rem;
+    border: 1px solid var(--edge); background: color-mix(in oklab, var(--color-ink) 3%, transparent);
+    display: flex; flex-direction: column; justify-content: space-between; gap: 1.25rem;
+  }
+  .ground-lead { color: var(--color-muted); font-size: 1rem; line-height: 1.6; }
+  .ground-cta .btn { align-self: flex-start; }
+</style>
