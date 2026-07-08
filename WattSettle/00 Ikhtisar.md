@@ -54,7 +54,7 @@ Karena yang di-settle adalah bacaan meter itu sendiri, tidak ada celah oracle an
 ## 📊 Posisi dan Peluang
 
 ```
-Opsi 5 dan 6 WattSettle  ██████████████████░░  90.0   entri utama, moat nyata
+WattSettle  ██████████████████░░  90.0   entri utama, moat nyata
 ```
 
 | Metrik | Angka jujur | Syarat |
