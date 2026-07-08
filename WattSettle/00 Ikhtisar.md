@@ -46,7 +46,7 @@ Karena yang di-settle adalah bacaan meter itu sendiri, tidak ada celah oracle an
 | Nama | **WattSettle** (Enovatek adalah use case demo) | [22 Decision Log](<22 Decision Log.md>) |
 | Token | `suriota` default, MockUSD cadangan | [08 Tokenomics](<08 Tokenomics.md>) |
 | Tooling | Foundry dan OpenZeppelin Contracts | [04 Setup Lingkungan](<04 Setup Lingkungan.md>) |
-| Track | Finance and Commerce, AI Agents fallback | [01 Latar Belakang](<01 Latar Belakang.md>) |
+| Track | Finance & Commerce, AI Agents fallback | [01 Latar Belakang](<01 Latar Belakang.md>) |
 | Chain | BSC testnet, chainId 97, UI via BscScan | [10 Deployment](<10 Deployment dan On-chain Ops.md>) |
 
 ---

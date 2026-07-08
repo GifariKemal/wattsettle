@@ -20,7 +20,7 @@
 
 Smart contract bersifat deterministik dan tertutup. Ia bisa memverifikasi tanda tangan, saldo, dan logika di dalam rantai secara sempurna, tetapi ia buta total terhadap dunia fisik. Ketika sebuah kontrak harus tahu apakah sebuah panel surya benar-benar memproduksi 512 kWh, atau apakah sebuah AC benar-benar menyala selama 8 jam, ia terpaksa mempercayai sebuah pesan dari luar. Pesan itulah oracle, dan di situ letak lubangnya.
 
-Untuk data harga aset kripto, masalah ini sudah relatif matang karena banyak sumber independen bisa saling silang cek. Untuk **kerja fisik**, ceritanya berbeda. Tidak ada Chainlink untuk membuktikan bahwa sebuah mesin di sebuah pabrik di Cikarang betul betul menghasilkan energi sebanyak yang diklaim. Angka kWh gampang dipalsukan di lapisan software, dan begitu angka palsu masuk ke kontrak, pembayaran otomatis akan mengeksekusi kebohongan itu dengan patuh.
+Untuk data harga aset kripto, masalah ini sudah relatif matang karena banyak sumber independen bisa saling silang cek. Untuk **kerja fisik**, ceritanya berbeda. Tidak ada Chainlink untuk membuktikan bahwa sebuah mesin di sebuah pabrik di Cikarang betul-betul menghasilkan energi sebanyak yang diklaim. Angka kWh mudah dipalsukan di lapisan software, dan begitu angka palsu masuk ke kontrak, pembayaran otomatis akan mengeksekusi kebohongan itu dengan patuh.
 
 > 💡 Inilah **oracle problem untuk kerja fisik**: sebuah kontrak tidak bisa mempercayai sensor. Selama jarak antara bukti fisik dan pembayaran diisi oleh pihak yang bisa berbohong, seluruh janji settlement otomatis runtuh.
 
@@ -49,7 +49,7 @@ Timeline resmi (terverifikasi dari kanal Coinvestasi dan Luma, mengoreksi asumsi
 
 > 💡 Implikasi terbesar dari timeline ini: ada **satu bulan penuh di September** untuk membangun setelah 9 sesi workshop selesai, lalu dua minggu penjurian sebelum finalis diumumkan. Jadwalnya longgar, sehingga tidak ada alasan gate hygiene tidak tuntas.
 
-Kenapa memilih track **Finance & Commerce** dan bukan AI Agents. Track AI Agents diperkirakan akan penuh dengan fork chatbot dan template, sedangkan Finance & Commerce adalah tempat hampir tidak ada pemula yang mampu mengirimkan kontrak settlement yang benar-benar bekerja. Track ini juga tepat di tengah selera juri Dev Web3 Jogja yang terbukti condong ke RWA, DePIN, dan payments. Rincian kill-shot dan validasi densitas track ada di [16 Risiko dan Kill-shots](<16 Risiko dan Kill-shots.md>).
+Pilihan track jatuh pada **Finance & Commerce**, bukan AI Agents. Track AI Agents diperkirakan akan penuh dengan fork chatbot dan template, sedangkan Finance & Commerce adalah tempat hampir tidak ada pemula yang mampu mengirimkan kontrak settlement yang benar-benar bekerja. Track ini juga tepat di tengah selera juri Dev Web3 Jogja yang terbukti condong ke RWA, DePIN, dan payments. Rincian kill-shot dan validasi densitas track ada di [16 Risiko dan Kill-shots](<16 Risiko dan Kill-shots.md>).
 
 ---
 

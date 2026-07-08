@@ -61,7 +61,7 @@ Kerangka pemenang yang identik dengan WattSettle.
 
 | Atribut | Detail |
 |:--|:--|
-| Ajang | Mantle Global Hackathon 2025, juara ZK and Privacy |
+| Ajang | Mantle Global Hackathon 2025, juara 2 ZK and Privacy |
 | Konsep | Bounty trustless, real-world off-chain event diverifikasi secara kriptografis lalu contract auto-release reward tanpa middleman |
 | Alur konkret | PR GitHub merged, verifikasi zkTLS, EigenLayer AVS enforce on-chain, auto-payout tanpa approval manual |
 | Fee | Success-based 5% |
@@ -77,7 +77,7 @@ Bukti selera juri, RWA plus real-world settlement.
 
 | Atribut | Detail |
 |:--|:--|
-| Ajang | Juara GameFi Mantle, dan juara 1 Synthesis Agentic AI |
+| Ajang | Juara 1 GameFi Mantle, dan juara 1 Synthesis Agentic AI |
 | Konsep | RWA invoice financing petani, invoice tani nyata ditokenisasi jadi "benih" ala game Hay Day, gabungan RWA dan GameFi |
 | Founder | Yeheskiel Yunus Tame, UKDW Blockchain Club Yogyakarta |
 | Relasi | Satu ekosistem Dev Web3 Jogja, mentor Sesi 1 sampai 4, kemungkinan besar juri |

@@ -36,7 +36,7 @@ Kontrak menghadapi empat kelas ancaman utama, yaitu memalsukan bacaan, mengulang
 | Reentrancy | Malicious token panggil balik saat payout | Checks-effects-interactions plus `nonReentrant` plus SafeERC20 | 🟢 diperkuat di delta |
 | Aktor tak berwenang attest | Wallet acak panggil `attestAndSettle` | `onlyRole(VERIFIER_ROLE)` | 🟢 ada, jangan sentuh |
 | Pool kering saat payout | Reward pool kontrak habis | Solvency check `balanceOf(this) < reward` revert `InsufficientRewardPool` | 🟢 ada di delta |
-| Anomali energi | Reading absurd lolos ke payout | On-chain ruleset gate anomaly dan delta bound, lalu reject on-chain | 🟢 ada di delta |
+| Anomali energi | Reading absurd lolos ke payout | On-chain ruleset gate memeriksa anomaly score dan delta bound, lalu reject on-chain | 🟢 ada di delta |
 
 ---
 

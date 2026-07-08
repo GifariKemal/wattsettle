@@ -111,10 +111,11 @@ Urutan ini penting. Item teratas memberi kenaikan probabilitas terbesar per jam 
 ```
 Efek path-to-90 pada nominasi (ilustratif)
 
-spec awal, gate terbuka   ████████████████░░░░  78 s.d 83%
+spec awal, gate terbuka   ███████████████░░░░░  78 s.d 83%
 + KS1 flip framing        █████████████████░░░  85%
 + KS2/KS3 moat & reject   ██████████████████░░  88%
-+ KS6 semua gate tutup    ██████████████████░░  84 s.d 90%
++ KS6 semua gate tutup    ██████████████████░░  90% (batas atas)
+rentang jujur akhir       █████████████████░░░  84 s.d 90%
 ```
 
 ---

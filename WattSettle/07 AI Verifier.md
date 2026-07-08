@@ -44,7 +44,7 @@ import json
 from pathlib import Path
 from web3 import Web3
 
-RPC_URL = "https://data-seed-prebsc-1-s1.bnbchain.org:8545"  # BSC testnet 97
+RPC_URL = "https://bsc-testnet-rpc.publicnode.com"  # BSC testnet 97
 w3 = Web3(Web3.HTTPProvider(RPC_URL))
 
 wattsettle = w3.eth.contract(address=CONTRACT_ADDR, abi=ABI)

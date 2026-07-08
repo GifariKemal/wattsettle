@@ -56,7 +56,7 @@ Glosarium ini alfabetis. Kolom kiri adalah istilah atau identifier apa adanya (t
 | **suriota** | Token ERC20 (18 desimal) milik SURIOTA yang sudah verified di BscScan testnet 97, token settlement default WattSettle. |
 | **VERIFIER_ROLE** | Peran AccessControl yang wajib dimiliki pemanggil `attestAndSettle`. Hanya verifier ter-otorisasi yang bisa menuliskan attestation dan memicu payout. |
 | **x402** | Standar pembayaran HTTP 402 stablecoin M2M yang live di BNB. Diperlakukan sebagai handshake self-contained "402, pay, prove" di on-chain ruleset gate. |
-| **zkPull** | Protokol bounty trustless pemenang Mantle 2025 (verifikasi dulu, bayar kemudian). Kerangka identik WattSettle, dasar tagline "zkPull for physical energy". |
+| **zkPull** | Protokol bounty trustless juara 2 ZK and Privacy Mantle 2025 (verifikasi dulu, bayar kemudian). Kerangka identik WattSettle, dasar tagline "zkPull for physical energy". |
 
 ---
 

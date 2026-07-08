@@ -18,7 +18,7 @@
 
 ## 💡 Prinsip Utama: EVOLVE, bukan REWRITE
 
-Kontrak WattSettle bukan proyek greenfield. Ia adalah evolusi terkendali dari `ProofOfWatt.sol` yang sudah ada, sudah `6 test PASS` di Foundry v1.7.1, dan sudah diverifikasi ulang. Aturan mainnya keras dan disengaja. Kita menyentuh **sesedikit mungkin** permukaan kontrak. Delta yang benar adalah satu struct baru, satu event baru, dan satu fungsi yang menggantikan `verifyReading`. Sisanya tetap byte for byte.
+Kontrak WattSettle bukan proyek greenfield. Ia adalah evolusi terkendali dari `ProofOfWatt.sol` yang sudah ada, sudah `6 test PASS` di Foundry v1.7.1, dan sudah diverifikasi ulang. Aturan mainnya keras dan disengaja. Kita menyentuh **sesedikit mungkin** permukaan kontrak. Delta yang benar adalah satu struct baru (`Attestation`), event rationale baru (`ReadingAttested` plus `SettlementFeeTaken` untuk transparansi fee), dan satu fungsi yang menggantikan `verifyReading`. Sisanya tetap byte for byte.
 
 Alasannya bukan kemalasan, tetapi strategi. Base yang sudah teruji adalah aset dengan nilai penjurian tinggi (Technical Implementation, bobot 30 persen). Menulis ulang dari nol membuang aset itu, memperkenalkan risiko regresi, dan membuat commit history terlihat seperti rewrite mendadak alih-alih pertumbuhan organik. Riwayat commit yang bersih dan berkelanjutan adalah salah satu hard gate submission, jadi disiplin ini membayar dua kali.
 
