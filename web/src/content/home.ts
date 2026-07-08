@@ -1,5 +1,26 @@
 // Konten Beranda. Angka dari WattSettle build bible, jangan mengada-ada.
 
+export const about = {
+  eyebrow: "Apa itu WattSettle",
+  title: "Rel pembayaran on-chain untuk energi yang bisa dibuktikan",
+  lead:
+    "WattSettle mengubah angka energi menjadi bukti, lalu membayarnya otomatis lewat AI, tanpa perlu ada pihak yang saling percaya. Perangkat di lapangan menandatangani kWh secara kriptografis, verifier AI otonom memeriksa kewajarannya, lalu smart contract menyelesaikan pembayaran. Semuanya tercatat di BNB Chain.",
+  cards: [
+    {
+      ic: "ph:warning",
+      tone: "heat",
+      t: "Masalahnya",
+      d: "Smart contract buta terhadap dunia fisik. Ia terpaksa mempercayai angka dari sensor, padahal angka kWh mudah dipalsukan di lapisan software. Begitu angka palsu masuk, pembayaran otomatis akan mengeksekusi kebohongan itu dengan patuh.",
+    },
+    {
+      ic: "ph:shield-check",
+      tone: "watt",
+      t: "Pendekatan WattSettle",
+      d: "Dua lapis pertahanan. Pertama, angka ditandatangani secara kriptografis di titik sumber sehingga tidak bisa diubah tanpa ketahuan. Kedua, verifier AI menuliskan alasan keputusannya on-chain sebelum kontrak membayar.",
+    },
+  ],
+} as const;
+
 export const loop = {
   eyebrow: "Satu loop",
   title: "Reading ditandatangani, AI menilai, kontrak membayar",
