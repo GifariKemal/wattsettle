@@ -7,8 +7,8 @@ import "@fontsource/geist-sans/500.css";
 import "@fontsource/geist-sans/600.css";
 import "@fontsource/geist-sans/700.css";
 import "../styles/global.css";
-import { site } from "../content/site";
-import { pages, href, total } from "../content/nav";
+import { site, footer } from "../content/site";
+import { pages, href } from "../content/nav";
 import SoundToggle from "../components/islands/SoundToggle.tsx";
 import ThemeToggle from "../components/islands/ThemeToggle.tsx";
 
@@ -16,11 +16,10 @@ interface Props { slug?: string }
 const { slug = "" } = Astro.props;
 const idx = Math.max(0, pages.findIndex((p) => p.slug === slug));
 const page = pages[idx];
-const prev = pages[idx - 1];
-const next = pages[idx + 1];
 const title = idx === 0 ? site.title : `${page.label} · WattSettle`;
 const ogImage = new URL("/og.png", Astro.site).href;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const year = 2026;
 ---
 
 <!doctype html>
@@ -48,33 +47,39 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
       import "../lib/themeInit.ts";
     </script>
     <ClientRouter />
-    <noscript><style>.rv{opacity:1 !important;transform:none !important}</style></noscript>
+    <noscript><style>.rv{opacity:1 !important;transform:none !important;filter:none !important}</style></noscript>
   </head>
   <body>
     <div class="bg-fx" aria-hidden="true">
       <span class="orb orb-a"></span><span class="orb orb-b"></span><span class="orb orb-c"></span><span class="orb orb-d"></span>
     </div>
     <div class="grain" aria-hidden="true"></div>
-    <div class="deck-ghost" aria-hidden="true">{String(idx + 1).padStart(2, "0")}</div>
 
-    <!-- Top bar -->
+    <!-- Top nav -->
     <header class="topbar">
-      <div class="topbar-left">
-        <button class="menu-btn" data-menu-toggle aria-label="Buka daftar halaman" aria-expanded="false">
+      <a href="/" class="brand"><span class="brand-dot"></span>{site.name}</a>
+
+      <nav class="topnav" aria-label="Navigasi utama">
+        {pages.map((p) => (
+          <a href={href(p.slug)} class="topnav-link" aria-current={p.slug === slug ? "page" : "false"}>{p.label}</a>
+        ))}
+      </nav>
+
+      <div class="topbar-right">
+        <div class="controls">
+          <ThemeToggle client:load />
+          <SoundToggle client:load />
+        </div>
+        <button class="menu-btn" data-menu-toggle aria-label="Buka menu" aria-expanded="false">
           <span></span><span></span><span></span>
         </button>
-        <a href="/" class="brand"><span class="brand-dot"></span>{site.name}</a>
-      </div>
-      <div class="controls">
-        <ThemeToggle client:load />
-        <SoundToggle client:load />
       </div>
     </header>
 
-    <!-- Page menu overlay -->
+    <!-- Mobile menu overlay -->
     <aside class="deck-menu" data-menu aria-hidden="true">
       <div class="deck-menu-inner">
-        <span class="eyebrow menu-eyebrow">Daftar Halaman · WattSettle</span>
+        <span class="eyebrow menu-eyebrow">Menu · WattSettle</span>
         <ol class="menu-list">
           {pages.map((p, i) => (
             <li>
@@ -88,30 +93,41 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
       </div>
     </aside>
 
-    <!-- Progress -->
-    <div class="deck-progress"><i style={`width:${((idx + 1) / total) * 100}%`}></i></div>
-
-    <!-- Rail dots -->
-    <nav class="deck-rail" aria-label="Navigasi halaman">
-      {pages.map((p) => (
-        <a href={href(p.slug)} data-label={p.label} aria-label={p.label} aria-current={p.slug === slug ? "true" : "false"}></a>
-      ))}
-    </nav>
-
-    <!-- Prev / next + counter -->
-    <div class="deck-nav">
-      <span class="counter"><b>{String(idx + 1).padStart(2, "0")}</b> / {String(total).padStart(2, "0")}</span>
-      {prev
-        ? <a class="nav-btn" data-nav-prev href={href(prev.slug)} aria-label={`Ke ${prev.label}`}>‹</a>
-        : <span class="nav-btn" aria-disabled="true">‹</span>}
-      {next
-        ? <a class="nav-btn" data-nav-next href={href(next.slug)} aria-label={`Ke ${next.label}`}>›</a>
-        : <span class="nav-btn" aria-disabled="true">›</span>}
-    </div>
-
     <main id="main">
       <slot />
     </main>
+
+    <!-- Global footer -->
+    <footer class="site-footer">
+      <div class="container">
+        <div class="foot-cta rv spot">
+          <span class="eyebrow">{footer.eyebrow}</span>
+          <h2 class="foot-head">
+            {footer.headline.map((line, i) => (
+              <span class="block">{i === footer.headline.length - 1 ? <span class="text-gradient-watt">{line}</span> : line}</span>
+            ))}
+          </h2>
+          <p class="foot-lead">{footer.lead}</p>
+          <a href={footer.cta.href} class="btn btn-primary">{footer.cta.label}<span class="ic">→</span></a>
+        </div>
+
+        <div class="foot-bar">
+          <div class="foot-brand">
+            <span class="brand-dot"></span>
+            <div>
+              <strong>{site.name}</strong>
+              <span class="foot-sub">{site.builder.company}</span>
+            </div>
+          </div>
+          <nav class="foot-links" aria-label="Tautan">
+            <a href={site.repo} target="_blank" rel="noopener">GitHub</a>
+            <a href={`${site.chain.scan}/token/${site.chain.token}`} target="_blank" rel="noopener">Token di BscScan</a>
+            <a href={`mailto:${site.builder.email}`}>Kontak</a>
+          </nav>
+          <p class="foot-copy">© {year} {site.builder.company}. <span class="foot-bismillah">{footer.bismillah}</span></p>
+        </div>
+      </div>
+    </footer>
 
     <script>
       import "../lib/nav.ts";
@@ -124,7 +140,6 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
           radial-gradient(60% 50% at 50% -10%, var(--wash-top), transparent 70%),
           var(--color-void);
       }
-      /* blueprint grid, tekstur ter-engineer yang memudar */
       .bg-fx::before {
         content: ""; position: absolute; inset: 0;
         background-image:
@@ -133,9 +148,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
         background-size: 62px 62px;
         -webkit-mask: radial-gradient(125% 85% at 50% 0%, #000 28%, transparent 72%);
         mask: radial-gradient(125% 85% at 50% 0%, #000 28%, transparent 72%);
-        opacity: 0.55;
+        opacity: 0.5;
       }
-      /* vignette, kedalaman di tepi */
       .bg-fx::after {
         content: ""; position: absolute; inset: 0;
         background: radial-gradient(125% 125% at 50% 38%, transparent 52%, color-mix(in oklab, var(--color-void) 40%, #000) 100%);
@@ -150,42 +164,57 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
       @keyframes drift-c { 50% { transform: translate3d(4vw, -6vh, 0) scale(1.06); } }
       @media (prefers-reduced-motion: reduce) { .orb { animation: none; } }
 
-      /* ghost numeral, ornamen angka halaman raksasa, mengisi sudut kosong */
-      .deck-ghost {
-        position: fixed; left: clamp(0.3rem, 1.4vw, 1.4rem); bottom: clamp(-3rem, -2.2vw, -0.8rem);
-        z-index: -1; pointer-events: none; user-select: none;
-        font-family: var(--font-display); font-weight: 800; line-height: 0.7;
-        font-size: clamp(11rem, 27vw, 25rem); letter-spacing: -0.05em;
-        color: transparent;
-        -webkit-text-stroke: 1.5px color-mix(in oklab, var(--color-ink) 4.5%, transparent);
-      }
-      /* mobile: watermark sering menabrak teks kartu, sembunyikan */
-      @media (max-width: 720px) { .deck-ghost { display: none; } }
-
+      /* Top nav */
       .topbar {
-        position: fixed; top: 0; left: 0; right: 0; z-index: 46;
-        display: flex; align-items: center; justify-content: space-between;
-        padding: clamp(1rem, 2.5vh, 1.5rem) clamp(1rem, 3vw, 2rem);
-        pointer-events: none;
+        position: sticky; top: 0; z-index: 46;
+        display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+        padding: clamp(0.8rem, 1.8vh, 1.15rem) clamp(1rem, 3vw, 2rem);
+        background: color-mix(in oklab, var(--color-void) 62%, transparent);
+        backdrop-filter: blur(16px);
+        border-bottom: 1px solid var(--edge);
       }
-      .topbar > * { pointer-events: auto; }
       .brand {
         display: inline-flex; align-items: center; gap: 0.55rem;
-        padding: 0.5rem 1rem; border-radius: 999px;
-        border: 1px solid var(--edge);
-        background: color-mix(in oklab, var(--color-void) 55%, transparent);
-        backdrop-filter: blur(14px);
-        font-family: var(--font-display); font-weight: 700; letter-spacing: -0.02em;
-        color: var(--color-ink); text-decoration: none;
+        font-family: var(--font-display); font-weight: 700; letter-spacing: -0.02em; font-size: 1.05rem;
+        color: var(--color-ink); text-decoration: none; flex-shrink: 0;
       }
-      .brand-dot { width: 0.55rem; height: 0.55rem; border-radius: 50%; background: var(--color-watt); box-shadow: 0 0 14px var(--color-watt); animation: dot-pulse 2.6s ease-in-out infinite; }
+      .brand-dot { width: 0.55rem; height: 0.55rem; border-radius: 50%; background: var(--color-watt); box-shadow: 0 0 14px var(--color-watt); animation: dot-pulse 2.6s ease-in-out infinite; flex-shrink: 0; }
       @keyframes dot-pulse { 0%, 100% { box-shadow: 0 0 12px var(--color-watt); } 50% { box-shadow: 0 0 22px var(--color-watt), 0 0 6px var(--color-watt); } }
+
+      .topnav { display: none; align-items: center; gap: 0.2rem; }
+      @media (min-width: 940px) { .topnav { display: flex; } }
+      .topnav-link {
+        padding: 0.45rem 0.85rem; border-radius: 999px;
+        font-size: 0.9rem; font-weight: 500; color: var(--color-muted); text-decoration: none;
+        transition: color 0.3s, background 0.3s;
+      }
+      .topnav-link:hover { color: var(--color-ink); background: color-mix(in oklab, var(--color-ink) 5%, transparent); }
+      .topnav-link[aria-current="page"] { color: var(--color-ink); background: color-mix(in oklab, var(--color-watt) 14%, transparent); }
+
+      .topbar-right { display: flex; align-items: center; gap: 0.6rem; }
       .controls {
-        display: flex; gap: 0.5rem; padding: 0.35rem; border-radius: 999px;
+        display: flex; gap: 0.4rem; padding: 0.3rem; border-radius: 999px;
         border: 1px solid var(--edge);
         background: color-mix(in oklab, var(--color-void) 55%, transparent);
-        backdrop-filter: blur(14px);
       }
+      .menu-btn { display: flex; }
+      @media (min-width: 940px) { .menu-btn { display: none; } }
+
+      /* Footer */
+      .site-footer { position: relative; margin-top: clamp(4rem, 10vw, 8rem); padding-block: clamp(3rem, 7vw, 6rem) clamp(1.5rem, 3vw, 2.5rem); border-top: 1px solid var(--edge); }
+      .foot-cta { padding: clamp(1.8rem, 4vw, 3.2rem); border-radius: 1.75rem; border: 1px solid var(--edge); background: color-mix(in oklab, var(--color-ink) 3%, transparent); text-align: center; }
+      .foot-head { font-size: clamp(1.8rem, 4.5vw, 3.2rem); margin-top: 0.7rem; }
+      .foot-head .block { display: block; }
+      .foot-lead { max-width: 60ch; margin: 1rem auto 1.6rem; color: var(--color-muted); font-size: clamp(0.98rem, 1.4vw, 1.12rem); line-height: 1.6; }
+      .foot-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.2rem; margin-top: clamp(2.5rem, 5vw, 4rem); padding-top: 1.6rem; border-top: 1px solid var(--edge); }
+      .foot-brand { display: flex; align-items: center; gap: 0.7rem; }
+      .foot-brand strong { display: block; font-family: var(--font-display); }
+      .foot-sub { font-size: 0.8rem; color: var(--color-faint); }
+      .foot-links { display: flex; flex-wrap: wrap; gap: 1.2rem; }
+      .foot-links a { color: var(--color-muted); text-decoration: none; font-size: 0.9rem; transition: color 0.3s; }
+      .foot-links a:hover { color: var(--color-flow); }
+      .foot-copy { font-size: 0.82rem; color: var(--color-faint); font-family: var(--font-mono); }
+      .foot-bismillah { color: var(--color-gold); }
     </style>
   </body>
 </html>

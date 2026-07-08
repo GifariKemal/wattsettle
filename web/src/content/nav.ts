@@ -1,27 +1,16 @@
-// Urutan halaman = urutan URL. slug "" = "/" (Intro). Satu sumber untuk routing,
-// menu, rail dots, prev/next, counter.
+// Urutan halaman = urutan URL. slug "" = "/" (Beranda). Satu sumber untuk routing,
+// nav produk, menu, prev/next, footer.
 
 export type NavPage = { slug: string; label: string; desc: string };
 
 export const pages: NavPage[] = [
-  { slug: "", label: "Intro", desc: "Rel pembayaran + wasit-AI untuk energi terverifikasi" },
-  { slug: "masalah", label: "Masalah", desc: "Kepercayaan buta di pasar energi & karbon" },
-  { slug: "simulator", label: "Simulator", desc: "Simulasi interaktif: kirim reading, AI menilai & bayar sendiri" },
-  { slug: "opsi", label: "Opsi 5 & 6", desc: "Rel platform (5) vs produk nyata Enovatek (6)" },
-  { slug: "codex", label: "Opsi Codex", desc: "AgentCart TrustPay: pivot cadangan finance/ecommerce" },
-  { slug: "mesin", label: "Mesin", desc: "Main sendiri: susun input → AI menilai → bayar (Opsi 5 & 6)" },
-  { slug: "aliran-uang", label: "Aliran Uang", desc: "Siapa bayar siapa, WattSettle jadi wasit + kasir" },
-  { slug: "banding", label: "5 vs 6", desc: "Perbandingan Opsi 5 (platform) vs Opsi 6 (produk)" },
-  { slug: "swot", label: "SWOT", desc: "Kekuatan, celah & peta kompetitor" },
-  { slug: "menang", label: "Kenapa Menang", desc: "Tiga lever blackbox yang 100% kami kontrol" },
-  { slug: "moat", label: "Moat", desc: "Lima hal langka sekaligus, tak bisa ditiru" },
-  { slug: "benchmark", label: "Benchmark", desc: "Keputusan build utama + opsi pivot Codex" },
-  { slug: "skenario", label: "Skenario", desc: "8 pasar, satu rel: solar, CBAM, EV, karbon" },
-  { slug: "peluang", label: "Peluang", desc: "Angka jujur: nominasi & juara, tanpa inflasi" },
-  { slug: "path", label: "Path-to-90", desc: "Checklist yang harus benar untuk menang" },
-  { slug: "referensi", label: "Referensi", desc: "Pola pemenang: zkPull & OwnaFarm" },
-  { slug: "prediksi", label: "Prediksi", desc: "Kenapa future-proof: RWA + Agentic Finance" },
-  { slug: "penutup", label: "Penutup", desc: "Kami taruh perusahaan nyata on-chain" },
+  { slug: "", label: "Beranda", desc: "Rel settlement on-chain untuk energi terverifikasi" },
+  { slug: "cara-kerja", label: "Cara Kerja", desc: "Reading ditandatangani, AI menilai, kontrak membayar" },
+  { slug: "demo", label: "Demo", desc: "Coba sendiri: approve, reject, settle di layar" },
+  { slug: "enovatek", label: "Enovatek", desc: "Cooling as a Service dengan meter PM20H20Q" },
+  { slug: "teknologi", label: "Teknologi", desc: "Kontrak, AI verifier, BNB Chain, token" },
+  { slug: "roadmap", label: "Roadmap", desc: "Posisi sekarang dan arah produk" },
+  { slug: "tentang", label: "Tentang", desc: "SURIOTA dan cara menghubungi" },
 ];
 
 export const href = (slug: string) => (slug ? `/${slug}` : "/");

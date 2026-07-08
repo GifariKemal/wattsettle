@@ -1,0 +1,185 @@
+---
+import { Icon } from "astro-icon/components";
+import { site } from "../../content/site";
+import { intro, builder, moat, links, contact } from "../../content/about";
+
+const proofLinks = [
+  {
+    ic: "ph:github-logo",
+    tag: "Kode sumber",
+    title: "Repo GitHub",
+    d: "Kontrak, verifier AI, dan situs ini, terbuka apa adanya.",
+    href: site.repo,
+    external: true,
+  },
+  {
+    ic: "ph:scales",
+    tag: "On-chain",
+    title: "Token di BscScan",
+    d: `Token ${site.chain.tokenSymbol} verified di ${site.chain.name}.`,
+    href: `${site.chain.scan}/token/${site.chain.token}`,
+    external: true,
+  },
+  {
+    ic: "ph:play-circle",
+    tag: "Interaktif",
+    title: "Demo langsung",
+    d: "Kirim reading, lihat AI menilai lalu kontrak membayar.",
+    href: "/demo",
+    external: false,
+  },
+];
+---
+
+<!-- INTRO -->
+<section class="section-pad hero-sec">
+  <div class="container">
+    <header class="sec-head rv">
+      <span class="eyebrow">{intro.eyebrow}</span>
+      <h1 class="hero-head">{intro.title}</h1>
+      <p class="hero-lead">{intro.lead}</p>
+    </header>
+
+    <div class="builder bezel rv" data-spot>
+      <div class="core">
+        <span class="eyebrow">{builder.eyebrow}</span>
+        <div class="builder-id">
+          <Icon name="ph:buildings" class="builder-ic" />
+          <div>
+            <strong class="builder-name">{builder.name}</strong>
+            <span class="builder-role">{builder.role} · {builder.company}</span>
+          </div>
+        </div>
+        <p class="builder-body">{builder.body}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MOAT · kenapa SURIOTA -->
+<section class="section-pad">
+  <div class="container">
+    <header class="sec-head rv">
+      <span class="eyebrow">{moat.eyebrow}</span>
+      <h2 class="sec-title">{moat.title}</h2>
+      <p class="sec-lead">{moat.lead}</p>
+    </header>
+    <ul class="moat-grid">
+      {moat.items.map((m) => (
+        <li class={`moat-card rv tone-${m.tone}`} data-spot>
+          <span class="moat-num">{m.no}</span>
+          <Icon name={m.ic} class="moat-ic" />
+          <strong class="moat-t">{m.title}</strong>
+          <span class="moat-d">{m.body}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<!-- TAUTAN & BUKTI -->
+<section class="section-pad">
+  <div class="container">
+    <header class="sec-head rv">
+      <span class="eyebrow">{links.eyebrow}</span>
+      <h2 class="sec-title">{links.title}</h2>
+      <p class="sec-lead">{links.lead}</p>
+    </header>
+    <div class="proof-links">
+      {proofLinks.map((l) => (
+        <a
+          href={l.href}
+          class="proof-link rv"
+          data-spot
+          {...(l.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+        >
+          <Icon name={l.ic} class="proof-link-ic" />
+          <span class="proof-link-tag tag tag-flow">{l.tag}</span>
+          <span class="proof-link-t">{l.title}<span class="proof-link-arrow">→</span></span>
+          <span class="proof-link-d">{l.d}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- KONTAK -->
+<section class="section-pad">
+  <div class="container">
+    <div class="contact bezel rv" data-spot>
+      <div class="core">
+        <span class="eyebrow">{contact.eyebrow}</span>
+        <h2 class="contact-title">{contact.title}</h2>
+        <p class="contact-body">{contact.body}</p>
+        <div class="contact-cta">
+          <a href={`mailto:${site.builder.email}`} class="btn btn-primary">
+            <Icon name="ph:envelope" class="contact-btn-ic" />
+            {site.builder.email}
+            <span class="ic">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-sec { padding-top: clamp(2.5rem, 7vw, 5rem); }
+  .hero-head { font-size: clamp(2.2rem, 5vw, 3.6rem); line-height: 1.04; margin-top: 0.6rem; max-width: 20ch; }
+  .hero-lead { margin: 1.4rem 0 0; max-width: 62ch; color: var(--color-muted); font-size: clamp(1rem, 1.5vw, 1.18rem); line-height: 1.6; }
+
+  .sec-head { max-width: 62ch; margin-bottom: clamp(2rem, 4vw, 3rem); }
+  .sec-title { font-size: clamp(1.7rem, 3.5vw, 2.7rem); margin-top: 0.6rem; }
+  .sec-lead { margin-top: 0.8rem; color: var(--color-muted); font-size: clamp(0.98rem, 1.4vw, 1.12rem); line-height: 1.6; }
+
+  /* Builder card */
+  .builder { margin-top: clamp(2rem, 4vw, 3rem); }
+  .builder .core { padding: clamp(1.6rem, 4vw, 2.6rem); display: flex; flex-direction: column; gap: 1rem; }
+  .builder-id { display: flex; align-items: center; gap: 1rem; }
+  .builder-ic { width: 2.4rem; height: 2.4rem; color: var(--color-flow); flex-shrink: 0; }
+  .builder-name { display: block; font-family: var(--font-display); font-size: clamp(1.3rem, 2.4vw, 1.7rem); line-height: 1.1; }
+  .builder-role { display: block; margin-top: 0.25rem; font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.02em; color: var(--color-faint); }
+  .builder-body { max-width: 70ch; color: var(--color-muted); line-height: 1.65; }
+
+  /* Moat grid */
+  .moat-grid { list-style: none; display: grid; gap: 1rem; }
+  @media (min-width: 720px) { .moat-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1040px) { .moat-grid { grid-template-columns: repeat(3, 1fr); } }
+  .moat-card {
+    position: relative; padding: 1.5rem 1.35rem; border-radius: 1.25rem;
+    border: 1px solid var(--edge); background: color-mix(in oklab, var(--color-ink) 3%, transparent);
+    display: flex; flex-direction: column; gap: 0.55rem;
+  }
+  .moat-num { font-family: var(--font-mono); font-size: 0.78rem; color: var(--color-faint); }
+  .moat-ic { width: 2rem; height: 2rem; }
+  .tone-flow .moat-ic { color: var(--color-flow); }
+  .tone-gold .moat-ic { color: var(--color-gold); }
+  .tone-volt .moat-ic { color: var(--color-volt); }
+  .tone-watt .moat-ic { color: var(--color-watt); }
+  .moat-t { font-family: var(--font-display); font-size: 1.2rem; }
+  .moat-d { color: var(--color-faint); font-size: 0.9rem; line-height: 1.55; }
+
+  /* Tautan & bukti */
+  .proof-links { display: grid; gap: 1rem; }
+  @media (min-width: 720px) { .proof-links { grid-template-columns: repeat(3, 1fr); } }
+  .proof-link {
+    display: flex; flex-direction: column; gap: 0.55rem; text-decoration: none;
+    padding: 1.5rem 1.4rem; border-radius: 1.25rem; border: 1px solid var(--edge);
+    background: color-mix(in oklab, var(--color-ink) 3%, transparent);
+    transition: transform 0.4s var(--ease-spring), border-color 0.3s;
+  }
+  .proof-link:hover { transform: translateY(-3px); border-color: color-mix(in oklab, var(--color-flow) 40%, transparent); }
+  .proof-link-ic { width: 1.8rem; height: 1.8rem; color: var(--color-flow); }
+  .proof-link-tag { align-self: flex-start; margin-top: 0.15rem; }
+  .proof-link-t { font-family: var(--font-display); font-weight: 600; font-size: 1.15rem; color: var(--color-ink); display: flex; align-items: center; gap: 0.4rem; }
+  .proof-link-arrow { transition: transform 0.4s var(--ease-spring); }
+  .proof-link:hover .proof-link-arrow { transform: translateX(4px); }
+  .proof-link-d { color: var(--color-faint); font-size: 0.9rem; line-height: 1.55; }
+
+  /* Kontak */
+  .contact .core { padding: clamp(1.8rem, 4.5vw, 3rem); display: flex; flex-direction: column; gap: 1rem; }
+  .contact-title { font-size: clamp(1.6rem, 3.5vw, 2.6rem); }
+  .contact-body { max-width: 62ch; color: var(--color-muted); line-height: 1.65; }
+  .contact-cta { margin-top: 0.6rem; }
+  .contact-btn-ic { width: 1.15rem; height: 1.15rem; }
+</style>

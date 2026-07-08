@@ -1,0 +1,288 @@
+---
+import { Icon } from "astro-icon/components";
+import { intro, reading, attestation, loop, architecture, thesis } from "../../content/howItWorks";
+---
+
+<!-- INTRO / MENTAL MODEL -->
+<section class="section-pad">
+  <div class="container">
+    <header class="sec-head rv">
+      <span class="eyebrow">{intro.eyebrow}</span>
+      <h1 class="sec-title">{intro.title}</h1>
+      <p class="sec-lead">{intro.lead}</p>
+    </header>
+    <div class="model-grid">
+      {intro.model.map((m) => (
+        <article class={`model-card rv tone-${m.tone}`} data-spot>
+          <Icon name={m.ic} class="model-ic" />
+          <strong class="model-t">{m.t}</strong>
+          <p class="model-d">{m.d}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- READING STRUCT -->
+<section class="section-pad">
+  <div class="container">
+    <header class="sec-head rv">
+      <span class="eyebrow">{reading.eyebrow}</span>
+      <h2 class="sec-title"><span class="mono-title">{reading.title}</span></h2>
+      <p class="sec-lead">{reading.lead}</p>
+    </header>
+
+    <div class="struct-grid rv" data-spot>
+      <div class="bezel">
+        <div class="core struct-core">
+          <ul class="field-list">
+            {reading.fields.map((f) => (
+              <li class="field-row">
+                <code class="field-name">{f.name}</code>
+                <span class="tag tag-flow field-type">{f.type}</span>
+                <span class="field-d">{f.d}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="guard-grid">
+      {reading.guards.map((g) => (
+        <article class="guard-card rv" data-spot>
+          <Icon name={g.ic} class="guard-ic" />
+          <div>
+            <strong class="guard-t">{g.t}</strong>
+            <p class="guard-d">{g.d}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- ATTESTATION STRUCT -->
+<section class="section-pad">
+  <div class="container">
+    <header class="sec-head rv">
+      <span class="eyebrow">{attestation.eyebrow}</span>
+      <h2 class="sec-title"><span class="mono-title">{attestation.title}</span></h2>
+      <p class="sec-lead">{attestation.lead}</p>
+    </header>
+
+    <div class="struct-grid rv" data-spot>
+      <div class="bezel">
+        <div class="core struct-core">
+          <ul class="field-list">
+            {attestation.fields.map((f) => (
+              <li class="field-row">
+                <code class="field-name">{f.name}</code>
+                <span class="tag tag-volt field-type">{f.type}</span>
+                <span class="field-d">{f.d}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <p class="struct-note rv">{attestation.note}</p>
+  </div>
+</section>
+
+<!-- LOOP END TO END -->
+<section class="section-pad">
+  <div class="container">
+    <header class="sec-head rv">
+      <span class="eyebrow">{loop.eyebrow}</span>
+      <h2 class="sec-title">{loop.title}</h2>
+      <p class="sec-lead">{loop.lead}</p>
+    </header>
+
+    <ol class="loop-flow">
+      {loop.steps.map((s, i) => (
+        <li class={`loop-card rv tone-${s.tone}`} data-spot>
+          <span class="loop-num">{s.k}</span>
+          <Icon name={s.ic} class="loop-ic" />
+          <strong class="loop-t">{s.t}</strong>
+          <code class="loop-call">{s.call}</code>
+          <span class="loop-d">{s.d}</span>
+          {i < loop.steps.length - 1 && <span class="loop-arrow" aria-hidden="true">→</span>}
+        </li>
+      ))}
+    </ol>
+
+    <div class="branch-grid">
+      {loop.branches.map((b) => (
+        <article class={`branch-card rv tone-${b.tone}`} data-spot>
+          <Icon name={b.ic} class="branch-ic" />
+          <div>
+            <strong class="branch-t">{b.t}</strong>
+            <p class="branch-d">{b.d}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE 3-LAYER -->
+<section class="section-pad">
+  <div class="container">
+    <header class="sec-head rv">
+      <span class="eyebrow">{architecture.eyebrow}</span>
+      <h2 class="sec-title">{architecture.title}</h2>
+      <p class="sec-lead">{architecture.lead}</p>
+    </header>
+
+    <div class="layer-stack">
+      {architecture.layers.map((l) => (
+        <article class={`layer-card rv tone-${l.tone}`} data-spot>
+          <div class="layer-head">
+            <Icon name={l.ic} class="layer-ic" />
+            <span class="layer-k">{l.k}</span>
+            <span class={`tag layer-tag tag-${l.tone === "flow" ? "flow" : l.tone === "gold" ? "gold" : "volt"}`}>{l.tag}</span>
+          </div>
+          <strong class="layer-t">{l.t}</strong>
+          <p class="layer-d">{l.d}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- THESIS: NO ORACLE GAP -->
+<section class="section-pad">
+  <div class="container">
+    <blockquote class="thesis bezel rv" data-spot>
+      <div class="core">
+        <span class="eyebrow">{thesis.eyebrow}</span>
+        <p class="thesis-q">{thesis.quote}</p>
+        <p class="thesis-b">{thesis.body}</p>
+      </div>
+    </blockquote>
+  </div>
+</section>
+
+<style>
+  .sec-head { max-width: 68ch; margin-bottom: clamp(2rem, 4vw, 3rem); }
+  .sec-title { font-size: clamp(1.7rem, 3.5vw, 2.7rem); margin-top: 0.6rem; }
+  .sec-lead { margin-top: 0.8rem; color: var(--color-muted); font-size: clamp(0.98rem, 1.4vw, 1.12rem); line-height: 1.6; }
+  .mono-title { font-family: var(--font-mono); font-size: 0.82em; letter-spacing: -0.01em; }
+
+  /* Mental model */
+  .model-grid { display: grid; gap: 1rem; }
+  @media (min-width: 720px) { .model-grid { grid-template-columns: 1fr 1fr; } }
+  .model-card {
+    padding: clamp(1.5rem, 3vw, 2rem); border-radius: 1.25rem;
+    border: 1px solid var(--edge); background: color-mix(in oklab, var(--color-ink) 3%, transparent);
+    display: flex; flex-direction: column; gap: 0.7rem;
+  }
+  .model-ic { width: 2.1rem; height: 2.1rem; }
+  .tone-flow .model-ic, .tone-flow .layer-ic { color: var(--color-flow); }
+  .tone-gold .model-ic, .tone-gold .layer-ic { color: var(--color-gold); }
+  .tone-volt .model-ic, .tone-volt .layer-ic { color: var(--color-volt); }
+  .tone-watt .model-ic { color: var(--color-watt); }
+  .model-t { font-family: var(--font-display); font-size: 1.35rem; }
+  .model-d { color: var(--color-muted); font-size: 0.95rem; line-height: 1.6; }
+
+  /* Struct field list */
+  .struct-grid { margin-bottom: 1rem; }
+  .struct-core { padding: clamp(1.1rem, 2.5vw, 1.6rem); }
+  .field-list { list-style: none; display: flex; flex-direction: column; }
+  .field-row {
+    display: grid; align-items: baseline; gap: 0.5rem 0.9rem;
+    grid-template-columns: minmax(0, auto) auto;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--edge);
+  }
+  .field-row:last-child { border-bottom: 0; padding-bottom: 0; }
+  .field-row:first-child { padding-top: 0; }
+  @media (min-width: 760px) {
+    .field-row { grid-template-columns: 13rem auto 1fr; }
+  }
+  .field-name { font-family: var(--font-mono); font-size: 0.92rem; color: var(--color-ink); font-weight: 600; }
+  .field-type { align-self: center; justify-self: start; }
+  .tag-volt { color: var(--color-volt); border-color: color-mix(in oklab, var(--color-volt) 35%, transparent); }
+  .field-d { color: var(--color-faint); font-size: 0.9rem; line-height: 1.5; grid-column: 1 / -1; }
+  @media (min-width: 760px) { .field-d { grid-column: 3; } }
+
+  .struct-note {
+    margin-top: 1.4rem; max-width: 78ch; color: var(--color-muted);
+    font-size: 0.98rem; line-height: 1.65;
+    padding-left: 1rem; border-left: 2px solid color-mix(in oklab, var(--color-volt) 45%, transparent);
+  }
+
+  /* Guards */
+  .guard-grid { display: grid; gap: 0.9rem; margin-top: 1.1rem; }
+  @media (min-width: 720px) { .guard-grid { grid-template-columns: 1fr 1fr; } }
+  .guard-card {
+    display: flex; gap: 0.9rem; align-items: flex-start;
+    padding: 1.2rem 1.25rem; border-radius: 1.25rem;
+    border: 1px solid var(--edge); background: color-mix(in oklab, var(--color-ink) 3%, transparent);
+  }
+  .guard-ic { width: 1.6rem; height: 1.6rem; flex-shrink: 0; color: var(--color-flow); }
+  .guard-t { font-family: var(--font-display); font-size: 1.05rem; }
+  .guard-d { color: var(--color-faint); font-size: 0.9rem; line-height: 1.5; margin-top: 0.25rem; }
+
+  /* Loop flow, pola sama seperti Home */
+  .loop-flow { list-style: none; display: grid; gap: 1rem; }
+  @media (min-width: 720px) { .loop-flow { grid-template-columns: repeat(4, 1fr); gap: 0.75rem; } }
+  .loop-card {
+    position: relative; padding: 1.4rem 1.25rem; border-radius: 1.25rem;
+    border: 1px solid var(--edge); background: color-mix(in oklab, var(--color-ink) 3%, transparent);
+    display: flex; flex-direction: column; gap: 0.5rem;
+  }
+  .loop-num { font-family: var(--font-mono); font-size: 0.78rem; color: var(--color-faint); }
+  .loop-ic { width: 1.9rem; height: 1.9rem; }
+  .tone-flow .loop-ic { color: var(--color-flow); }
+  .tone-gold .loop-ic { color: var(--color-gold); }
+  .tone-volt .loop-ic { color: var(--color-volt); }
+  .tone-watt .loop-ic { color: var(--color-watt); }
+  .loop-t { font-family: var(--font-display); font-size: 1.2rem; }
+  .loop-call { font-family: var(--font-mono); font-size: 0.76rem; color: var(--color-muted); }
+  .tone-flow .loop-call { color: var(--color-flow); }
+  .tone-gold .loop-call { color: var(--color-gold); }
+  .tone-volt .loop-call { color: var(--color-volt); }
+  .tone-watt .loop-call { color: var(--color-watt); }
+  .loop-d { color: var(--color-faint); font-size: 0.88rem; line-height: 1.5; }
+  .loop-arrow { position: absolute; right: -0.55rem; top: 50%; transform: translateY(-50%); color: var(--color-line); font-size: 1.1rem; z-index: 2; }
+  @media (max-width: 719px) { .loop-arrow { right: 50%; top: auto; bottom: -0.9rem; transform: translateX(50%) rotate(90deg); } }
+
+  /* Branches approve / reject */
+  .branch-grid { display: grid; gap: 0.9rem; margin-top: 1.1rem; }
+  @media (min-width: 720px) { .branch-grid { grid-template-columns: 1fr 1fr; } }
+  .branch-card {
+    display: flex; gap: 0.9rem; align-items: flex-start;
+    padding: 1.3rem 1.35rem; border-radius: 1.25rem;
+    border: 1px solid var(--edge); background: color-mix(in oklab, var(--color-ink) 3%, transparent);
+  }
+  .branch-card.tone-watt { border-color: color-mix(in oklab, var(--color-watt) 32%, transparent); }
+  .branch-card.tone-heat { border-color: color-mix(in oklab, var(--color-heat) 32%, transparent); }
+  .branch-ic { width: 1.9rem; height: 1.9rem; flex-shrink: 0; }
+  .tone-watt .branch-ic { color: var(--color-watt); }
+  .tone-heat .branch-ic { color: var(--color-heat); }
+  .branch-t { font-family: var(--font-display); font-size: 1.15rem; }
+  .branch-d { color: var(--color-muted); font-size: 0.92rem; line-height: 1.55; margin-top: 0.3rem; }
+
+  /* Architecture layer stack */
+  .layer-stack { display: grid; gap: 1rem; }
+  @media (min-width: 900px) { .layer-stack { grid-template-columns: repeat(3, 1fr); } }
+  .layer-card {
+    padding: clamp(1.4rem, 3vw, 1.8rem); border-radius: 1.25rem;
+    border: 1px solid var(--edge); background: color-mix(in oklab, var(--color-ink) 3%, transparent);
+    display: flex; flex-direction: column; gap: 0.6rem;
+  }
+  .layer-head { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+  .layer-ic { width: 1.9rem; height: 1.9rem; }
+  .layer-k { font-family: var(--font-mono); font-size: 0.78rem; color: var(--color-faint); text-transform: uppercase; letter-spacing: 0.14em; }
+  .layer-tag { margin-left: auto; }
+  .layer-t { font-family: var(--font-display); font-size: 1.3rem; margin-top: 0.15rem; }
+  .layer-d { color: var(--color-muted); font-size: 0.93rem; line-height: 1.6; }
+
+  /* Thesis, pola sama seperti Home */
+  .thesis .core { padding: clamp(1.6rem, 4vw, 2.8rem); }
+  .thesis-q { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.4rem, 3vw, 2.1rem); line-height: 1.18; letter-spacing: -0.02em; margin-top: 0.6rem; }
+  .thesis-b { margin-top: 1rem; max-width: 74ch; color: var(--color-muted); line-height: 1.65; }
+</style>

@@ -1,0 +1,193 @@
+---
+import { Icon } from "astro-icon/components";
+import { intro, now, timeline, directions, scope } from "../../content/roadmap";
+---
+
+<!-- INTRO -->
+<section class="section-pad hero-sec">
+  <div class="container">
+    <header class="sec-head rv">
+      <span class="eyebrow">{intro.eyebrow}</span>
+      <h1 class="intro-head">{intro.title}</h1>
+      <p class="sec-lead">{intro.lead}</p>
+    </header>
+  </div>
+</section>
+
+<!-- POSISI SEKARANG -->
+<section class="section-pad">
+  <div class="container">
+    <header class="sec-head rv">
+      <span class="eyebrow">{now.eyebrow}</span>
+      <h2 class="sec-title">{now.title}</h2>
+      <p class="sec-lead">{now.lead}</p>
+    </header>
+    <ul class="now-grid">
+      {now.items.map((it) => (
+        <li class={`now-card bezel rv tone-${it.tone}`} data-spot>
+          <div class="core">
+            <Icon name={it.ic} class="now-ic" />
+            <strong class="now-t">{it.t}</strong>
+            <span class="now-d">{it.d}</span>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section class="section-pad">
+  <div class="container">
+    <header class="sec-head rv">
+      <span class="eyebrow">{timeline.eyebrow}</span>
+      <h2 class="sec-title">{timeline.title}</h2>
+      <p class="sec-lead">{timeline.lead}</p>
+    </header>
+    <ol class="phase-flow">
+      {timeline.phases.map((p, i) => (
+        <li class={`phase-card rv tone-${p.tone}`} data-spot>
+          <span class="phase-k">{p.k}</span>
+          <strong class="phase-t">{p.t}</strong>
+          <span class="phase-d">{p.d}</span>
+          <span class="phase-sifat tag">{p.sifat}</span>
+          {i < timeline.phases.length - 1 && <span class="phase-arrow" aria-hidden="true">→</span>}
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<!-- ARAH PRODUK -->
+<section class="section-pad">
+  <div class="container">
+    <header class="sec-head rv">
+      <span class="eyebrow">{directions.eyebrow}</span>
+      <h2 class="sec-title">{directions.title}</h2>
+      <p class="sec-lead">{directions.lead}</p>
+    </header>
+    <div class="dir-grid">
+      {directions.cards.map((c) => (
+        <article class={`dir-card bezel rv tone-${c.tone}`} data-spot>
+          <div class="core">
+            <div class="dir-head">
+              <Icon name={c.ic} class="dir-ic" />
+              <span class="dir-tag tag">{c.tag}</span>
+            </div>
+            <strong class="dir-t">{c.t}</strong>
+            <p class="dir-d">{c.d}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- SCOPE JUJUR -->
+<section class="section-pad">
+  <div class="container">
+    <header class="sec-head rv">
+      <span class="eyebrow">{scope.eyebrow}</span>
+      <h2 class="sec-title">{scope.title}</h2>
+      <p class="sec-lead">{scope.lead}</p>
+    </header>
+    <div class="scope-grid">
+      <div class="scope-col bezel rv tone-watt" data-spot>
+        <div class="core">
+          <span class="scope-h"><Icon name="ph:check-circle" class="scope-h-ic" />{scope.done.t}</span>
+          <ul class="scope-list">
+            {scope.done.items.map((it) => <li>{it}</li>)}
+          </ul>
+        </div>
+      </div>
+      <div class="scope-col bezel rv tone-volt" data-spot>
+        <div class="core">
+          <span class="scope-h"><Icon name="ph:rocket" class="scope-h-ic" />{scope.planned.t}</span>
+          <ul class="scope-list scope-list-planned">
+            {scope.planned.items.map((it) => <li>{it}</li>)}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-sec { padding-top: clamp(2.5rem, 7vw, 5rem); }
+  .intro-head { font-size: clamp(2rem, 4.6vw, 3.4rem); line-height: 1.04; margin-top: 0.6rem; }
+
+  .sec-head { max-width: 64ch; margin-bottom: clamp(2rem, 4vw, 3rem); }
+  .sec-title { font-size: clamp(1.7rem, 3.5vw, 2.7rem); margin-top: 0.6rem; }
+  .sec-lead { margin-top: 0.8rem; color: var(--color-muted); font-size: clamp(0.98rem, 1.4vw, 1.12rem); line-height: 1.6; }
+
+  /* Posisi sekarang */
+  .now-grid { list-style: none; display: grid; gap: 1rem; }
+  @media (min-width: 720px) { .now-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1040px) { .now-grid { grid-template-columns: repeat(4, 1fr); } }
+  .now-card .core { padding: 1.35rem 1.25rem; display: flex; flex-direction: column; gap: 0.5rem; height: 100%; }
+  .now-ic { width: 1.9rem; height: 1.9rem; }
+  .now-t { font-family: var(--font-display); font-size: 1.15rem; }
+  .now-d { color: var(--color-faint); font-size: 0.88rem; line-height: 1.5; }
+  .tone-flow .now-ic { color: var(--color-flow); }
+  .tone-gold .now-ic { color: var(--color-gold); }
+  .tone-volt .now-ic { color: var(--color-volt); }
+  .tone-watt .now-ic { color: var(--color-watt); }
+
+  /* Timeline, pola loop-flow */
+  .phase-flow { list-style: none; display: grid; gap: 1rem; }
+  @media (min-width: 900px) { .phase-flow { grid-template-columns: repeat(5, 1fr); gap: 0.7rem; } }
+  .phase-card {
+    position: relative; padding: 1.4rem 1.2rem; border-radius: 1.25rem;
+    border: 1px solid var(--edge); background: color-mix(in oklab, var(--color-ink) 3%, transparent);
+    display: flex; flex-direction: column; gap: 0.5rem;
+  }
+  .phase-k {
+    font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.04em;
+    color: var(--color-faint); width: fit-content;
+    border-bottom: 2px solid var(--color-line); padding-bottom: 0.3rem;
+  }
+  .tone-flow .phase-k { color: var(--color-flow); border-color: color-mix(in oklab, var(--color-flow) 45%, transparent); }
+  .tone-gold .phase-k { color: var(--color-gold); border-color: color-mix(in oklab, var(--color-gold) 45%, transparent); }
+  .tone-volt .phase-k { color: var(--color-volt); border-color: color-mix(in oklab, var(--color-volt) 45%, transparent); }
+  .tone-watt .phase-k { color: var(--color-watt); border-color: color-mix(in oklab, var(--color-watt) 45%, transparent); }
+  .phase-t { font-family: var(--font-display); font-size: 1.12rem; }
+  .phase-d { color: var(--color-faint); font-size: 0.86rem; line-height: 1.5; flex: 1 1 auto; }
+  .phase-sifat { align-self: flex-start; font-size: 0.66rem; }
+  .phase-arrow { position: absolute; right: -0.5rem; top: 2.1rem; color: var(--color-line); font-size: 1.1rem; z-index: 2; }
+  @media (max-width: 899px) { .phase-arrow { right: 50%; top: auto; bottom: -0.9rem; transform: translateX(50%) rotate(90deg); } }
+
+  /* Arah produk */
+  .dir-grid { display: grid; gap: 1rem; }
+  @media (min-width: 800px) { .dir-grid { grid-template-columns: repeat(2, 1fr); } }
+  .dir-card .core { padding: clamp(1.5rem, 3vw, 2rem); display: flex; flex-direction: column; gap: 0.75rem; height: 100%; }
+  .dir-head { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
+  .dir-ic { width: 2.1rem; height: 2.1rem; }
+  .tone-flow .dir-ic { color: var(--color-flow); }
+  .tone-gold .dir-ic { color: var(--color-gold); }
+  .tone-volt .dir-ic { color: var(--color-volt); }
+  .tone-watt .dir-ic { color: var(--color-watt); }
+  .dir-tag { font-size: 0.68rem; }
+  .tone-flow .dir-tag { color: var(--color-flow); border-color: color-mix(in oklab, var(--color-flow) 35%, transparent); }
+  .tone-gold .dir-tag { color: var(--color-gold); border-color: color-mix(in oklab, var(--color-gold) 35%, transparent); }
+  .tone-volt .dir-tag { color: var(--color-volt); border-color: color-mix(in oklab, var(--color-volt) 35%, transparent); }
+  .tone-watt .dir-tag { color: var(--color-watt); border-color: color-mix(in oklab, var(--color-watt) 35%, transparent); }
+  .dir-t { font-family: var(--font-display); font-size: 1.5rem; letter-spacing: -0.02em; }
+  .dir-d { color: var(--color-muted); font-size: 0.94rem; line-height: 1.6; max-width: 58ch; }
+
+  /* Scope jujur */
+  .scope-grid { display: grid; gap: 1rem; }
+  @media (min-width: 800px) { .scope-grid { grid-template-columns: repeat(2, 1fr); } }
+  .scope-col .core { padding: clamp(1.4rem, 3vw, 1.9rem); display: flex; flex-direction: column; gap: 1rem; height: 100%; }
+  .scope-h { display: flex; align-items: center; gap: 0.6rem; font-family: var(--font-display); font-weight: 700; font-size: 1.2rem; }
+  .scope-h-ic { width: 1.4rem; height: 1.4rem; flex-shrink: 0; }
+  .tone-watt .scope-h-ic { color: var(--color-watt); }
+  .tone-volt .scope-h-ic { color: var(--color-volt); }
+  .scope-list { list-style: none; display: grid; gap: 0.7rem; }
+  .scope-list li { position: relative; padding-left: 1.4rem; color: var(--color-muted); font-size: 0.94rem; line-height: 1.5; }
+  .scope-list li::before {
+    content: ""; position: absolute; left: 0; top: 0.55rem;
+    width: 0.5rem; height: 0.5rem; border-radius: 999px;
+    background: var(--color-watt);
+  }
+  .scope-list-planned li::before { background: transparent; border: 1.5px solid var(--color-volt); }
+</style>

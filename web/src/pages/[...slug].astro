@@ -1,48 +1,26 @@
 ---
 import PageShell from "../layouts/PageShell.astro";
 import { pages } from "../content/nav";
-import Hero from "../components/sections/Hero.astro";
-import Problem from "../components/sections/Problem.astro";
-import SimulatorSection from "../components/sections/SimulatorSection.astro";
-import Options from "../components/sections/Options.astro";
-import CodexOptions from "../components/sections/CodexOptions.astro";
-import Machine from "../components/sections/Machine.astro";
-import MoneyFlow from "../components/sections/MoneyFlow.astro";
-import Comparison from "../components/sections/Comparison.astro";
-import Swot from "../components/sections/Swot.astro";
-import Levers from "../components/sections/Levers.astro";
-import Moat from "../components/sections/Moat.astro";
-import Scoring from "../components/sections/Scoring.astro";
-import Scenarios from "../components/sections/Scenarios.astro";
-import Probability from "../components/sections/Probability.astro";
-import PathTo90 from "../components/sections/PathTo90.astro";
-import References from "../components/sections/References.astro";
-import Prediction from "../components/sections/Prediction.astro";
-import Footer from "../components/sections/Footer.astro";
+import Home from "../components/pages/Home.astro";
+import CaraKerja from "../components/pages/CaraKerja.astro";
+import Demo from "../components/pages/Demo.astro";
+import Enovatek from "../components/pages/Enovatek.astro";
+import Teknologi from "../components/pages/Teknologi.astro";
+import Roadmap from "../components/pages/Roadmap.astro";
+import Tentang from "../components/pages/Tentang.astro";
 
 export function getStaticPaths() {
   return pages.map((p) => ({ params: { slug: p.slug || undefined } }));
 }
 
 const MAP: Record<string, any> = {
-  "": Hero,
-  masalah: Problem,
-  simulator: SimulatorSection,
-  opsi: Options,
-  codex: CodexOptions,
-  mesin: Machine,
-  "aliran-uang": MoneyFlow,
-  banding: Comparison,
-  swot: Swot,
-  menang: Levers,
-  moat: Moat,
-  benchmark: Scoring,
-  skenario: Scenarios,
-  peluang: Probability,
-  path: PathTo90,
-  referensi: References,
-  prediksi: Prediction,
-  penutup: Footer,
+  "": Home,
+  "cara-kerja": CaraKerja,
+  demo: Demo,
+  enovatek: Enovatek,
+  teknologi: Teknologi,
+  roadmap: Roadmap,
+  tentang: Tentang,
 };
 
 const slug = Astro.params.slug ?? "";

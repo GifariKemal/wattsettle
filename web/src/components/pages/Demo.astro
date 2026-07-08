@@ -1,0 +1,103 @@
+---
+import { Icon } from "astro-icon/components";
+import { site } from "../../content/site";
+import { demo } from "../../content/demo";
+import Simulator from "../islands/Simulator.tsx";
+import SettleMachine from "../islands/SettleMachine.tsx";
+---
+
+<!-- INTRO -->
+<section class="section-pad">
+  <div class="container">
+    <header class="sec-head rv">
+      <span class="eyebrow">{demo.intro.eyebrow}</span>
+      <h1 class="sec-title">{demo.intro.title}</h1>
+      <p class="sec-lead">{demo.intro.lead}</p>
+    </header>
+  </div>
+</section>
+
+<!-- SIMULATOR -->
+<section class="section-pad">
+  <div class="container">
+    <header class="sec-head rv">
+      <span class="eyebrow">{demo.simulator.eyebrow}</span>
+      <h2 class="sec-title">{demo.simulator.title}</h2>
+      <p class="sec-lead">{demo.simulator.lead}</p>
+    </header>
+    <div class="bezel sim-wrap rv" data-spot>
+      <div class="core">
+        <Simulator client:load />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MESIN SETTLEMENT -->
+<section class="section-pad">
+  <div class="container">
+    <header class="sec-head rv">
+      <span class="eyebrow">{demo.machine.eyebrow}</span>
+      <h2 class="sec-title">{demo.machine.title}</h2>
+      <p class="sec-lead">{demo.machine.lead}</p>
+    </header>
+    <div class="bezel sm-wrap rv" data-spot>
+      <div class="core">
+        <SettleMachine client:load />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BUKTI ON-CHAIN -->
+<section class="section-pad">
+  <div class="container">
+    <header class="sec-head rv">
+      <span class="eyebrow">{demo.proof.eyebrow}</span>
+      <h2 class="sec-title">{demo.proof.title}</h2>
+      <p class="sec-lead">{demo.proof.lead}</p>
+    </header>
+    <div class="proof-onchain bezel rv" data-spot>
+      <div class="core">
+        <Icon name="ph:seal-check" class="proof-ic" />
+        <div class="proof-body">
+          <span class="tag tag-flow">{site.chain.name}</span>
+          <p class="proof-note">{demo.proof.note}</p>
+          <a
+            class="btn btn-primary proof-cta"
+            href={site.chain.scan}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {demo.proof.cta}<span class="ic">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .sec-head { max-width: 62ch; margin-bottom: clamp(1.6rem, 3.5vw, 2.6rem); }
+  .sec-title { font-size: clamp(1.7rem, 3.5vw, 2.7rem); margin-top: 0.6rem; }
+  .sec-lead { margin-top: 0.8rem; color: var(--color-muted); font-size: clamp(0.98rem, 1.4vw, 1.12rem); line-height: 1.6; }
+
+  /* island shells, identik dengan section aslinya */
+  .sim-wrap { width: 100%; }
+  .sim-wrap .core { padding: clamp(1.2rem, 2.5vw, 2rem); }
+  .sm-wrap { width: 100%; }
+  .sm-wrap .core { padding: clamp(1rem, 2.2vw, 1.6rem); }
+
+  /* callout bukti on-chain */
+  .proof-onchain .core {
+    padding: clamp(1.6rem, 4vw, 2.6rem);
+    display: flex;
+    gap: clamp(1.1rem, 3vw, 2rem);
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .proof-ic { width: 2.6rem; height: 2.6rem; color: var(--color-flow); flex-shrink: 0; }
+  .proof-body { flex: 1 1 22rem; display: flex; flex-direction: column; align-items: flex-start; gap: 1rem; }
+  .proof-note { color: var(--color-muted); line-height: 1.65; max-width: 66ch; }
+  .proof-cta { align-self: flex-start; }
+</style>
