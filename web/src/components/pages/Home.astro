@@ -1,7 +1,7 @@
 ---
 import { Icon } from "astro-icon/components";
 import { hero } from "../../content/site";
-import { loop, thesis, teasers } from "../../content/home";
+import { about, loop, thesis, teasers } from "../../content/home";
 ---
 
 <!-- HERO -->
@@ -33,6 +33,26 @@ import { loop, thesis, teasers } from "../../content/home";
         </li>
       ))}
     </ul>
+  </div>
+</section>
+
+<!-- APA ITU WATTSETTLE -->
+<section class="section-pad">
+  <div class="container">
+    <header class="sec-head rv">
+      <span class="eyebrow">{about.eyebrow}</span>
+      <h2 class="sec-title">{about.title}</h2>
+      <p class="sec-lead">{about.lead}</p>
+    </header>
+    <div class="about-cards">
+      {about.cards.map((c) => (
+        <article class={`about-card rv tone-${c.tone}`} data-spot>
+          <Icon name={c.ic} class="about-ic" />
+          <strong class="about-t">{c.t}</strong>
+          <p class="about-d">{c.d}</p>
+        </article>
+      ))}
+    </div>
   </div>
 </section>
 
@@ -105,6 +125,19 @@ import { loop, thesis, teasers } from "../../content/home";
   .sec-head { max-width: 62ch; margin-bottom: clamp(2rem, 4vw, 3rem); }
   .sec-title { font-size: clamp(1.7rem, 3.5vw, 2.7rem); margin-top: 0.6rem; }
   .sec-lead { margin-top: 0.8rem; color: var(--color-muted); font-size: clamp(0.98rem, 1.4vw, 1.12rem); line-height: 1.6; }
+
+  .about-cards { display: grid; gap: 1rem; }
+  @media (min-width: 760px) { .about-cards { grid-template-columns: 1fr 1fr; } }
+  .about-card {
+    padding: clamp(1.5rem, 3vw, 2rem); border-radius: 1.25rem;
+    border: 1px solid var(--edge); background: color-mix(in oklab, var(--color-ink) 3%, transparent);
+    display: flex; flex-direction: column; gap: 0.7rem;
+  }
+  .about-ic { width: 2rem; height: 2rem; }
+  .tone-heat .about-ic { color: var(--color-heat); }
+  .tone-watt .about-ic { color: var(--color-watt); }
+  .about-t { font-family: var(--font-display); font-size: 1.25rem; }
+  .about-d { color: var(--color-muted); font-size: 0.95rem; line-height: 1.6; }
 
   .loop-flow { list-style: none; display: grid; gap: 1rem; }
   @media (min-width: 720px) { .loop-flow { grid-template-columns: repeat(4, 1fr); gap: 0.75rem; } }
