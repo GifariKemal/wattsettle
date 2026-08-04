@@ -13,6 +13,9 @@ proofofwatt/out/
 proofofwatt/cache/
 output/
 
+# Slide PDF mentor workshop (52 MB, materi pihak ketiga, arsip lokal saja)
+docs/Workshop/*.pdf
+
 # OS
 Thumbs.db
 .DS_Store
