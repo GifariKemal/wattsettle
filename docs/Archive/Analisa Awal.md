@@ -82,5 +82,5 @@ Form "Verify & Publish Contract Source Code":
 
 ## Keamanan ⚠️
 - Private key & password wallet ada plaintext di `My Data.txt`, **testnet-only**. Jangan pernah pakai keypair/pola ini untuk mainnet.
-- Password `Tampan12` (bscscan) = password lemah yg pernah bocor → ganti & jangan reuse.
+- Password akun BscScan memakai password lemah yang pernah bocor (nilainya disensor dari dokumen ini karena repo bersifat publik) -> wajib diganti dan jangan dipakai ulang di layanan lain.
 - Gunakan burner wallet khusus hackathon, terpisah dari wallet asli.
