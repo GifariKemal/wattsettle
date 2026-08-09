@@ -1,13 +1,14 @@
 # Materi Online Workshop - Indonesia Web3 Hackathon 2026
 
-Arsip lokal materi 5 sesi Online Workshop (DevWeb3 Jogja). Mentor sesi 1-4: Axel
+Arsip lokal materi 6 sesi Online Workshop (DevWeb3 Jogja). Mentor sesi 1-4: Axel
 Urwawuska Atarubby (@lexilexy) dan Yeheskiel Yunus Tame (@yeheskieltame). Mentor
-sesi 5: Fajar Jati Nugroho (@Beatless16) dan Fajar Ramadhan (@xfajarrr).
+sesi 5-8: Fajar Jati Nugroho (@Beatless16) dan Fajar Ramadhan (@xfajarrr).
 
 > [!NOTE]
 > Halaman Notion dikonversi ke Markdown lewat record-map Notion (proxy splitbee
 > untuk sesi 2-4 pada 26 Juli 2026, lalu internal API loadPageChunk plus
-> syncRecordValues untuk sesi 5 pada 3 Agustus 2026, karena splitbee sudah 500).
+> syncRecordValues untuk sesi 5 pada 3 Agustus 2026 dan sesi 6 pada 9 Agustus
+> 2026, karena splitbee sudah 500).
 > Isi mengikuti versi saat konversi, jadi kalau mentor mengedit Notion setelah
 > tanggal tersebut, file di sini tidak ikut berubah.
 
@@ -29,6 +30,7 @@ sesi 5: Fajar Jati Nugroho (@Beatless16) dan Fajar Ramadhan (@xfajarrr).
 | [Sesi 3 Papan Sayembara Bounty.md](Sesi%203%20Papan%20Sayembara%20Bounty.md) | 3 | Notion, 3 tab |
 | [Sesi 4 Factory dan AI Oracle.md](Sesi%204%20Factory%20dan%20AI%20Oracle.md) | 4 | Notion, 2 tab |
 | [Sesi 5 Backend Reading Chain dan Indexing.md](Sesi%205%20Backend%20Reading%20Chain%20dan%20Indexing.md) | 5 | Notion, 1 halaman (custom backend plus Ponder) |
+| [Sesi 6 API dan AI Auto-verify.md](Sesi%206%20API%20dan%20AI%20Auto-verify.md) | 6 | Notion, 1 halaman (API relayer plus juri AI) |
 
 ## Jadwal dan tautan asli
 
@@ -76,6 +78,23 @@ sesi 5: Fajar Jati Nugroho (@Beatless16) dan Fajar Ramadhan (@xfajarrr).
 - YouTube: https://youtube.com/live/YnNGFCMSRIw
 - Materi: dua pendekatan indexing kontrak Sesi 4 (BountyFactory + BountyEscrow di chain 97). (1) Custom backend Bun plus Hono plus viem plus SQLite (REST API). (2) Ponder framework (GraphQL). Catatan Windows: WSL/Linux tidak didemokan, pasang sendiri dulu.
 - Rekaman dan folder Drive: belum dibagikan panitia
+
+### Sesi 6 - Backend 2: API dan AI Auto-verify
+
+- Tanggal: Minggu, 9 Agustus 2026, 19.30-21.30 WIB
+- Judul Notion: Sesi 6: API + AI Auto-verify (page id 22295160-5d98-8274-a712-81cde7dcc2f2)
+- Notion: https://app.notion.com/p/Sesi-6-API-AI-Auto-verify-222951605d988274a71281cde7dcc2f2
+- Presentasi (Canva): https://canva.link/w6xtc81jlxb0qud
+- YouTube: https://youtube.com/live/MQjqcPCOZgQ
+- Google Meet: https://meet.google.com/axr-bijz-wyi
+- Materi: Part 1 endpoint baca baru (`/pending`, `/leaderboard`, `/verdicts`) plus endpoint tulis pola relayer. Part 2 juri AI (LLM menilai bukti terhadap aturan, putusan dikirim on-chain lewat `fulfillVerification`). Catatan Windows: WSL/Linux tidak didemokan, pasang sendiri dulu.
+- Berkas pendukung mentor: [DEMO-RULES.md](https://raw.githubusercontent.com/DevWeb3Jogja/boootcamp-indonesia-web3-hacathon/da87a895de207bb6cea797a4e52d6903216fa15a/DEMO-RULES.md) (aturan bounty contoh) dan [PROOF.md](https://gist.githubusercontent.com/FjrREPO/3f704cf309365d851eb6f2efbd9ec190/raw/03fe854b1547265f6d9a6d21e136fed5dec86442/PROOF.md) (bukti contoh yang lolos)
+- Rekaman dan folder Drive: belum dibagikan panitia
+
+> [!CAUTION]
+> Materi asli Sesi 6 memuat API key OpenAI milik mentor secara terbuka di blok
+> `.env`. Key itu sudah disensor di arsip lokal ini dan tidak pernah dipakai.
+> Isi `LLM_API_KEY` dengan key sendiri.
 
 ## Repo kode mentor
 
