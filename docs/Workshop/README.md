@@ -112,9 +112,12 @@ Implementasi milik SURIOTA ada di `~/reward-token` (WSL):
 
 ## Yang belum tersimpan lokal
 
-- [ ] File Canva sesi 1, 3, 4 (`canva.link` butuh login browser, export manual ke PDF)
+Materi tertulis sesi 1 sampai 6 sudah lengkap tersimpan. Yang belum, semuanya berkas
+pendukung, dan tidak ada satu pun yang memuat kode:
+
+- [ ] File Canva sesi 1, 3, 4, dan 6 (`canva.link` butuh login browser, export manual ke PDF)
 - [ ] Rekaman video sesi 1 dan 2 (ukuran besar, sengaja tidak dimasukkan ke repo git)
-- [ ] Rekaman dan catatan Gemini sesi 3 dan 4 (belum dibagikan panitia)
+- [ ] Rekaman dan catatan Gemini sesi 3, 4, 5, dan 6 (belum dibagikan panitia)
 
 ## Absensi
 
