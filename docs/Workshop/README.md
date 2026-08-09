@@ -29,6 +29,8 @@ sesi 5-8: Fajar Jati Nugroho (@Beatless16) dan Fajar Ramadhan (@xfajarrr).
 | [Sesi 2 Foundry dan Dasar Solidity.md](Sesi%202%20Foundry%20dan%20Dasar%20Solidity.md) | 2 | Notion, 3 tab |
 | [Sesi 3 Papan Sayembara Bounty.md](Sesi%203%20Papan%20Sayembara%20Bounty.md) | 3 | Notion, 3 tab |
 | [Sesi 4 Factory dan AI Oracle.md](Sesi%204%20Factory%20dan%20AI%20Oracle.md) | 4 | Notion, 2 tab |
+| Sesi 4 Factory dan AI Oracle.pdf (lokal saja) | 4 | Drive, 10 halaman |
+| Slide Canva/Sesi 1, 3, 4, 6 (lokal saja) | 1, 3, 4, 6 | Canva, PNG per halaman |
 | [Sesi 5 Backend Reading Chain dan Indexing.md](Sesi%205%20Backend%20Reading%20Chain%20dan%20Indexing.md) | 5 | Notion, 1 halaman (custom backend plus Ponder) |
 | [Sesi 6 API dan AI Auto-verify.md](Sesi%206%20API%20dan%20AI%20Auto-verify.md) | 6 | Notion, 1 halaman (API relayer plus juri AI) |
 
@@ -110,14 +112,45 @@ Implementasi milik SURIOTA ada di `~/reward-token` (WSL):
 - `a838236` Sesi 5: backend indexer (Bun + Hono + viem + SQLite) plus Ponder, dua
   pendekatan sudah diverifikasi live terhadap chain 97
 
-## Yang belum tersimpan lokal
+## Kelengkapan arsip
 
-Materi tertulis sesi 1 sampai 6 sudah lengkap tersimpan. Yang belum, semuanya berkas
-pendukung, dan tidak ada satu pun yang memuat kode:
+Materi tertulis sesi 1 sampai 6 sudah lengkap, begitu juga seluruh slide. Status di
+bawah diperiksa ulang pada 9 Agustus 2026.
 
-- [ ] File Canva sesi 1, 3, 4, dan 6 (`canva.link` butuh login browser, export manual ke PDF)
-- [ ] Rekaman video sesi 1 dan 2 (ukuran besar, sengaja tidak dimasukkan ke repo git)
-- [ ] Rekaman dan catatan Gemini sesi 3, 4, 5, dan 6 (belum dibagikan panitia)
+- [x] **Slide Canva sesi 1, 3, 4, dan 6 sudah diarsipkan** sebagai PNG per halaman di
+      `docs/Workshop/Slide Canva/Sesi N/` (22, 11, 10, dan 23 halaman). Tidak perlu
+      login: URL gambarnya sudah tertanam di HTML halaman `/view` Canva. Ukurannya
+      terkunci di 596 piksel karena tanda tangan URL terikat ke dimensi, jadi
+      permintaan resolusi lebih besar selalu dibalas 403. Masih terbaca, termasuk
+      label di diagram.
+- [x] **Slide PDF sesi 4 sudah diunduh** dari Drive (10 halaman), baru muncul di
+      folder panitia setelah pengecekan sebelumnya.
+- [ ] Rekaman video sesi 1 dan 2. Ada di Drive, sengaja tidak diunduh maupun
+      dimasukkan ke git karena besar. Isi pentingnya sudah tersimpan sebagai catatan
+      Gemini beserta transkrip penuh.
+- [ ] Rekaman dan catatan Gemini sesi 3, 5, dan 6. Folder Drive-nya masih kosong per
+      9 Agustus 2026, belum dibagikan panitia.
+
+> [!NOTE]
+> Berkas besar milik pihak ketiga tidak masuk git karena repo ini publik. Pola
+> `docs/Workshop/*.pdf` dan `docs/Workshop/Slide Canva/` ada di `.gitignore`.
+> Semuanya bisa diunduh ulang dari tautan di halaman ini.
+
+ID folder Drive per sesi, untuk pengecekan berikutnya. Tempel ke
+`https://drive.google.com/embeddedfolderview?id=<ID>#list` supaya isinya terbaca tanpa
+login; cara lama lewat blob `_DRIVE_ivd` di halaman folder sudah tidak jalan.
+
+| Sesi | ID folder Drive |
+|---|---|
+| 1 | `1cZBou9cVGc15lLQ4i27iR0YV1zD7QM54` |
+| 2 | `1poQIt3KQ3zxIJ1JCMXrJqu0odu41lxfA` |
+| 3 | `1tuL9xfFdFybYN3iRkw9UuYNFzGEDmve-` |
+| 4 | `17UyTJqc2shLyBkzv6MtSYM7lSMu0XLR6` |
+| 5 | `1Y-s-_SsdVXTz6o1PAJH43A6pnBF69cq_` |
+| 6 | `1Qz9ShqImweyu181OVWWorcO9yTAikV0F` |
+| 7 | `18UJ8alCyA8NeAcFCBPVIfC6xoUjzR36V` |
+| 8 | `1F_zcnodNt2f7TLo7JK3lVl6GvR88k4ES` |
+| 9 | `1ImSaXULFBlX66yUQAMrrJhebNAIV_7sy` |
 
 ## Absensi
 

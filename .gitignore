@@ -15,6 +15,9 @@ output/
 
 # Slide PDF mentor workshop (52 MB, materi pihak ketiga, arsip lokal saja)
 docs/Workshop/*.pdf
+# Slide Canva mentor, diunduh per halaman jadi PNG. Materi pihak ketiga dan repo
+# ini publik, jadi diperlakukan sama seperti PDF di atas: arsip lokal saja.
+docs/Workshop/Slide Canva/
 
 # OS
 Thumbs.db
