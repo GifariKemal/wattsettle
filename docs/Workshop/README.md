@@ -30,9 +30,10 @@ sesi 5-8: Fajar Jati Nugroho (@Beatless16) dan Fajar Ramadhan (@xfajarrr).
 | [Sesi 3 Papan Sayembara Bounty.md](Sesi%203%20Papan%20Sayembara%20Bounty.md) | 3 | Notion, 3 tab |
 | [Sesi 4 Factory dan AI Oracle.md](Sesi%204%20Factory%20dan%20AI%20Oracle.md) | 4 | Notion, 2 tab |
 | Sesi 4 Factory dan AI Oracle.pdf (lokal saja) | 4 | Drive, 10 halaman |
-| Slide Canva/Sesi 1, 3, 4, 6 (lokal saja) | 1, 3, 4, 6 | Canva, PNG per halaman |
+| Slide Canva/Sesi 1, 3, 4, 6, 7 (lokal saja) | 1, 3, 4, 6, 7 | Canva, PNG per halaman |
 | [Sesi 5 Backend Reading Chain dan Indexing.md](Sesi%205%20Backend%20Reading%20Chain%20dan%20Indexing.md) | 5 | Notion, 1 halaman (custom backend plus Ponder) |
 | [Sesi 6 API dan AI Auto-verify.md](Sesi%206%20API%20dan%20AI%20Auto-verify.md) | 6 | Notion, 1 halaman (API relayer plus juri AI) |
+| [Sesi 7 dApp UI.md](Sesi%207%20dApp%20UI.md) | 7 | Notion, 1 halaman (frontend dApp) plus ringkasan 22 slide |
 
 ## Jadwal dan tautan asli
 
@@ -98,12 +99,31 @@ sesi 5-8: Fajar Jati Nugroho (@Beatless16) dan Fajar Ramadhan (@xfajarrr).
 > `.env`. Key itu sudah disensor di arsip lokal ini dan tidak pernah dipakai.
 > Isi `LLM_API_KEY` dengan key sendiri.
 
+### Sesi 7 - Frontend: dApp UI
+
+- Tanggal: Minggu, 16 Agustus 2026, 19.30-21.30 WIB
+- Judul Notion: Sesi 7: dApp UI (page id ad395160-5d98-8230-b6a7-81188b81c623)
+- Notion: https://butternut-pawpaw-7ed.notion.site/Sesi-7-dApp-UI-ad3951605d988230b6a781188b81c623
+- Presentasi (Canva): https://canva.link/dmpcr1cloh5j9x7 (22 halaman)
+- Tautan pendek panitia: https://s.id/indonesia-web3-workshop-sesi-7
+- YouTube: https://youtube.com/live/9dRiBOj38H0
+- Google Meet: https://meet.google.com/axr-bijz-wyi
+- Folder Drive: https://drive.google.com/drive/folders/18UJ8alCyA8NeAcFCBPVIfC6xoUjzR36V (masih kosong per 16 Agustus 2026)
+- Materi: Bagian 1 papan baca-saja di atas backend Sesi 5-6, tanpa wallet sama sekali (viem plus TanStack Query). Bagian 2 RainbowKit plus wagmi, peserta menandatangani sendiri `approve`, `createBounty`, dan `submitWork`. Empat bagian Tambahan: tab Punyaku, auto refresh dari event chain, hitung mundur deadline, dan approve pas sejumlah hadiah. Catatan Windows: WSL/Linux tidak didemokan, pasang sendiri dulu.
+- Starter frontend mentor: folder `frontend/` di repo materi, mulai commit `109bbae` sampai `ff59789`
+
+> [!NOTE]
+> Materi Sesi 7 mewajibkan projectId WalletConnect dari cloud.reown.com, dan tanpa itu
+> halamannya blank total. Di implementasi SURIOTA hal itu dibuat opsional, lihat
+> `frontend/README.md` di repo kode.
+
 ## Repo kode mentor
 
 https://github.com/devweb3jogja/boootcamp-indonesia-web3-hacathon (clone lokal di
-WSL: `~/ref-bootcamp-web3`). Commit terakhir `sesi 4: BountyFactory + AI oracle`
-(2 Agustus 2026), jadi kode Sesi 5 (backend/indexing) belum di-push mentor. Perlu
-`git fetch` ulang beberapa hari setelah workshop.
+WSL: `~/ref-bootcamp-web3`). Per 16 Agustus 2026 HEAD-nya `ff59789`, dan isinya sudah
+lengkap sampai Sesi 7: `SmartContract/`, `backend/`, `ponder/`, `agent-oracle/`, dan
+`frontend/` (starter Sesi 7). Perlu `git fetch` ulang beberapa hari setelah workshop,
+sebab kode sesi biasanya baru di-push belakangan.
 
 Implementasi milik SURIOTA ada di `~/reward-token` (WSL):
 
@@ -114,11 +134,11 @@ Implementasi milik SURIOTA ada di `~/reward-token` (WSL):
 
 ## Kelengkapan arsip
 
-Materi tertulis sesi 1 sampai 6 sudah lengkap, begitu juga seluruh slide. Status di
-bawah diperiksa ulang pada 9 Agustus 2026.
+Materi tertulis sesi 1 sampai 7 sudah lengkap, begitu juga seluruh slide. Status di
+bawah diperiksa ulang pada 16 Agustus 2026.
 
-- [x] **Slide Canva sesi 1, 3, 4, dan 6 sudah diarsipkan** sebagai PNG per halaman di
-      `docs/Workshop/Slide Canva/Sesi N/` (22, 11, 10, dan 23 halaman). Tidak perlu
+- [x] **Slide Canva sesi 1, 3, 4, 6, dan 7 sudah diarsipkan** sebagai PNG per halaman di
+      `docs/Workshop/Slide Canva/Sesi N/` (22, 11, 10, 23, dan 22 halaman). Tidak perlu
       login: URL gambarnya sudah tertanam di HTML halaman `/view` Canva. Ukurannya
       terkunci di 596 piksel karena tanda tangan URL terikat ke dimensi, jadi
       permintaan resolusi lebih besar selalu dibalas 403. Masih terbaca, termasuk
@@ -128,8 +148,8 @@ bawah diperiksa ulang pada 9 Agustus 2026.
 - [ ] Rekaman video sesi 1 dan 2. Ada di Drive, sengaja tidak diunduh maupun
       dimasukkan ke git karena besar. Isi pentingnya sudah tersimpan sebagai catatan
       Gemini beserta transkrip penuh.
-- [ ] Rekaman dan catatan Gemini sesi 3, 5, dan 6. Folder Drive-nya masih kosong per
-      9 Agustus 2026, belum dibagikan panitia.
+- [ ] Rekaman dan catatan Gemini sesi 3, 5, 6, dan 7. Folder Drive-nya masih kosong per
+      16 Agustus 2026, belum dibagikan panitia.
 
 > [!NOTE]
 > Berkas besar milik pihak ketiga tidak masuk git karena repo ini publik. Pola
