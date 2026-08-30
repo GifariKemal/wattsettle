@@ -38,8 +38,27 @@ WattSettle dibangun untuk **Indonesia Web3 Hackathon 2026**, kolaborasi Binance 
 | Track WattSettle | **Finance & Commerce** (AI Agents sebagai fallback sah) |
 | Track lain | AI Agents, Consumer Apps |
 | Chain | BNB Smart Chain Testnet, chainId 97 |
-| Prize pool | USD 5.000 total, terbagi 3 track (kira-kira 1 pemenang per track) |
+| Prize pool | USD 5.000 total untuk **11 pemenang**, bukan satu per track. Rinciannya di tabel berikutnya |
 | Field peserta | Mayoritas pemula, banyak fork chatbot dan template |
+
+Rincian hadiah, dibaca langsung dari tabel di halaman Luma resmi pada 30 Agustus 2026.
+Ini mengoreksi asumsi awal "kira-kira 1 pemenang per track".
+
+| Hadiah | Cakupan | Nilai |
+|:--|:--|--:|
+| Grand Prize, Best Overall | Lintas track | USD 1.000 |
+| Community Choice, Best Overall | Lintas track | USD 100 |
+| Juara 1 | Per track | USD 600 |
+| Juara 2 | Per track | USD 400 |
+| Juara 3 | Per track | USD 300 |
+
+> [!IMPORTANT]
+> Konsekuensi strategisnya nyata. Tiap track menyediakan **tiga** posisi berhadiah,
+> bukan satu, dan masih ada dua hadiah lintas track di atasnya. Angka probabilitas
+> juara-1-dalam-track yang dipakai di dokumen strategi tetap berlaku apa adanya, tetapi
+> peluang "pulang membawa sesuatu" jelas lebih besar daripada yang diasumsikan semula.
+> Arbitrase track jadi makin masuk akal: masuk tiga besar di track yang lebih sepi lebih
+> mudah daripada memaksakan juara satu di track yang ramai.
 
 Timeline resmi (terverifikasi dari kanal Coinvestasi dan Luma, mengoreksi asumsi awal yang keliru):
 
@@ -110,5 +129,5 @@ Regulasi justru menjadi tailwind, bukan hambatan, karena perusahaan berlisensi y
 ---
 
 <div align="center">
-<sub>© 2026 PT Surya Inovasi Prioritas (SURIOTA) · <a href="README.md">Hub WattSettle</a> · Update 7 Juli 2026</sub>
+<sub>© 2026 PT Surya Inovasi Prioritas (SURIOTA) · <a href="README.md">Hub WattSettle</a> · Update 30 Agustus 2026</sub>
 </div>

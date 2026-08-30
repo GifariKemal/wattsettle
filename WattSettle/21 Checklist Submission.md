@@ -24,6 +24,56 @@ Ini dokumen **hidup**, di-update tiap gate ditutup. Tiap hard gate di bawah adal
 
 ---
 
+## ❓ Yang Belum Diumumkan Panitia
+
+Dicari ulang pada 30 Agustus 2026 lewat halaman Luma resmi, hub Notion, dan repo materi
+mentor. Tiga hal berikut **belum dipublikasikan di kanal mana pun yang bisa diakses**,
+jadi jangan diasumsikan.
+
+| Hal | Keadaan | Sikap yang diambil |
+|:--|:--|:--|
+| Platform submission | Luma hanya menyebut "the hackathon portal" tanpa nama. Halaman Indonesia Web3 Hackathon **tidak ditemukan** di DoraHacks, Devfolio, maupun Devpost | Jangan menyiapkan berkas dengan format khusus satu platform sebelum namanya diumumkan. Bagian yang aman disiapkan lebih dulu adalah repo, README, video, dan tautan transaksi, karena semua portal meminta itu |
+| Rubrik penilaian juri | Tidak dipublikasikan | Pakai gate di halaman ini sebagai pengganti sementara, karena semuanya berada dalam kendali sendiri |
+| Deliverable wajib, termasuk durasi video | Tidak dipublikasikan | Siapkan video sekitar tiga menit mengikuti pitch arc di [15 Demo dan Pitch](<15 Demo dan Pitch.md>). Durasi itu aman untuk hampir semua portal dan bisa dipotong kalau ternyata dibatasi lebih pendek |
+
+> [!TIP]
+> Ketiganya kemungkinan besar diumumkan di grup peserta menjelang 1 September, dan Sesi 9
+> adalah kesempatan bertanya langsung. Tanyakan tiga hal itu persis seperti tertulis di
+> tabel, lalu perbarui halaman ini begitu jawabannya masuk.
+
+---
+
+## 📅 Status Terperiksa per 30 Agustus 2026
+
+Diperiksa langsung ke berkas pada 30 Agustus 2026, bukan dari ingatan. Semua gate di
+tabel berikut masih kosong, dan penyebabnya satu: entri hackathon belum pernah
+di-deploy. `proofofwatt/src/` masih `ProofOfWatt.sol` versi satu, `proofofwatt/script/`
+kosong, dan tidak ada `proofofwatt/broadcast/`.
+
+| Gate | Keadaan sebenarnya |
+|:--|:--|
+| 1 Repo publik dengan riwayat commit asli | ✅ Sudah terpenuhi. Repo publik sejak 7 Juli 2026 dengan commit bertanggal sepanjang kurikulum |
+| 3 Deploy chain 97 | ❌ Belum pernah deploy |
+| 4 Kontrak verified | ❌ Belum ada kontrak yang di-deploy untuk di-verify |
+| 5 Minimal dua transaksi | ❌ Nol transaksi |
+| 7 Video demo | ❌ Belum direkam |
+| 8 Tweet | ❌ Belum dikirim |
+| 9 Pre-fund pool hadiah | ❌ Belum, dan ini yang membuat pembayaran revert di panggung kalau terlewat |
+
+> [!CAUTION]
+> Jendela submission dibuka 1 September 2026. Gate 3, 4, dan 5 adalah satu rangkaian
+> pekerjaan yang sama dan bisa ditutup dalam satu sesi begitu delta kontrak di
+> [06 Kontrak WattSettle](<06 Kontrak WattSettle.md>) selesai. Alur deploy dan verify di
+> chain 97 sudah terbukti jalan di repo latihan, jadi risikonya rendah dan yang mahal
+> hanya menulis kontraknya.
+
+Dua pekerjaan rumah non-teknis yang juga masih menggantung dan tidak terlihat di tabel
+gate: rotasi kata sandi akun BscScan (menggantung sejak 4 Agustus 2026, menghapus berkas
+bukan remediasi karena riwayat git masih menyimpannya), dan repo `GifariKemal/reward-token`
+yang masih privat sehingga harus dibalik publik saat submission.
+
+---
+
 ## 📋 Tabel Gate dengan Bukti
 
 | # | Hard gate | Status | Bukti / link |
@@ -81,5 +131,5 @@ Semua gate di atas 100% dalam kendali solo builder, tidak ada yang bergantung fa
 ---
 
 <div align="center">
-<sub>© 2026 PT Surya Inovasi Prioritas (SURIOTA) · <a href="README.md">Hub WattSettle</a> · Update 7 Juli 2026</sub>
+<sub>© 2026 PT Surya Inovasi Prioritas (SURIOTA) · <a href="README.md">Hub WattSettle</a> · Update 30 Agustus 2026</sub>
 </div>
