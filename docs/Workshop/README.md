@@ -1,8 +1,9 @@
 # Materi Online Workshop - Indonesia Web3 Hackathon 2026
 
-Arsip lokal materi 6 sesi Online Workshop (DevWeb3 Jogja). Mentor sesi 1-4: Axel
+Arsip lokal materi sembilan sesi Online Workshop (DevWeb3 Jogja). Mentor sesi 1-4: Axel
 Urwawuska Atarubby (@lexilexy) dan Yeheskiel Yunus Tame (@yeheskieltame). Mentor
-sesi 5-8: Fajar Jati Nugroho (@Beatless16) dan Fajar Ramadhan (@xfajarrr).
+sesi 5-8: Fajar Jati Nugroho (@Beatless16) dan Fajar Ramadhan (@xfajarrr). Sesi 9:
+Dev Web3 Jogja dan alumni.
 
 > [!NOTE]
 > Halaman Notion dikonversi ke Markdown lewat record-map Notion (proxy splitbee
@@ -30,11 +31,12 @@ sesi 5-8: Fajar Jati Nugroho (@Beatless16) dan Fajar Ramadhan (@xfajarrr).
 | [Sesi 3 Papan Sayembara Bounty.md](Sesi%203%20Papan%20Sayembara%20Bounty.md) | 3 | Notion, 3 tab |
 | [Sesi 4 Factory dan AI Oracle.md](Sesi%204%20Factory%20dan%20AI%20Oracle.md) | 4 | Notion, 2 tab |
 | Sesi 4 Factory dan AI Oracle.pdf (lokal saja) | 4 | Drive, 10 halaman |
-| Slide Canva/Sesi 1, 3, 4, 6, 7, 8 (lokal saja) | 1, 3, 4, 6, 7, 8 | Canva, PNG per halaman |
+| Slide Canva/Sesi 1, 3, 4, 6, 7, 8, 9 (lokal saja) | 1, 3, 4, 6, 7, 8, 9 | Canva, PNG per halaman |
 | [Sesi 5 Backend Reading Chain dan Indexing.md](Sesi%205%20Backend%20Reading%20Chain%20dan%20Indexing.md) | 5 | Notion, 1 halaman (custom backend plus Ponder) |
 | [Sesi 6 API dan AI Auto-verify.md](Sesi%206%20API%20dan%20AI%20Auto-verify.md) | 6 | Notion, 1 halaman (API relayer plus juri AI) |
 | [Sesi 7 dApp UI.md](Sesi%207%20dApp%20UI.md) | 7 | Notion, 1 halaman (frontend dApp) plus ringkasan 22 slide |
 | [Sesi 8 AI Integration dan Scope Ideas.md](Sesi%208%20AI%20Integration%20dan%20Scope%20Ideas.md) | 8 | Notion, 1 halaman (pola integrasi AI plus prompt injection) plus ringkasan 28 slide |
+| [Sesi 9 Pitching Project.md](Sesi%209%20Pitching%20Project.md) | 9 | Canva saja, transkripsi 43 slide (kerangka pitch 7 beat plus eksplorasi ide) |
 
 ## Jadwal dan tautan asli
 
@@ -140,6 +142,28 @@ sesi 5-8: Fajar Jati Nugroho (@Beatless16) dan Fajar Ramadhan (@xfajarrr).
 - Endpoint demo mentor: `https://serang.ifajar.dev/nilai` (juri AI versi lemah, kotak
   demo sesaat, bisa mati setelah workshop)
 
+### Sesi 9 - Pitching Project (Learn How to Pitch dan Demo Day)
+
+- Tanggal: Minggu, 30 Agustus 2026, 19.30-21.30 WIB (pengumuman panitia menulis "Selasa", salah tulis)
+- Mentor: Dev Web3 Jogja dan Alumni Dev Web3 Jogja (di slide: Ghoza @godza256 dan Axel @lexirieru, keduanya co-founder SenjaLabs). Handle Axel di slide ini berbeda dari @lexilexy yang tercatat untuk mentor sesi 1 sampai 4; kemungkinan orang yang sama dengan handle baru, belum dikonfirmasi
+- Presentasi (Canva): https://canva.link/gn69mo1sw84b9wx (deck `DAHTj7igjCk`, 43 halaman)
+- YouTube: https://youtube.com/live/j9oT6hzPHSA
+- Google Meet: https://meet.google.com/axr-bijz-wyi
+- Feedback workshop: https://bit.ly/web3jogja-feedback
+- Slido sesi tanya jawab: https://app.sli.do/event/9XtGXtS6aUrqk1uyeLrHby
+- Linktree komunitas: https://linktr.ee/devweb3jogja
+- Dokumentasi komunitas: https://devweb3jogja.github.io/docs/
+- Folder Drive: https://drive.google.com/drive/folders/1ImSaXULFBlX66yUQAMrrJhebNAIV_7sy (masih kosong per 30 Agustus 2026)
+- Notion: belum ada halaman Sesi 9, sesi ini hanya memakai Canva
+- Materi: sesi penutup, isinya cara menyusun pitch dan menjalankan demo, bukan kode sama sekali.
+  Kerangka tujuh beat: Masalah, apa jadinya kalau dibiarkan, solusi (How), alur End to
+  End tiga penjelasan (apa yang user lakukan di awal, penggunaan fitur, bagaimana user
+  untung), penjelasan teknis secukupnya, live demo, dan Why now. Ditutup dengan
+  eksplorasi ide (Amati Tiru Modifikasi) serta tiga platform hackathon (DoraHacks,
+  Devfolio, HackQuest).
+- Catatan arsip: halaman 22, 23, 27 sampai 31, dan 34 sampai 37 di deck ini adalah slide
+  daur ulang dari Sesi 1 yang ikut terbawa di berkas Canva yang sama, bukan materi baru.
+
 ## Repo kode mentor
 
 https://github.com/devweb3jogja/boootcamp-indonesia-web3-hacathon (clone lokal di
@@ -157,11 +181,11 @@ Implementasi milik SURIOTA ada di `~/reward-token` (WSL):
 
 ## Kelengkapan arsip
 
-Materi tertulis sesi 1 sampai 8 sudah lengkap, begitu juga seluruh slide. Status di
-bawah diperiksa ulang pada 27 Agustus 2026.
+Materi tertulis sesi 1 sampai 9 sudah lengkap, begitu juga seluruh slide. Status di
+bawah diperiksa ulang pada 30 Agustus 2026.
 
-- [x] **Slide Canva sesi 1, 3, 4, 6, 7, dan 8 sudah diarsipkan** sebagai PNG per halaman di
-      `docs/Workshop/Slide Canva/Sesi N/` (22, 11, 10, 23, 22, dan 28 halaman). Tidak perlu
+- [x] **Slide Canva sesi 1, 3, 4, 6, 7, 8, dan 9 sudah diarsipkan** sebagai PNG per halaman di
+      `docs/Workshop/Slide Canva/Sesi N/` (22, 11, 10, 23, 22, 28, dan 43 halaman). Tidak perlu
       login: URL gambarnya sudah tertanam di HTML halaman `/view` Canva. Ukurannya
       terkunci di 596 piksel karena tanda tangan URL terikat ke dimensi, jadi
       permintaan resolusi lebih besar selalu dibalas 403. Masih terbaca, termasuk
@@ -173,8 +197,8 @@ bawah diperiksa ulang pada 27 Agustus 2026.
 - [ ] Rekaman video sesi 1 dan 2. Ada di Drive, sengaja tidak diunduh maupun
       dimasukkan ke git karena besar. Isi pentingnya sudah tersimpan sebagai catatan
       Gemini beserta transkrip penuh.
-- [ ] Rekaman dan catatan Gemini sesi 3, 5, 6, 7, dan 8. Folder Drive-nya masih kosong per
-      27 Agustus 2026, belum dibagikan panitia.
+- [ ] Rekaman dan catatan Gemini sesi 3, 5, 6, 7, 8, dan 9. Folder Drive-nya masih kosong
+      per 30 Agustus 2026, belum dibagikan panitia.
 
 > [!NOTE]
 > Berkas besar milik pihak ketiga tidak masuk git karena repo ini publik. Pola
