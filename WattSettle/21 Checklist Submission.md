@@ -71,10 +71,28 @@ gate 6 baru bisa dinilai setelah ada alamat kontrak untuk ditulis di README.
 > chain 97 sudah terbukti jalan di repo latihan, jadi risikonya rendah dan yang mahal
 > hanya menulis kontraknya.
 
-Dua pekerjaan rumah non-teknis yang juga masih menggantung dan tidak terlihat di tabel
-gate: rotasi kata sandi akun BscScan (menggantung sejak 4 Agustus 2026, menghapus berkas
-bukan remediasi karena riwayat git masih menyimpannya), dan repo `GifariKemal/reward-token`
-yang masih privat sehingga harus dibalik publik saat submission.
+Dua pekerjaan rumah non-teknis di luar tabel gate, keduanya diperiksa ulang pada
+30 Agustus 2026:
+
+- ✅ **Repo `GifariKemal/reward-token` sudah dibalik publik.** Seluruh riwayatnya
+  dipindai lebih dulu, 317 objek, dan hasilnya bersih: tidak ada berkas `.env` yang
+  pernah masuk riwayat, tidak ada kunci OpenAI, Anthropic, GLM, AWS, maupun token
+  GitHub, dan dua nilai yang sempat tertangkap pemindai ternyata alamat kontrak publik
+  serta kunci tiruan di berkas uji.
+- ❌ **Rotasi kredensial akun BscScan/Etherscan masih terbuka**, menggantung sejak
+  4 Agustus 2026. Kata sandi lemah pernah tertulis harfiah di `docs/Archive/Analisa
+  Awal.md`. Berkasnya sudah disensor di HEAD, tetapi blob lamanya **masih dilayani
+  publik dengan status HTTP 200** lewat SHA commit yang terlihat di riwayat. Sejak
+  Etherscan V2 satu akun berlaku multichain termasuk chain 97, dan `ETHERSCAN_API_KEY`
+  memang sedang terisi, jadi cakupan rotasinya dua hal: kata sandi akun **dan**
+  regenerasi API key.
+
+> [!WARNING]
+> Menulis ulang riwayat dengan `git filter-repo` bukan jalan keluarnya. Force-push
+> menulis ulang seluruh SHA tepat sebelum jendela submission, padahal gate 1 justru
+> menuntut riwayat commit yang asli, dan itu pun tidak menyentuh cache GitHub maupun
+> fork yang sudah menyalin. Setelah kredensialnya dirotasi, string yang bocor tidak
+> bernilai lagi.
 
 ---
 
