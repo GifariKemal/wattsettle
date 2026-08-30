@@ -30,10 +30,11 @@ sesi 5-8: Fajar Jati Nugroho (@Beatless16) dan Fajar Ramadhan (@xfajarrr).
 | [Sesi 3 Papan Sayembara Bounty.md](Sesi%203%20Papan%20Sayembara%20Bounty.md) | 3 | Notion, 3 tab |
 | [Sesi 4 Factory dan AI Oracle.md](Sesi%204%20Factory%20dan%20AI%20Oracle.md) | 4 | Notion, 2 tab |
 | Sesi 4 Factory dan AI Oracle.pdf (lokal saja) | 4 | Drive, 10 halaman |
-| Slide Canva/Sesi 1, 3, 4, 6, 7 (lokal saja) | 1, 3, 4, 6, 7 | Canva, PNG per halaman |
+| Slide Canva/Sesi 1, 3, 4, 6, 7, 8 (lokal saja) | 1, 3, 4, 6, 7, 8 | Canva, PNG per halaman |
 | [Sesi 5 Backend Reading Chain dan Indexing.md](Sesi%205%20Backend%20Reading%20Chain%20dan%20Indexing.md) | 5 | Notion, 1 halaman (custom backend plus Ponder) |
 | [Sesi 6 API dan AI Auto-verify.md](Sesi%206%20API%20dan%20AI%20Auto-verify.md) | 6 | Notion, 1 halaman (API relayer plus juri AI) |
 | [Sesi 7 dApp UI.md](Sesi%207%20dApp%20UI.md) | 7 | Notion, 1 halaman (frontend dApp) plus ringkasan 22 slide |
+| [Sesi 8 AI Integration dan Scope Ideas.md](Sesi%208%20AI%20Integration%20dan%20Scope%20Ideas.md) | 8 | Notion, 1 halaman (pola integrasi AI plus prompt injection) plus ringkasan 28 slide |
 
 ## Jadwal dan tautan asli
 
@@ -117,6 +118,28 @@ sesi 5-8: Fajar Jati Nugroho (@Beatless16) dan Fajar Ramadhan (@xfajarrr).
 > halamannya blank total. Di implementasi SURIOTA hal itu dibuat opsional, lihat
 > `frontend/README.md` di repo kode.
 
+### Sesi 8 - AI Integration (Patterns) dan Find & Scope Ideas
+
+- Tanggal: Selasa, 25 Agustus 2026, 19.30-21.30 WIB
+- Judul Notion: Sesi 8: AI Integration (Patterns) (page id df295160-5d98-82f5-ad0e-811bb42a932b)
+- Notion: https://butternut-pawpaw-7ed.notion.site/Sesi-8-Soon-df2951605d9882f5ad0e811bb42a932b
+- Presentasi (Canva): https://canva.link/cugj036bzcow6fx (28 halaman)
+- Tautan pendek panitia: https://s.id/indonesia-web3-workshop-sesi-8
+- Template tugas 1-pager: https://s.id/1-pager-ide-hackathon
+- YouTube: https://youtube.com/live/pdZVxVeLng8
+- Google Meet: https://meet.google.com/axr-bijz-wyi
+- Folder Drive: https://drive.google.com/drive/folders/1F_zcnodNt2f7TLo7JK3lVl6GvR88k4ES (masih kosong per 27 Agustus 2026)
+- Materi: Part 1 menembus juri AI versi lemah bersama milik mentor (`serang.ts`, tanpa
+  API key) untuk memperagakan prompt injection lewat komentar HTML yang mendikte field
+  `alasan`. Part 2 memperbaiki juri di backend sendiri lewat pola 5 langkah dan satu
+  pintu LLM (`lib/ai.ts` dengan `response_format: json_schema strict`), plus skrip ukur
+  `uji-injeksi.ts` (prompt lemah vs keras). Seksi "Find & Scope Ideas" (framework 4
+  pertanyaan, 6 domain, checklist validasi 15 menit, rumus scope 1 kontrak + 1 AI call +
+  1 UI) HANYA ada di slide, bukan di Notion. Catatan Windows: WSL/Linux tidak
+  didemokan, pasang sendiri dulu.
+- Endpoint demo mentor: `https://serang.ifajar.dev/nilai` (juri AI versi lemah, kotak
+  demo sesaat, bisa mati setelah workshop)
+
 ## Repo kode mentor
 
 https://github.com/devweb3jogja/boootcamp-indonesia-web3-hacathon (clone lokal di
@@ -134,22 +157,24 @@ Implementasi milik SURIOTA ada di `~/reward-token` (WSL):
 
 ## Kelengkapan arsip
 
-Materi tertulis sesi 1 sampai 7 sudah lengkap, begitu juga seluruh slide. Status di
-bawah diperiksa ulang pada 16 Agustus 2026.
+Materi tertulis sesi 1 sampai 8 sudah lengkap, begitu juga seluruh slide. Status di
+bawah diperiksa ulang pada 27 Agustus 2026.
 
-- [x] **Slide Canva sesi 1, 3, 4, 6, dan 7 sudah diarsipkan** sebagai PNG per halaman di
-      `docs/Workshop/Slide Canva/Sesi N/` (22, 11, 10, 23, dan 22 halaman). Tidak perlu
+- [x] **Slide Canva sesi 1, 3, 4, 6, 7, dan 8 sudah diarsipkan** sebagai PNG per halaman di
+      `docs/Workshop/Slide Canva/Sesi N/` (22, 11, 10, 23, 22, dan 28 halaman). Tidak perlu
       login: URL gambarnya sudah tertanam di HTML halaman `/view` Canva. Ukurannya
       terkunci di 596 piksel karena tanda tangan URL terikat ke dimensi, jadi
       permintaan resolusi lebih besar selalu dibalas 403. Masih terbaca, termasuk
-      label di diagram.
+      label di diagram. Catatan Sesi 8: yang menanam 28 halaman penuh adalah URL
+      `/view?mode=present` (bukan `/view` biasa yang cuma menanam 24), dan nomor halaman
+      dibaca dari parameter `page=` bukan nama berkas S3 (nama S3 basi dan bertabrakan).
 - [x] **Slide PDF sesi 4 sudah diunduh** dari Drive (10 halaman), baru muncul di
       folder panitia setelah pengecekan sebelumnya.
 - [ ] Rekaman video sesi 1 dan 2. Ada di Drive, sengaja tidak diunduh maupun
       dimasukkan ke git karena besar. Isi pentingnya sudah tersimpan sebagai catatan
       Gemini beserta transkrip penuh.
-- [ ] Rekaman dan catatan Gemini sesi 3, 5, 6, dan 7. Folder Drive-nya masih kosong per
-      16 Agustus 2026, belum dibagikan panitia.
+- [ ] Rekaman dan catatan Gemini sesi 3, 5, 6, 7, dan 8. Folder Drive-nya masih kosong per
+      27 Agustus 2026, belum dibagikan panitia.
 
 > [!NOTE]
 > Berkas besar milik pihak ketiga tidak masuk git karena repo ini publik. Pola
