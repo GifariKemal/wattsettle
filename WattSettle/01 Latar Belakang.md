@@ -30,7 +30,7 @@ WattSettle menutup lubang ini dengan dua lapis pertahanan. Pertama, angka kWh di
 
 ## 🗓️ Konteks Hackathon
 
-WattSettle dibangun untuk **Indonesia Web3 Hackathon 2026**, kolaborasi Binance Academy, BNB Chain, Coinvestasi, dan Dev Web3 Jogja. Event ini gratis, online, dengan prize pool total USD 5.000 yang terbagi ke 3 track. Tema besarnya adalah **AI x Web3**.
+WattSettle dibangun untuk **Indonesia Web3 Hackathon 2026**, kolaborasi Binance Academy, BNB Chain, Coinvestasi, dan Dev Web3 Jogja. Event ini gratis, online, dengan prize pool total USD 5.000 yang dibagi ke 11 pemenang: dua hadiah lintas track dan tiga posisi berhadiah di tiap track. Tema besarnya adalah **AI x Web3**.
 
 | Aspek | Detail |
 |:--|:--|

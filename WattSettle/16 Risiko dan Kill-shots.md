@@ -135,7 +135,7 @@ rentang jujur akhir       █████████████████░
 
 Dua alasan struktural. Pertama, framing "self-contained mirror of ERC-8004" adalah bunuh diri di depan juri BNB karena registry-nya sudah live di rantai yang sama (KS1), jadi klaim tinggi hanya masuk akal SETELAH framing itu diganti integrasi live. Kedua, angka di atas 90 persen sepenuhnya bergantung pada gate yang saat ini belum satu pun tuntas (KS6), dan probabilitas tidak boleh dihitung seolah gate itu sudah tertutup.
 
-Tailwind strukturalnya nyata dan mengerjakan sebagian besar beban, yaitu field pemula tahap ide, pool sekitar 5 ribu dolar dibagi tiga track dengan kira-kira satu pemenang per track, konsep yang persis jawaban kanonik kurikulum, semua hard gate solo-controllable, dan moat real-company plus hardware yang tidak bisa dipalsukan siapa pun. Tailwind ini yang menahan angka di kisaran 84 sampai 90, bukan eksekusi heroik.
+Tailwind strukturalnya nyata dan mengerjakan sebagian besar beban, yaitu field pemula tahap ide, pool sekitar 5 ribu dolar yang dibagi ke sebelas pemenang, yaitu tiga posisi berhadiah di tiap track ditambah dua hadiah lintas track, sehingga jumlah kursi berhadiah jauh lebih banyak daripada asumsi awal, konsep yang persis jawaban kanonik kurikulum, semua hard gate solo-controllable, dan moat real-company plus hardware yang tidak bisa dipalsukan siapa pun. Tailwind ini yang menahan angka di kisaran 84 sampai 90, bukan eksekusi heroik.
 
 ### Kenapa juara 1 tidak dijanjikan
 

@@ -31,10 +31,17 @@ keras: jangan mulai dengan fitur, dan jangan habiskan waktu demo di layar login.
 di bawah mengisi tiap beat dengan kalimat WattSettle yang siap diucapkan. Arsip materi
 aslinya ada di [Sesi 9 Pitching Project](<../docs/Workshop/Sesi 9 Pitching Project.md>).
 
-Kerangka ini dipakai untuk **video submission dan sesi tanya jawab** (durasi longgar,
-lima sampai tujuh menit). Untuk **panggung Demo Day** yang dipatok tiga menit, pakai
-pitch arc peak-end di seksi berikutnya. Isinya sama, urutannya beda karena panggung
-menuntut moat lebih dulu.
+Kerangka ini adalah **daftar periksa isi**, bukan urutan panggung. Tujuh pertanyaan di
+bawah semuanya harus terjawab, di video submission maupun di sesi tanya jawab. Urutan
+pengucapannya di panggung tetap memakai pitch arc peak-end di seksi berikutnya, karena
+panggung menuntut moat lebih dulu.
+
+Hanya ada **satu video** yang direkam, berdurasi sekitar tiga menit mengikuti pitch arc,
+dan video itu dipakai untuk dua keperluan sekaligus: lampiran submission dan cadangan
+kalau demo panggung tersendat. Panitia belum mengumumkan durasi video yang diminta
+(lihat [21 Checklist Submission](<21 Checklist Submission.md>)), jadi tiga menit dipilih
+karena aman untuk hampir semua portal dan mudah dipotong kalau ternyata dibatasi lebih
+pendek.
 
 | # | Beat | Pertanyaan yang harus terjawab | Isi WattSettle |
 |:--:|:--|:--|:--|
@@ -42,8 +49,8 @@ menuntut moat lebih dulu.
 | 2 | 🔥 **Kalau dibiarkan** | Rugi apa kalau tidak diselesaikan | Empat akibat konkret. Sengketa tagihan menahan pembayaran berminggu-minggu sehingga arus kas penyedia jasa terganggu. Model sewa berbasis pemakaian sulit diskalakan karena tiap kontrak menuntut audit manual. Klaim karbon dan REC tidak bisa diaudit, padahal CBAM sudah berlaku definitif sejak 1 Januari 2026. Dan memaksa angka yang tidak terbukti masuk ke blockchain hanya memindahkan sampah ke tempat yang lebih mahal. |
 | 3 | ⚡ **Solusi (How)** | Bagaimana ide ini menjawabnya, dan apa pembedanya | Meter yang menandatangani sendiri angkanya di titik ukur, wasit AI yang menghitung ulang kewajarannya, dan kontrak yang membayar tanpa disuruh. Pembedanya satu kalimat: kami tidak menaruh angka ke blockchain, kami membuat angkanya lahir sudah bertanda tangan dari perangkat yang kami produksi sendiri. |
 | 4 | 🔁 **End to end** | Apa yang user lakukan di awal, bagaimana fitur dipakai, bagaimana user untung | Tiga langkah, dijabarkan di tabel berikutnya. |
-| 5 | 🛠️ **Teknis** | Teknologi apa, kenapa cocok, apa pembedanya | BNB Smart Chain testnet 97 dengan Solidity dan Foundry. Tanda tangan EIP-712 dibuat di gerbang SRT-MGATE-1210. Putusan verifier murni aritmetika deterministik; LLM tidak pernah berada di jalur keputusan dan hanya menuliskan alasan yang bisa dibaca manusia. Pembacaan riwayat memakai `eth_getLogs` langsung, tanpa subgraph. Identitas dan validasi agent ditulis ke registry ERC-8004 milik BNB yang sudah live. Kenapa cocok: biaya gas BNB cukup murah untuk settlement per periode tagihan, dan registry agent-nya sudah ada sehingga otonomi mesin bisa dibuktikan, bukan diklaim. |
-| 6 | 🎥 **Live demo** | Buktinya mana | Satu putaran approve dan satu putaran reject, keduanya berakhir di BscScan. Layar hubungkan-dompet dilewati secepat mungkin, tidak dijadikan tontonan. |
+| 5 | 🛠️ **Teknis** | Teknologi apa, kenapa cocok, apa pembedanya | BNB Smart Chain testnet 97 dengan Solidity dan Foundry. Tanda tangan EIP-712 dibuat di gerbang SRT-MGATE-1210. Putusan verifier murni aritmetika deterministik; LLM tidak pernah berada di jalur keputusan dan hanya menuliskan alasan yang bisa dibaca manusia. Pembacaan riwayat memakai `eth_getLogs` langsung, tanpa subgraph. Identitas dan validasi agent ditulis ke registry ERC-8004 milik BNB yang sudah live (**jangan diucapkan sampai gate registry ditutup**, lihat tabel uji jujur di akhir bab). Kenapa cocok: biaya gas BNB cukup murah untuk settlement per periode tagihan, dan registry agent-nya sudah ada sehingga otonomi mesin bisa dibuktikan, bukan diklaim. |
+| 6 | 🎥 **Live demo** | Buktinya mana | Satu putaran approve dan satu putaran reject, keduanya berakhir di BscScan. Dompet sudah dalam keadaan tersambung sebelum berbagi layar, jadi layar hubungkan-dompet tidak pernah muncul sama sekali. |
 | 7 | ⏰ **Why now** | Kenapa harus dibangun sekarang | CBAM masuk fase definitif 1 Januari 2026 sehingga eksportir Indonesia mulai butuh bukti yang bisa diaudit. Perpres 110/2025 membuka jalur jual beli listrik antarpihak. Registry ERC-8004 baru live di BSC testnet sejak 4 Februari 2026, jadi otonomi agent baru bisa dibuktikan on-chain tahun ini. Dan biaya gas baru cukup murah untuk menyelesaikan tagihan sekecil satu periode pendinginan. Setahun lalu, tiga hal ini belum ada sekaligus. |
 
 > [!TIP]
@@ -60,7 +67,7 @@ dan menerima uang. Peran pengguna dalam demo diperagakan presenter.
 
 | Urutan | Pertanyaan mentor | Jawaban WattSettle (studi kasus Enovatek) |
 |:--:|:--|:--|
-| 1 | Apa yang harus user lakukan di awal? | Enovatek memasang unit pendingin hibrida beserta meter PM20H20Q di lokasi penyewa, lalu mendaftarkan perangkat itu sekali ke kontrak lewat `registerDevice`. Penyewa cukup mendaftar satu kali. Di demo, pendaftaran diperagakan dengan menghubungkan dompet. Di produksi, penyewa membayar dengan rupiah dan dompetnya dikelola secara custodial di belakang layar, karena penyewa pabrik tidak akan mengurus frasa pemulihan. |
+| 1 | Apa yang harus user lakukan di awal? | Enovatek memasang unit pendingin hibrida beserta meter PM20H20Q di lokasi penyewa, lalu mendaftarkan perangkat itu sekali ke kontrak lewat `registerDevice`. Penyewa cukup mendaftar satu kali. Di demo, pendaftaran diperagakan lewat dompet yang sudah tersambung sejak sebelum berbagi layar, bukan dengan memperagakan proses menghubungkannya. Di produksi, penyewa membayar dengan rupiah dan dompetnya dikelola secara custodial di belakang layar, karena penyewa pabrik tidak akan mengurus frasa pemulihan. |
 | 2 | Bagaimana fitur dipakai? | Penyewa tidak melakukan apa-apa selain memakai pendinginnya. Meter mengirim pembacaan bertanda tangan tiap periode, verifier menghitung ulang kewajarannya terhadap batas fisik perangkat dan data pembanding, lalu memasang attestation. Tidak ada tombol yang ditekan manusia di antara pemakaian dan pembayaran. |
 | 3 | Bagaimana user mendapat keuntungan? | Penyewa hanya membayar kWh yang terbukti, dan bisa memeriksa sendiri dasar tagihannya di explorer tanpa meminta izin siapa pun. Enovatek dibayar di hari yang sama tanpa menunggu persetujuan, sehingga tidak ada lagi piutang yang menggantung karena sengketa angka. Protokol mengambil biaya satu persen dari nilai yang diselesaikan. |
 
@@ -163,7 +170,7 @@ ingatan, pada 30 Agustus 2026.
 | Yang diklaim naskah | Status per 30 Agustus 2026 | Akibat kalau tetap terbuka |
 |:--|:--|:--|
 | Klip lapangan SRT-MGATE-1210 di dinding pabrik pelanggan plus PO ter-redaksi | Belum ada berkasnya di repo | Beat 1 dan penutup kehilangan moat, tinggal klaim lisan yang tidak bisa diperiksa |
-| Kontrak dengan `attestAndSettle`, struct `Attestation`, pembagian biaya, dan penghitung reputasi | **Belum ada.** `proofofwatt/src/` masih `ProofOfWatt.sol` versi satu dengan empat fungsi | Seluruh loop 0:40 sampai 1:30 tidak bisa diperagakan |
+| Kontrak dengan `attestAndSettle`, struct `Attestation`, pembagian biaya, dan penghitung reputasi | **Belum ada.** `proofofwatt/src/` masih `ProofOfWatt.sol` versi satu dengan empat fungsi inti (`registerDevice`, `setRewardPerKwh`, `submitReading`, `verifyReading`) plus satu getter `submissionCount` | Seluruh loop 0:40 sampai 1:30 tidak bisa diperagakan |
 | Kontrak ter-deploy dan verified di chain 97 | **Belum.** `proofofwatt/script/` kosong dan tidak ada `broadcast/` | Gate 3 dan 4 di [21 Checklist Submission](<21 Checklist Submission.md>) terbuka |
 | Minimal dua transaksi on-chain yang bisa dibuka juri | **Nol transaksi** | Gate 5 terbuka, dan gate ini adalah disqualifier |
 | Agent bangun sendiri lewat cron tanpa klik | Belum ada di repo entri | Kalimat "no human touches the button" belum bisa dibuktikan, jangan diucapkan dulu |
@@ -172,10 +179,12 @@ ingatan, pada 30 Agustus 2026.
 | Video rekaman cadangan | Belum ada | Tidak ada jaring pengaman kalau demo tersendat |
 
 > [!CAUTION]
-> Jendela submission dibuka 1 September 2026 dan ditutup 30 September 2026. Delapan baris
-> di atas semuanya berada di dalam kendali sendiri, tidak satu pun bergantung pada pihak
-> luar. Selama baris kedua sampai keempat masih merah, naskah di bab ini adalah rencana,
-> bukan pitch yang bisa dibawakan.
+> Jendela submission dibuka 1 September 2026 dan ditutup 30 September 2026. Enam dari
+> delapan baris di atas berada sepenuhnya di dalam kendali sendiri. Dua sisanya butuh
+> pihak lain: klip lapangan beserta PO ter-redaksi menuntut izin pelanggan, dan verifikasi
+> registry ERC-8004 menuntut memastikan alamat serta tanda tangan fungsi milik BNB. Selama
+> baris kedua sampai keempat masih merah, naskah di bab ini adalah rencana, bukan pitch
+> yang bisa dibawakan.
 
 ### Urutan kerja tersempit sebelum naskah ini layak dibawakan
 
@@ -187,7 +196,7 @@ tambahan yang boleh disisipkan sebelum keenamnya selesai.
 2. Tulis skrip deploy, lalu deploy dan verify di chain 97. Alur ini sudah terbukti jalan di repo latihan, tinggal dipakai ulang.
 3. Isi pool hadiah lebih dulu, karena pembayaran diambil dari saldo kontrak dan akan revert kalau kosong.
 4. Tembakkan satu putaran approve dan satu putaran reject, simpan kedua tautan transaksinya.
-5. Rekam video loop yang mulus sebagai cadangan panggung sekaligus lampiran submission.
+5. Rekam satu video loop yang mulus, sekitar tiga menit, dipakai sebagai cadangan panggung sekaligus lampiran submission.
 6. Kirim tweet dengan keempat handle dan tagar yang persis, lalu balik repo `reward-token` menjadi publik.
 
 > [!TIP]

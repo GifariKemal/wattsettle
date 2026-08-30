@@ -145,7 +145,7 @@ Dev Web3 Jogja dan alumni.
 ### Sesi 9 - Pitching Project (Learn How to Pitch dan Demo Day)
 
 - Tanggal: Minggu, 30 Agustus 2026, 19.30-21.30 WIB (pengumuman panitia menulis "Selasa", salah tulis)
-- Mentor: Dev Web3 Jogja dan Alumni Dev Web3 Jogja (di slide: Ghoza @godza256 dan Axel @lexirieru)
+- Mentor: Dev Web3 Jogja dan Alumni Dev Web3 Jogja (di slide: Ghoza @godza256 dan Axel @lexirieru, keduanya co-founder SenjaLabs). Handle Axel di slide ini berbeda dari @lexilexy yang tercatat untuk mentor sesi 1 sampai 4; kemungkinan orang yang sama dengan handle baru, belum dikonfirmasi
 - Presentasi (Canva): https://canva.link/gn69mo1sw84b9wx (deck `DAHTj7igjCk`, 43 halaman)
 - YouTube: https://youtube.com/live/j9oT6hzPHSA
 - Google Meet: https://meet.google.com/axr-bijz-wyi
@@ -155,12 +155,12 @@ Dev Web3 Jogja dan alumni.
 - Dokumentasi komunitas: https://devweb3jogja.github.io/docs/
 - Folder Drive: https://drive.google.com/drive/folders/1ImSaXULFBlX66yUQAMrrJhebNAIV_7sy (masih kosong per 30 Agustus 2026)
 - Notion: belum ada halaman Sesi 9, sesi ini hanya memakai Canva
-- Materi: sesi penutup, isinya cara menyusun pitch dan menjalankan demo, bukan kode.
+- Materi: sesi penutup, isinya cara menyusun pitch dan menjalankan demo, bukan kode sama sekali.
   Kerangka tujuh beat: Masalah, apa jadinya kalau dibiarkan, solusi (How), alur End to
   End tiga penjelasan (apa yang user lakukan di awal, penggunaan fitur, bagaimana user
   untung), penjelasan teknis secukupnya, live demo, dan Why now. Ditutup dengan
   eksplorasi ide (Amati Tiru Modifikasi) serta tiga platform hackathon (DoraHacks,
-  Devfolio, HackQuest). Catatan Windows: WSL/Linux tidak didemokan, pasang sendiri dulu.
+  Devfolio, HackQuest).
 - Catatan arsip: halaman 22, 23, 27 sampai 31, dan 34 sampai 37 di deck ini adalah slide
   daur ulang dari Sesi 1 yang ikut terbawa di berkas Canva yang sama, bukan materi baru.
 
@@ -181,10 +181,10 @@ Implementasi milik SURIOTA ada di `~/reward-token` (WSL):
 
 ## Kelengkapan arsip
 
-Materi tertulis sesi 1 sampai 8 sudah lengkap, begitu juga seluruh slide. Status di
-bawah diperiksa ulang pada 27 Agustus 2026.
+Materi tertulis sesi 1 sampai 9 sudah lengkap, begitu juga seluruh slide. Status di
+bawah diperiksa ulang pada 30 Agustus 2026.
 
-- [x] **Slide Canva sesi 1, 3, 4, 6, 7, dan 8 sudah diarsipkan** sebagai PNG per halaman di
+- [x] **Slide Canva sesi 1, 3, 4, 6, 7, 8, dan 9 sudah diarsipkan** sebagai PNG per halaman di
       `docs/Workshop/Slide Canva/Sesi N/` (22, 11, 10, 23, 22, 28, dan 43 halaman). Tidak perlu
       login: URL gambarnya sudah tertanam di HTML halaman `/view` Canva. Ukurannya
       terkunci di 596 piksel karena tanda tangan URL terikat ke dimensi, jadi

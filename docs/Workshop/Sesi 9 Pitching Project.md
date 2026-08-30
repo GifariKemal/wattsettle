@@ -22,8 +22,8 @@ Empat QR di slide sudah dipecahkan supaya tautannya tidak hilang bersama gambarn
 
 > [!NOTE]
 > Sesi 9 adalah sesi penutup kurikulum dan isinya bukan kode, melainkan cara
-> menyusun pitch dan menjalankan demo. Inti materi ada di halaman 10 sampai 26
-> ditambah halaman 32. Halaman 22, 23, dan 27 sampai 31 serta 34 sampai 37 adalah
+> menyusun pitch dan menjalankan demo. Inti materi ada di halaman 10 sampai 21 dan
+> 24 sampai 26, ditambah halaman 32. Halaman 22, 23, dan 27 sampai 31 serta 34 sampai 37 adalah
 > slide daur ulang dari deck Sesi 1 (perbandingan Web1/Web2/Web3, wallet, Remix,
 > standar token) yang ikut terbawa di berkas Canva yang sama, bukan materi baru
 > Sesi 9. Semuanya tetap ditranskripsi di bawah supaya arsip lengkap, tetapi

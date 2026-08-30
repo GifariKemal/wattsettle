@@ -55,7 +55,7 @@ Pembaca baru mulai dari `00`. Saat membangun tiap sesi workshop, buka `13 Workfl
 | 🖥️ | [`12 Frontend dan dApp UI`](<12 Frontend dan dApp UI.md>) | BscScan sebagai UI, viewer tipis |
 | 🗓️ | [`13 Workflow Build`](<13 Workflow Build.md>) | Playbook per sesi, gate hygiene |
 | 🏢 | [`14 Bisnis dan GTM`](<14 Bisnis dan GTM.md>) | Revenue, after sales, GTM, use case Enovatek |
-| 🎤 | [`15 Demo dan Pitch`](<15 Demo dan Pitch.md>) | Pitch arc, runbook, know your judges |
+| 🎤 | [`15 Demo dan Pitch`](<15 Demo dan Pitch.md>) | Kerangka tujuh beat, pitch arc, runbook, know your judges, uji jujur |
 | ⚠️ | [`16 Risiko dan Kill-shots`](<16 Risiko dan Kill-shots.md>) | 6 kill shot, path to 90, probabilitas jujur |
 | 📊 | [`17 SWOT dan Kompetitor`](<17 SWOT dan Kompetitor.md>) | SWOT, peta kompetitor, verdict |
 | 🔭 | [`18 Roadmap Pasca-Hackathon`](<18 Roadmap Pasca-Hackathon.md>) | Scope freeze, roadmap produk |

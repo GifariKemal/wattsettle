@@ -34,7 +34,7 @@ jadi jangan diasumsikan.
 |:--|:--|:--|
 | Platform submission | Luma hanya menyebut "the hackathon portal" tanpa nama. Halaman Indonesia Web3 Hackathon **tidak ditemukan** di DoraHacks, Devfolio, maupun Devpost | Jangan menyiapkan berkas dengan format khusus satu platform sebelum namanya diumumkan. Bagian yang aman disiapkan lebih dulu adalah repo, README, video, dan tautan transaksi, karena semua portal meminta itu |
 | Rubrik penilaian juri | Tidak dipublikasikan | Pakai gate di halaman ini sebagai pengganti sementara, karena semuanya berada dalam kendali sendiri |
-| Deliverable wajib, termasuk durasi video | Tidak dipublikasikan | Siapkan video sekitar tiga menit mengikuti pitch arc di [15 Demo dan Pitch](<15 Demo dan Pitch.md>). Durasi itu aman untuk hampir semua portal dan bisa dipotong kalau ternyata dibatasi lebih pendek |
+| Deliverable wajib, termasuk durasi video | Tidak dipublikasikan | Siapkan **satu** video sekitar tiga menit mengikuti pitch arc di [15 Demo dan Pitch](<15 Demo dan Pitch.md>), dipakai untuk lampiran submission sekaligus cadangan panggung. Durasi itu aman untuk hampir semua portal dan bisa dipotong kalau ternyata dibatasi lebih pendek |
 
 > [!TIP]
 > Ketiganya kemungkinan besar diumumkan di grup peserta menjelang 1 September, dan Sesi 9
@@ -45,9 +45,9 @@ jadi jangan diasumsikan.
 
 ## 📅 Status Terperiksa per 30 Agustus 2026
 
-Diperiksa langsung ke berkas pada 30 Agustus 2026, bukan dari ingatan. Semua gate di
-tabel berikut masih kosong, dan penyebabnya satu: entri hackathon belum pernah
-di-deploy. `proofofwatt/src/` masih `ProofOfWatt.sol` versi satu, `proofofwatt/script/`
+Diperiksa langsung ke berkas pada 30 Agustus 2026, bukan dari ingatan. Kecuali gate 1,
+semua gate di tabel berikut masih kosong, dan penyebabnya satu: entri hackathon belum
+pernah di-deploy. `proofofwatt/src/` masih `ProofOfWatt.sol` versi satu, `proofofwatt/script/`
 kosong, dan tidak ada `proofofwatt/broadcast/`.
 
 | Gate | Keadaan sebenarnya |
@@ -59,6 +59,10 @@ kosong, dan tidak ada `proofofwatt/broadcast/`.
 | 7 Video demo | ❌ Belum direkam |
 | 8 Tweet | ❌ Belum dikirim |
 | 9 Pre-fund pool hadiah | ❌ Belum, dan ini yang membuat pembayaran revert di panggung kalau terlewat |
+
+Gate 2 (langkah verifikasi wallet) dan gate 6 (README plus roadmap) sengaja tidak
+diperiksa pada tanggal ini. Gate 2 menunggu instruksi panitia yang belum keluar, dan
+gate 6 baru bisa dinilai setelah ada alamat kontrak untuk ditulis di README.
 
 > [!CAUTION]
 > Jendela submission dibuka 1 September 2026. Gate 3, 4, dan 5 adalah satu rangkaian
@@ -78,7 +82,7 @@ yang masih privat sehingga harus dibalik publik saat submission.
 
 | # | Hard gate | Status | Bukti / link |
 |:--:|:--|:--:|:--|
-| 1 | Repo public dengan commit history genuine (bukan single squash) | ⬜ | `github.com/GifariKemal/wattsettle`, tampilkan grafik commit harian |
+| 1 | Repo public dengan commit history genuine (bukan single squash) | ✅ | https://github.com/GifariKemal/wattsettle publik sejak 7 Juli 2026, commit bertanggal sepanjang kurikulum Juli sampai Agustus |
 | 2 | Wallet token-verify step tuntas | ⬜ | Screenshot langkah verify wallet |
 | 3 | Deploy ke BSC testnet 97 | ⬜ | Alamat kontrak WattSettle di BscScan testnet |
 | 4 | Kontrak VERIFIED di BscScan | ⬜ | Tab Contract hijau, source ter-verify (bukan hanya base) |
@@ -96,7 +100,7 @@ yang masih privat sehingga harus dibalik publik saat submission.
 
 Salin blok ini ke README repo dan centang saat tuntas.
 
-- [ ] **Repo public, commit history genuine.** Commit harian mulai Sesi 1, jangan pernah squash jadi satu commit. Burst commit terbaca sebagai pola "backdated" dan jadi red flag.
+- [x] **Repo public, commit history genuine.** Commit harian mulai Sesi 1, jangan pernah squash jadi satu commit. Burst commit terbaca sebagai pola "backdated" dan jadi red flag.
 - [ ] **Wallet token-verify step.** Selesaikan langkah verifikasi token yang diminta panitia.
 - [ ] **Deploy BSC testnet 97.** Kontrak WattSettle live di chainId 97, catat alamatnya.
 - [ ] **Contract VERIFIED di BscScan.** Jalankan `forge verify-contract`. Ingat, base yang verified bukan berarti kontrak baru `attestAndSettle` ikut verified, re-verify kontrak baru.
@@ -126,7 +130,7 @@ Untuk tiap gate, simpan screenshot sebagai bukti tahan-audit, bukan hanya link y
 
 ## 🚦 Ringkasan Jujur
 
-Semua gate di atas 100% dalam kendali solo builder, tidak ada yang bergantung faktor eksternal. Menutup semuanya lebih awal adalah cara termurah menaikkan probabilitas nomination. Jangan sampai engineering yang sudah benar dijatuhkan oleh satu checkbox yang terlewat.
+Semua gate teknis di atas 100% dalam kendali solo builder. Satu-satunya pengecualian adalah gate 2, karena langkah verifikasi wallet mengikuti instruksi panitia yang belum diumumkan. Menutup semuanya lebih awal adalah cara termurah menaikkan probabilitas nomination. Jangan sampai engineering yang sudah benar dijatuhkan oleh satu checkbox yang terlewat.
 
 ---
 
