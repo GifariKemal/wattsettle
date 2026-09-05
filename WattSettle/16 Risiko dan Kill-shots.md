@@ -38,8 +38,8 @@ Sebagian besar entri hackathon mati bukan karena idenya lemah, melainkan karena 
 
 | Aspek | Isi |
 |:--|:--|
-| **Risiko** | ERC-8004 dan BEP-620 sudah **LIVE di BSC testnet 97** sejak 4 Februari 2026, dan BNBAgent SDK live sejak Maret. Kalau WattSettle dipitch sebagai "attestation yang meniru vocabulary ERC-8004, self-contained, tanpa dependency singleton eksternal", framing itu terbalik di depan rep BNB yang tahu registry mereka ada di rantai yang sama. Pertanyaan mematikan: "kenapa hand-roll event bespoke yang meniru standar kami, alih-alih register device di Validation Registry yang sudah live di testnet 97?" Lever inovasi nomor satu berubah jadi dismissal nomor satu. |
-| **Fix (WAJIB)** | **INTEGRASI registry live sebagai act-2 demo**, sementara kontrak self-contained tetap jadi settlement core. Setelah `attestAndSettle` meng-emit event, Hermes verifier JUGA memanggil `validationResponse(requestHash, response 0-100, responseUri)` di Validation Registry testnet 97 untuk reading yang sama. Pitch berubah jadi "saya tidak reimplement BEP-620, device physical DePIN saya adalah agent real-world PERTAMA yang menulis ke registry live BNB, dan settlement rail saya adalah payment layer di atasnya". Framing "self-contained mirror" HARUS MATI dari deck, skrip, dan README. |
+| **Risiko** | Registry ERC-8004 sudah **LIVE di BSC testnet 97**. Kalau WattSettle dipitch sebagai "attestation yang meniru vocabulary ERC-8004, self-contained, tanpa dependency singleton eksternal", framing itu terbalik di depan rep BNB yang tahu registry mereka ada di rantai yang sama. Pertanyaan mematikan: "kenapa hand-roll event bespoke yang meniru standar kami, alih-alih mendaftar di registry yang sudah live di testnet 97?" Lever inovasi nomor satu berubah jadi dismissal nomor satu. |
+| **Fix (SUDAH DIEKSEKUSI 5 Sep 2026)** | **INTEGRASI registry live sebagai act-2 demo**, sementara kontrak self-contained tetap jadi settlement core. Bentuknya berubah dari rencana awal: karena **tidak ada Validation Registry yang ter-deploy di chain 97**, agent verifier didaftarkan ke **Identity Registry** yang live dan memperoleh **agentId 2116** (tx `0x7216d78d...3ecbaa5d`). Pitch menjadi "verifier DePIN saya adalah agent terdaftar di Identity Registry ERC-8004 milik BNB yang live, dan karena Validation Registry belum ter-deploy di testnet 97, rationale attestation-nya hidup di event `ReadingAttested` saya sendiri yang nama fieldnya mencerminkan semantik `validationResponse`". Framing "self-contained mirror" HARUS MATI dari deck, skrip, dan README, dan begitu juga klaim "menulis ke Validation Registry live". Rincian di [07 AI Verifier](<07 AI Verifier.md>). |
 
 ---
 
@@ -100,9 +100,9 @@ Urutan ini penting. Item teratas memberi kenaikan probabilitas terbesar per jam 
 
 | # | Aksi | Kill-shot | Leverage |
 |:--:|:--|:--:|:--|
-| 1 | **FLIP framing ERC-8004**, stop "self-contained mirror", integrasi Validation Registry LIVE sebagai act-2 | KS1 | 🟢 Tertinggi, satu perubahan paling menaikkan nominasi di mata juri BNB |
+| 1 | ✅ **FLIP framing ERC-8004** selesai 5 Sep 2026, stop "self-contained mirror", agent terdaftar di Identity Registry LIVE sebagai agentId 2116 | KS1 | 🟢 Tertinggi, satu perubahan paling menaikkan nominasi di mata juri BNB |
 | 2 | **TIE moat ke chain**, tangkap satu signature EIP-712 nyata dari SRT-MGATE-1210 sebagai demo reading | KS3 | 🟢 Mengubah moat dari klaim atas video jadi properti sistem yang terdemonstrasi |
-| 3 | **SHOW a rejection**, agent tolak reading anomalous on-chain di live loop | KS2 | 🟢 Refutasi terkuat atas pertanyaan "is the AI real" |
+| 3 | ✅ **SHOW a rejection** selesai 5 Sep 2026, agent menolak reading 4200 kWh on-chain tanpa payout, tx `0xdca33d63...bc5d8d40` | KS2 | 🟢 Refutasi terkuat atas pertanyaan "is the AI real" |
 | 4 | **TUTUP semua gate minggu ini dengan proof link**, commit harian, re-verify kontrak baru, dua tx, README plus roadmap, tweet exact handle | KS6 | 🟡 Bukan menaikkan skor, tetapi mencegah nol otomatis |
 | 5 | **VALIDASI track dengan data**, count per track nyata, siapkan dua framing, pilih by data | KS4 | 🟡 Menentukan medan tempur, kalau Finance ramai pindah ke AI Agents |
 | 6 | **TAMBAH finance substance**, fee split take-rate on-chain | KS4 | 🟡 "Payment rail with revenue model", bukan sekadar transfer |

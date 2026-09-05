@@ -47,7 +47,16 @@ Dua guard ini melindungi jalur masuk `submitReading` dan **sudah teruji di 6 tes
 - **`usedDigest` (anti-replay):** tiap `Reading` menghasilkan digest EIP-712 unik dari tuple `Reading{deviceId, kWh, timestamp, nonce}` di domain `ProofOfWatt/1`. Digest yang sudah dipakai dicatat, dan submit ulang direvert. Ini mencegah satu bacaan dibayar lebih dari sekali.
 - **`lastTs` (monotonic guard):** kontrak menyimpan timestamp terakhir per device dan menolak reading dengan timestamp lebih lama atau sama. Ini mencegah penyisipan bacaan basi atau out-of-order.
 
-> ⚠️ Kedua guard ini punya efek samping di demo. Menjalankan ulang reading yang sama akan **revert** `ReplayedReading` atau `StaleTimestamp` di panggung. Karena itu siapkan tiga fixture dengan timestamp distinct berantre, dan script morning-of yang menolak start bila reading akan revert. Detail ada di [10 Deployment dan On-chain Ops](<10 Deployment dan On-chain Ops.md>).
+> ⚠️ Kedua guard ini punya efek samping di demo. Menjalankan ulang reading yang sama akan **revert** di panggung. Karena itu siapkan tiga fixture dengan timestamp distinct berantre, dan script morning-of yang menolak start bila reading akan revert. Detail ada di [10 Deployment dan On-chain Ops](<10 Deployment dan On-chain Ops.md>).
+
+**Urutan kedua guard, temuan dari penulisan test.** Kirim ulang mentah-mentah tidak pernah
+sampai ke `ReplayedReading`. Karena `timestamp` ikut masuk ke digest EIP-712, bacaan yang
+identik selalu membawa timestamp yang identik pula, dan `lastTs` sudah lebih dulu maju ke
+nilai itu, jadi yang muncul adalah `StaleTimestamp`. Satu-satunya jalan yang benar-benar
+menyentuh `usedDigest` adalah mendaftarkan ulang device (yang mengembalikan `lastTs` ke
+nol) lalu mengirim ulang bacaan lama yang sudah ditandatangani. Test
+`testReplayGuardReverts` melakukan persis itu, dan itulah yang membuktikan guard-nya kode
+hidup, bukan kode mati. Uraiannya ada di [11 Testing dan QA](<11 Testing dan QA.md>).
 
 ---
 
@@ -127,5 +136,5 @@ Jalankan `/ponytail-review` pada diff untuk memangkas over-engineering, tapi kea
 ---
 
 <div align="center">
-<sub>© 2026 PT Surya Inovasi Prioritas (SURIOTA) · <a href="README.md">Hub WattSettle</a> · Update 7 Juli 2026</sub>
+<sub>© 2026 PT Surya Inovasi Prioritas (SURIOTA) · <a href="README.md">Hub WattSettle</a> · Update 5 September 2026</sub>
 </div>

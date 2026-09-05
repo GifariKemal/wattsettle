@@ -16,7 +16,7 @@
 
 ## 💡 Cara Membaca
 
-Ini catatan keputusan resmi WattSettle. Tiap baris adalah satu keputusan yang sudah diambil sadar, dengan alasannya, agar tidak dibahas ulang tanpa alasan baru. Kolom Status menandai apakah keputusan masih berlaku (Aktif), sudah dieksekusi (Selesai), atau bisa dibalik dengan pemicu tertentu (Reversible).
+Ini catatan keputusan resmi WattSettle. Tiap baris adalah satu keputusan yang sudah diambil sadar, dengan alasannya, agar tidak dibahas ulang tanpa alasan baru. Kolom Status menandai apakah keputusan masih berlaku (Aktif), sudah dieksekusi (Selesai), bisa dibalik dengan pemicu tertentu (Reversible), atau sudah digantikan keputusan yang lebih baru karena premisnya terbukti keliru (Dikoreksi).
 
 ---
 
@@ -29,13 +29,17 @@ Ini catatan keputusan resmi WattSettle. Tiap baris adalah satu keputusan yang su
 | 5 Jul 2026 | Chain BSC testnet 97, UI via BscScan | Target deploy hackathon adalah chainId 97. UI custom tidak dipakai di critical path (ponytail), BscScan jadi UI resmi agar loop tetap deterministik. | Aktif |
 | 5 Jul 2026 | Pre-fund reward pool sebelum demo | Payout diambil dari saldo kontrak. Tanpa pre-fund sekitar 500k `suriota` (mint `onlyOwner` ke deployer lalu isi kontrak), payout revert di panggung. | Aktif |
 | 6 Jul 2026 | Submit ke Finance and Commerce, AI Agents sebagai fallback | Track arbitrage adalah lever tunggal terbesar. Finance and Commerce dead-center selera Dev Web3 Jogja (OwnaFarm) dan hampir nol pemula bisa ship kontrak settlement kerja. | Reversible |
-| 6 Jul 2026 | Integrasi ERC-8004 Validation Registry live, bukan mirror | Registry sudah live singleton di BSC testnet 97 sejak 4 Feb 2026. Framing "self-contained mirror" adalah bunuh diri di depan juri BNB. Hermes JUGA memanggil `validationResponse` untuk reading yang sama. | Aktif |
+| 6 Jul 2026 | Integrasi ERC-8004 Validation Registry live, bukan mirror | Framing "self-contained mirror" adalah bunuh diri di depan juri BNB, dan itu masih berlaku. Tetapi premisnya keliru: Validation Registry ternyata **tidak** ter-deploy di chain 97. **Digantikan oleh keputusan 5 Sep 2026.** | Dikoreksi |
 | 6 Jul 2026 | Positioning vs PiggyCell, industrial B2B plus AI verifier | PiggyCell (consumer, loyalty, event logging) memvalidasi tesis tapi beda segmen. WattSettle industrial B2B settlement rail dengan AI verifier otonom sebagai novelty asli. | Aktif |
 | 6 Jul 2026 | Tooling Foundry plus OpenZeppelin Contracts (import, bukan Wizard) | Toolchain ini sudah dipakai dan teruji (base 6 test PASS, token `suriota` verified pakai OZ ERC20 plus Ownable). Import langsung konsisten dengan evolve-not-rewrite. Wizard hanya referensi pattern. | Aktif |
 | 7 Jul 2026 | Nama produk tetap WattSettle, Enovatek adalah use case | Opsi 5 nama produk (rel generik), Opsi 6 deployment demo di Enovatek dan PM20H20Q. Rename akan buang ekuitas (repo, website live, docs) dan kaburkan pesan "rel generik". Enovatek nama partner, bukan bagian nama produk. | Aktif |
 | 7 Jul 2026 | Token settlement default `suriota`, MockUSD sebagai fallback | `suriota` sudah verified di BscScan testnet 97, zero new-token risk, delta terkecil. MockUSD (6 desimal) di-repo sebagai swap satu baris kalau keyword "stablecoin" penting di hari-H. | Reversible |
 | 7 Jul 2026 | Repo dibuat public apa adanya | Gifari sadar `docs/` berisi strategi kompetitif (win-prob, kill-shots, SWOT) dan tetap memilih publik (opsi B, keputusan sadar). `.secrets/` tidak ter-track. | Aktif |
 | 7 Jul 2026 | Restrukturisasi docs ke `/WattSettle/`, docs lama diarsipkan | Dokumen strategi lama dipindah ke `docs/Archive/`, Build Bible aktif berada di `/WattSettle/` sebagai satu keluarga bergaya konsisten. | Selesai |
+| 5 Sep 2026 | Constructor `WattSettle` cukup satu argumen | `constructor(IERC20 _rewardToken)` saja. `rewardPerKwh`, `treasury`, `feeBps`, `maxAnomalyBps`, dan `maxDeltaBound` diberi nilai awal di dalam constructor lalu diubah lewat setter admin. Argumen deploy pendek berarti `--constructor-args` verifikasi hanya satu `address`, jadi peluang salah encode mendekati nol. Setter tetap dibutuhkan untuk kalibrasi lapangan, jadi constructor panjang berarti membayar dua kali untuk satu hal. Setter dibatasi keras: `MAX_FEE_BPS` 1000 bps dan bound anomali maksimum 10000. | Selesai |
+| 5 Sep 2026 | Deployer mencabut `VERIFIER_ROLE` dari dirinya sendiri | Setelah `VERIFIER_ROLE` diberikan ke wallet agent, deployer memanggil `revokeRole` atas dirinya sendiri (tx `0x697a6058...cd3d301ab`). Sejak itu satu-satunya alamat yang bisa memanggil `attestAndSettle` adalah wallet agent. Autonomy berhenti menjadi klaim dan menjadi properti izin yang bisa dibaca siapa pun di rantai, dan ini jawaban terkuat untuk Kill-shot #2 (autonomy theater). | Selesai |
+| 5 Sep 2026 | Verifikasi Sourcify sekarang, BscScan menyusul saat kunci tersedia | Sumber di-verify ke Sourcify lebih dulu dengan hasil `exact_match`, sebab jalur itu tidak butuh kunci API sama sekali dan langsung membuat sumber dapat diperiksa publik. Lencana verified di BscScan tetap dikejar, tetapi menuntut kunci Etherscan V2 terpadu (kunci khusus BscScan ditolak sejak V1 mati 15 Agu 2025) dan hanya pemilik akun yang bisa menerbitkannya. Menunggu kunci sambil membiarkan sumber tak terverifikasi adalah risiko yang tidak perlu. | Aktif |
+| 5 Sep 2026 | ERC-8004: daftar ke Identity Registry, bukan tulis ke Validation Registry | Koreksi atas keputusan 6 Jul 2026. Riset verifikasi menemukan **tidak ada Validation Registry yang ter-deploy di chain 97**, dan dua alamat registry yang tercatat sebelumnya ternyata ada di mainnet 56. Rencana lama karena itu tidak bisa dieksekusi. Gantinya, agent verifier didaftarkan sungguhan ke Identity Registry live chain 97, memperoleh agentId 2116. Rationale attestation sementara hidup di event `ReadingAttested` sendiri yang nama fieldnya mencerminkan semantik `validationResponse`, sehingga migrasi tinggal pemetaan field saat registry-nya rilis. | Aktif |
 
 ---
 
@@ -50,5 +54,5 @@ Dua keputusan sengaja ditandai **Reversible** karena bergantung data yang belum 
 ---
 
 <div align="center">
-<sub>© 2026 PT Surya Inovasi Prioritas (SURIOTA) · <a href="README.md">Hub WattSettle</a> · Update 7 Juli 2026</sub>
+<sub>© 2026 PT Surya Inovasi Prioritas (SURIOTA) · <a href="README.md">Hub WattSettle</a> · Update 5 September 2026</sub>
 </div>

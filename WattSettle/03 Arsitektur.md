@@ -48,7 +48,7 @@ Layer paling bawah adalah dunia fisik. Di sinilah moat WattSettle berdiri, karen
 
 ## 📄 Layer 2, Settlement Contract
 
-Inti on-chain adalah `WattSettle.sol` yang di-deploy ke BSC testnet chainId 97. Kontrak ini adalah evolusi dari `ProofOfWatt.sol`, dengan delta yang sengaja dijaga sekecil mungkin (kira-kira satu hari kerja) di atas base yang sudah teruji.
+Inti on-chain adalah `WattSettle.sol` yang **sudah di-deploy** ke BSC testnet chainId 97 di alamat `0xdA149c0939c0C3450EDE5c8a0A0e8cF3AF36481a` sejak 5 September 2026. Kontrak ini adalah evolusi dari `ProofOfWatt.sol`, dengan delta yang sengaja dijaga sekecil mungkin (kira-kira satu hari kerja) di atas base yang sudah teruji.
 
 | Bagian | Perlakuan |
 |:--|:--|
@@ -59,6 +59,11 @@ Inti on-chain adalah `WattSettle.sol` yang di-deploy ke BSC testnet chainId 97. 
 | `Attestation` struct, `deviceReputation` mapping, fee split | ditambahkan sebagai substansi Finance |
 
 Fungsi baru `attestAndSettle` menuliskan alasan AI sebagai attestation on-chain yang bisa di-decode di BscScan, menerapkan ruleset gate di dalam kontrak, membayar produsen via `safeTransfer`, dan memungut fee protokol. Detail penuh contract surface ada di [06 Kontrak WattSettle](<06 Kontrak WattSettle.md>).
+
+> [!NOTE]
+> Domain EIP-712 tetap `ProofOfWatt` versi `1` walaupun kontraknya berganti nama. Ini
+> disengaja supaya seluruh fixture tanda tangan device yang sudah ada tetap sah tanpa
+> perlu ditandatangani ulang.
 
 ---
 
@@ -73,7 +78,7 @@ Alur kerja agent:
 3. **Build** struct `Attestation` (delta, anomaly score, hash model, hash ruleset, timestamp evaluasi).
 4. **Panggil** `attestAndSettle()` memakai `VERIFIER_ROLE`, **tanpa klik manusia**.
 
-Di panggung, state di-seed deterministik sehingga hasil sudah bisa diprediksi, tetapi keputusan tetap dihitung oleh agent (bukan di-hardcode). Integrasi ke ERC-8004 Validation Registry yang live dibahas di [07 AI Verifier](<07 AI Verifier.md>).
+Di panggung, state di-seed deterministik sehingga hasil sudah bisa diprediksi, tetapi keputusan tetap dihitung oleh agent (bukan di-hardcode). Agent ini sudah berjalan sungguhan: wallet `0xce4D51524eDECD04B5417F6C8B6E6B6b9e594291` memegang `VERIFIER_ROLE` dan sudah menyelesaikan satu approve serta satu reject on-chain. Identitasnya juga sudah terdaftar di ERC-8004 Identity Registry live chain 97 dengan agentId 2116, dibahas di [07 AI Verifier](<07 AI Verifier.md>).
 
 > 💡 Autonomy yang legible: `rulesetHash` on-chain harus cocok dengan file ruleset di repo, sehingga juri bisa memverifikasi bahwa keputusan dihitung, bukan di-hardcode. Menunjukkan satu penolakan (reject) on-chain jauh lebih meyakinkan daripada hanya approval.
 
@@ -97,7 +102,7 @@ Di panggung, state di-seed deterministik sehingga hasil sudah bisa diprediksi, t
 | `WattSettle.sol` | 2 | verifikasi, ruleset gate, payout, fee, reputation | evolusi `ProofOfWatt.sol` |
 | `suriota` ERC20 | 2 | settlement token (payout dan fee) | sudah verified di BscScan |
 | Hermes agent | 3 | subscribe, recompute, build Attestation, kirim tx | infra Hermes existing |
-| ERC-8004 Validation Registry | 3 | tulis `validationResponse` ke registry BNB yang live | integrate, bukan mirror |
+| ERC-8004 Identity Registry | 3 | identitas agent verifier terdaftar on-chain (agentId 2116) | integrate ke registry BNB yang live |
 | BscScan | UI | tampilkan tx dan attestation ter-decode | tanpa custom frontend |
 
 ---
@@ -113,7 +118,7 @@ Prinsip **zero external runtime dependency di critical path** adalah pertahanan 
 
 Satu-satunya jaringan yang tetap live di jalur kritis adalah BSC testnet 97 itu sendiri untuk mengirim transaksi. Semua risiko flaky lain dimitigasi dengan pre-seed, pin transaksi confirmed, dan video fallback satu keystroke. Detail runbook determinisme ada di [15 Demo dan Pitch](<15 Demo dan Pitch.md>).
 
-Integrasi ke ERC-8004 Validation Registry yang live diposisikan sebagai **act-2** demo, dijalankan setelah loop settlement inti selesai, dan bisa di-pre-record bila perlu. Jadi kegagalan pada leg itu tidak pernah menjatuhkan loop utama.
+Integrasi ERC-8004 diposisikan sebagai **act-2** demo, dijalankan setelah loop settlement inti selesai, dan bisa di-pre-record bila perlu. Jadi kegagalan pada leg itu tidak pernah menjatuhkan loop utama. Bentuk integrasinya adalah pendaftaran agent di Identity Registry, bukan penulisan ke Validation Registry, sebab per 5 September 2026 **belum ada Validation Registry yang ter-deploy di chain 97**. Alasan lengkapnya ada di [07 AI Verifier](<07 AI Verifier.md>).
 
 ---
 
@@ -133,5 +138,5 @@ Karena `WattSettle.sol` adalah kontrak EVM standar, migrasi ke opBNB tidak menun
 ---
 
 <div align="center">
-<sub>© 2026 PT Surya Inovasi Prioritas (SURIOTA) · <a href="README.md">Hub WattSettle</a> · Update 7 Juli 2026</sub>
+<sub>© 2026 PT Surya Inovasi Prioritas (SURIOTA) · <a href="README.md">Hub WattSettle</a> · Update 5 September 2026</sub>
 </div>

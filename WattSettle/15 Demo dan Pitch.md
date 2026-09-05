@@ -87,10 +87,10 @@ Arc dirancang peak-end. Pembukaan dan penutupan sama-sama berdiri di atas moat h
 |:--|:--|:--|
 | 0:00 sampai 0:15 | 🏭 **Moat first, cold open** | Klip 12 detik SRT-MGATE-1210 di dinding pabrik customer plus PO ter-redaksi. "This is not a demo device. This machine bills a real Indonesian customer today. In the next 90 seconds it gets paid by an AI, no human touches the button." |
 | 0:15 sampai 0:40 | 🧩 **Problem dalam vocab mereka** | "A smart contract cannot trust a sensor. The oracle problem for physical work is unsolved." Tanam frasa **proof of physical work**. |
-| 0:40 sampai 1:30 | 🔁 **Deterministic peak loop** | Trigger reading yang pre-seeded, Hermes agent bangun sendiri lewat cron tanpa klik, recompute, memasang attestation, `attestAndSettle` auto-pay, lalu menulis `validationResponse` ke registry ERC-8004 yang live, tx confirmed live di BscScan dengan event decoded. |
+| 0:40 sampai 1:30 | 🔁 **Deterministic peak loop** | Trigger reading yang pre-seeded, Hermes agent bangun sendiri lewat cron tanpa klik, recompute, memasang attestation, `attestAndSettle` auto-pay, tx confirmed live di BscScan dengan event decoded. |
 | 1:30 sampai 1:50 | 🚫 **Show a rejection** | Reading kedua yang sengaja anomalous, agent menolak on-chain, tanpa payout. "It evaluates, it does not rubber-stamp." |
 | 1:50 sampai 2:10 | ✨ **Peak plus silence** | Diam 2 sampai 3 detik di tx confirmed dengan attestation decoded. Jangan menarasi di atasnya. |
-| 2:10 sampai 2:35 | 🟡 **BNB fit plus ERC-8004 live** | "Real kWh is RWA. An autonomous verifier settling machine-to-machine is Agentic Finance. My device is the first physical-DePIN agent writing to BNB's live ERC-8004 registry. It is zkPull for physical energy." |
+| 2:10 sampai 2:35 | 🟡 **BNB fit plus ERC-8004 live** | "Real kWh is RWA. An autonomous verifier settling machine-to-machine is Agentic Finance. My verifier is a registered agent in BNB's live ERC-8004 Identity Registry, agentId 2116. It is zkPull for physical energy." |
 | 2:35 sampai 3:00 | 🏆 **Close on moat** | "A student can fork a chatbot in a weekend. Nobody can fork a licensed Indonesian energy company's field meters. Contract verified, commits public, txs live, check them yourself." STOP. |
 
 > 💡 Satu-satunya bagian yang boleh dipotong bila waktu mepet adalah paragraf keyword BNB di 2:10 sampai 2:35. Jangan pernah memotong field clip di pembukaan atau silence di 1:50.
@@ -164,27 +164,28 @@ Mentor kemungkinan besar merangkap juri, dan mereka elite. Setiap kalimat pitch 
 ## 🔎 Uji Jujur Naskah terhadap Kenyataan
 
 Naskah pitch hanya berharga kalau tiap kalimatnya bisa dibuktikan di layar. Tabel ini
-diisi ulang setiap kali ada gate yang tertutup. Diperiksa langsung ke berkas, bukan dari
-ingatan, pada 30 Agustus 2026.
+diisi ulang setiap kali ada gate yang tertutup. Diperiksa langsung ke rantai dan ke berkas,
+bukan dari ingatan, pada 5 September 2026.
 
-| Yang diklaim naskah | Status per 30 Agustus 2026 | Akibat kalau tetap terbuka |
+| Yang diklaim naskah | Status per 5 September 2026 | Akibat kalau tetap terbuka |
 |:--|:--|:--|
 | Klip lapangan SRT-MGATE-1210 di dinding pabrik pelanggan plus PO ter-redaksi | Belum ada berkasnya di repo | Beat 1 dan penutup kehilangan moat, tinggal klaim lisan yang tidak bisa diperiksa |
-| Kontrak dengan `attestAndSettle`, struct `Attestation`, pembagian biaya, dan penghitung reputasi | **Belum ada.** `proofofwatt/src/` masih `ProofOfWatt.sol` versi satu dengan empat fungsi inti (`registerDevice`, `setRewardPerKwh`, `submitReading`, `verifyReading`) plus satu getter `submissionCount` | Seluruh loop 0:40 sampai 1:30 tidak bisa diperagakan |
-| Kontrak ter-deploy dan verified di chain 97 | **Belum.** `proofofwatt/script/` kosong dan tidak ada `broadcast/` | Gate 3 dan 4 di [21 Checklist Submission](<21 Checklist Submission.md>) terbuka |
-| Minimal dua transaksi on-chain yang bisa dibuka juri | **Nol transaksi** | Gate 5 terbuka, dan gate ini adalah disqualifier |
-| Agent bangun sendiri lewat cron tanpa klik | Belum ada di repo entri | Kalimat "no human touches the button" belum bisa dibuktikan, jangan diucapkan dulu |
-| Menulis `validationResponse` ke registry ERC-8004 yang live | Alamat registry dan tanda tangan fungsinya **belum terverifikasi** | Jangan diucapkan sampai terverifikasi. Juri BNB tahu registry ini dan akan menagih buktinya |
+| Kontrak dengan `attestAndSettle`, struct `Attestation`, pembagian biaya, dan penghitung reputasi | ✅ **Ada dan live.** `WattSettle.sol` di `0xdA149c0939c0C3450EDE5c8a0A0e8cF3AF36481a`, 20 test hijau | Loop 0:40 sampai 1:30 sudah bisa diperagakan |
+| Kontrak ter-deploy dan verified di chain 97 | ⚠️ **Deploy sudah, verified sebagian.** Sourcify `exact_match` sudah terbit, lencana BscScan menunggu kunci Etherscan V2 | Gate 3 tertutup, gate 4 masih terbuka di [21 Checklist Submission](<21 Checklist Submission.md>) |
+| Minimal dua transaksi on-chain yang bisa dibuka juri | ✅ **Sebelas transaksi confirmed**, termasuk satu approve yang membayar 103,95 `suriota` dan satu reject yang tidak membayar apa pun | Gate 5 tertutup |
+| Agent bangun sendiri lewat cron tanpa klik | ✅ Wallet agent memegang `VERIFIER_ROLE` dan sudah settle dua bacaan. Deployer sudah mencabut role itu dari dirinya sendiri, jadi hanya agent yang bisa settle | Kalimat "no human touches the button" kini punya bukti izin on-chain |
+| Menulis `validationResponse` ke registry ERC-8004 yang live | ❌ **Tidak bisa dan jangan diucapkan.** Tidak ada Validation Registry yang ter-deploy di chain 97. Ganti dengan agentId 2116 di Identity Registry yang live | Mengucapkan versi lama akan dipatahkan juri BNB dalam sepuluh detik dengan satu `eth_getCode` |
 | Antarmuka dApp WattSettle | Yang ada baru papan bounty di repo latihan `reward-token`, bukan WattSettle | Beat 6 harus didemokan lewat skrip dan explorer, bukan lewat UI |
 | Video rekaman cadangan | Belum ada | Tidak ada jaring pengaman kalau demo tersendat |
 
 > [!CAUTION]
-> Jendela submission dibuka 1 September 2026 dan ditutup 30 September 2026. Enam dari
-> delapan baris di atas berada sepenuhnya di dalam kendali sendiri. Dua sisanya butuh
-> pihak lain: klip lapangan beserta PO ter-redaksi menuntut izin pelanggan, dan verifikasi
-> registry ERC-8004 menuntut memastikan alamat serta tanda tangan fungsi milik BNB. Selama
-> baris kedua sampai keempat masih merah, naskah di bab ini adalah rencana, bukan pitch
-> yang bisa dibawakan.
+> Jendela submission dibuka 1 September 2026 dan ditutup 30 September 2026. Baris kedua
+> sampai kelima sudah hijau, jadi loop intinya bukan lagi rencana melainkan sesuatu yang
+> sudah pernah berjalan di rantai. Yang tersisa: klip lapangan beserta PO ter-redaksi
+> menuntut izin pelanggan, lencana verified BscScan menuntut kunci Etherscan V2 yang hanya
+> bisa diterbitkan pemilik akun, dan video cadangan belum direkam. Baris ERC-8004 bukan
+> pekerjaan yang tertunda melainkan kalimat yang harus diganti, rinciannya di
+> [07 AI Verifier](<07 AI Verifier.md>).
 
 ### Urutan kerja tersempit sebelum naskah ini layak dibawakan
 
@@ -192,10 +193,10 @@ Urutan ini sengaja dipendekkan sesuai disiplin scope-freeze di
 [16 Risiko dan Kill-shots](<16 Risiko dan Kill-shots.md>). Tidak ada satu pun langkah
 tambahan yang boleh disisipkan sebelum keenamnya selesai.
 
-1. Terapkan delta kontrak yang sudah dirancang di [06 Kontrak WattSettle](<06 Kontrak WattSettle.md>), targetnya sekitar 14 test pada delta dan nol dependency baru.
-2. Tulis skrip deploy, lalu deploy dan verify di chain 97. Alur ini sudah terbukti jalan di repo latihan, tinggal dipakai ulang.
-3. Isi pool hadiah lebih dulu, karena pembayaran diambil dari saldo kontrak dan akan revert kalau kosong.
-4. Tembakkan satu putaran approve dan satu putaran reject, simpan kedua tautan transaksinya.
+1. ✅ ~~Terapkan delta kontrak~~ selesai, 20 test hijau dan nol dependency baru.
+2. ⚠️ ~~Deploy~~ selesai, tetapi verify baru tuntas di Sourcify. Terbitkan kunci Etherscan V2 lalu jalankan perintah verify yang sudah siap di [10 Deployment](<10 Deployment dan On-chain Ops.md>).
+3. ✅ ~~Isi pool hadiah~~ selesai, 500000 `suriota` masuk, sisa 499895 setelah payout demo.
+4. ✅ ~~Tembakkan satu putaran approve dan satu putaran reject~~ selesai, kedua tautan transaksinya ada di [10 Deployment](<10 Deployment dan On-chain Ops.md>).
 5. Rekam satu video loop yang mulus, sekitar tiga menit, dipakai sebagai cadangan panggung sekaligus lampiran submission.
 6. Kirim tweet dengan keempat handle dan tagar yang persis, lalu balik repo `reward-token` menjadi publik.
 
@@ -206,5 +207,5 @@ tambahan yang boleh disisipkan sebelum keenamnya selesai.
 ---
 
 <div align="center">
-<sub>© 2026 PT Surya Inovasi Prioritas (SURIOTA) · <a href="README.md">Hub WattSettle</a> · Update 30 Agustus 2026</sub>
+<sub>© 2026 PT Surya Inovasi Prioritas (SURIOTA) · <a href="README.md">Hub WattSettle</a> · Update 5 September 2026</sub>
 </div>

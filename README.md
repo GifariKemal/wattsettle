@@ -5,6 +5,10 @@
 ![Track](https://img.shields.io/badge/track-Finance%20%26%20Commerce-06b6d4?style=for-the-badge)
 &nbsp;
 ![BNB Chain](https://img.shields.io/badge/BNB%20Chain-Testnet%2097-f0b90b?style=for-the-badge&logo=binance&logoColor=white)
+&nbsp;
+[![Contract](https://img.shields.io/badge/WattSettle-live%20on%20chain%2097-22c55e?style=for-the-badge)](https://testnet.bscscan.com/address/0xdA149c0939c0C3450EDE5c8a0A0e8cF3AF36481a)
+&nbsp;
+![Tests](https://img.shields.io/badge/tests-20%20passing-brightgreen?style=for-the-badge)
 
 # ⚡ Indonesia Web3 Hackathon 2026
 
@@ -62,7 +66,7 @@ Opsi 2   JanjiChain           ██████████░░░░░░�
 
 ```mermaid
 flowchart LR
-  D["🔌 Device<br>SRT-MGATE / PM20H20Q"] -->|Reading EIP-712| C["📄 Kontrak ProofOfWatt"]
+  D["🔌 Device<br>SRT-MGATE / PM20H20Q"] -->|Reading EIP-712| C["📄 Kontrak WattSettle"]
   C -->|Pending| V["🤖 AI Verifier otonom"]
   V -->|Attestation on-chain| C
   C -->|approve| P["🏭 Produsen / Enovatek<br>transfer suriota + fee 1%"]
@@ -82,7 +86,10 @@ Web3 Hackathon 2026/
 │   ├── README.md                 hub + style guide + peta baca
 │   ├── 00 Ikhtisar.md ... 22 Decision Log.md
 │   └── assets/                   diagram dan aset visual
-├── proofofwatt/                  📄 kontrak Foundry (ProofOfWatt.sol, 6 test PASS)
+├── proofofwatt/                  📄 kontrak Foundry (WattSettle.sol LIVE di chain 97, 20 test PASS)
+│   ├── src/ test/ script/        kontrak, test, script deploy dan submit
+│   ├── agent/                    agent AI verifier otonom (web3.py) + agent card ERC-8004
+│   └── ruleset/                  ruleset anomali yang di-hash ke on-chain
 ├── web/                          🌐 website pemaparan produksi (Astro, 17 halaman)
 ├── scripts/                      🧪 docs-check.mjs (validator dokumentasi)
 ├── docs/                         🗄️ arsip strategi + spec dan plan
@@ -98,9 +105,13 @@ Web3 Hackathon 2026/
 
 | Aset | Alamat | Catatan |
 |:--|:--|:--|
-| 👛 Wallet (Rabby) | `0x52317162A7a228D01353e8907a5C068A6D9a0F2e` | saldo faucet tBNB |
+| 👛 Wallet deployer (Rabby) | `0x52317162A7a228D01353e8907a5C068A6D9a0F2e` | pemegang `DEFAULT_ADMIN_ROLE` |
 | 🪙 Token `suriota` | `0x5f730750388176206cC3A7FE894c413675381B05` | ERC20, verified di BscScan, supply 1.000.000 |
-| 📄 ProofOfWatt.sol | belum deploy | rencana Sesi 3, 6 test lokal PASS |
+| 📄 **WattSettle.sol** | [`0xdA149c0939c0C3450EDE5c8a0A0e8cF3AF36481a`](https://testnet.bscscan.com/address/0xdA149c0939c0C3450EDE5c8a0A0e8cF3AF36481a) | **LIVE sejak 5 Sep 2026**, source `exact_match` di Sourcify |
+| 🤖 Agent AI verifier | [`0xce4D51524eDECD04B5417F6C8B6E6B6b9e594291`](https://testnet.bscscan.com/address/0xce4D51524eDECD04B5417F6C8B6E6B6b9e594291) | satu-satunya pemegang `VERIFIER_ROLE`, ERC-8004 agentId **2116** |
+| 💰 Reward pool | 499.895 `suriota` | sudah pre-fund 500.000, terpakai 105 di demo |
+
+Loop penuh sudah berjalan nyata: satu bacaan **disetujui dan dibayar** (103,95 suriota ke produsen, 1,05 fee ke treasury), satu bacaan **ditolak on-chain tanpa pembayaran**. Daftar lengkap tautan transaksi ada di [`proofofwatt/README.md`](proofofwatt/README.md#bukti-on-chain).
 
 <details>
 <summary><b>🔐 Catatan keamanan (klik untuk buka)</b></summary>
@@ -119,7 +130,9 @@ Web3 Hackathon 2026/
 <tr><th>Komponen</th><th>Perintah</th></tr>
 <tr><td>🌐 Website produksi</td><td><code>cd web &amp;&amp; npm install &amp;&amp; npm run dev</code> (buka :4321)</td></tr>
 <tr><td>🌐 Website fallback</td><td>double-click <code>Presentasi Opsi 5 6/index.html</code></td></tr>
-<tr><td>📄 Kontrak (Foundry, Git Bash)</td><td><code>cd proofofwatt &amp;&amp; forge test</code></td></tr>
+<tr><td>📄 Kontrak (Foundry, WSL atau Git Bash)</td><td><code>cd proofofwatt &amp;&amp; forge test</code> (20 test)</td></tr>
+<tr><td>🤖 Agent AI verifier</td><td><code>cd proofofwatt &amp;&amp; python agent/verifier.py --dry-run</code></td></tr>
+<tr><td>🔒 Pengunci state sebelum demo</td><td><code>cd proofofwatt &amp;&amp; bash scripts/night-before.sh</code></td></tr>
 </table>
 
 ---
@@ -129,14 +142,14 @@ Web3 Hackathon 2026/
 | Sesi | Tanggal | Materi | Status |
 |:--:|:--|:--|:--:|
 | 1 | 5 Jul | Foundations 1, environment dan first deploy | ✅ |
-| 2 | 12 Jul | Foundations 2, Solidity via Guestbook | ⬜ |
-| 3 | 19 Jul | Smart Contract 1, Foundry, token, Bounty Board | ⬜ |
-| 4 | 26 Jul | Smart Contract 2, full bounty dan security | ⬜ |
-| 5 | 2 Ags | Backend 1, reading chain dan indexing | ⬜ |
-| 6 | 9 Ags | Backend 2, API dan AI auto verify | ⬜ |
-| 7 | 16 Ags | Frontend, dApp UI | ⬜ |
-| 8 | 25 Ags | AI integration dan scope ideas | ⬜ |
-| 9 | 30 Ags | Pitch training menuju Demo Day (31 Okt) | ⬜ |
+| 2 | 12 Jul | Foundations 2, Solidity via Guestbook | ✅ |
+| 3 | 19 Jul | Smart Contract 1, Foundry, token, Bounty Board | ✅ |
+| 4 | 26 Jul | Smart Contract 2, full bounty dan security | ✅ |
+| 5 | 2 Ags | Backend 1, reading chain dan indexing | ✅ |
+| 6 | 9 Ags | Backend 2, API dan AI auto verify | ✅ |
+| 7 | 16 Ags | Frontend, dApp UI | ✅ |
+| 8 | 25 Ags | AI integration dan scope ideas | ✅ |
+| 9 | 30 Ags | Pitch training menuju Demo Day (31 Okt) | ✅ |
 
 <div align="center">
 

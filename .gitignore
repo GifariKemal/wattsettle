@@ -25,4 +25,7 @@ Thumbs.db
 
 # Contract deps (restore via forge install)
 proofofwatt/lib/
-proofofwatt/broadcast/
+
+# proofofwatt/broadcast/ SENGAJA ikut ter-commit. Isinya catatan deploy chain 97
+# (alamat plus hash transaksi) yang jadi bukti hard gate submission, dan tidak memuat
+# rahasia. Nilai sensitif ditulis Foundry ke proofofwatt/cache/ yang tetap diabaikan.

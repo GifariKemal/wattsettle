@@ -14,6 +14,16 @@ export const site = {
     token: "0x5f730750388176206cC3A7FE894c413675381B05",
     tokenSymbol: "suriota",
     scan: "https://testnet.bscscan.com",
+    // Deploy 5 September 2026. Sumber terverifikasi di Sourcify dengan status exact_match.
+    contract: "0xdA149c0939c0C3450EDE5c8a0A0e8cF3AF36481a",
+    // Wallet agent AI, satu-satunya pemegang VERIFIER_ROLE. Terdaftar di Identity
+    // Registry ERC-8004 yang live di chain 97 sebagai agentId 2116.
+    agent: "0xce4D51524eDECD04B5417F6C8B6E6B6b9e594291",
+    agentId: 2116,
+    // Dua transaksi settlement nyata: satu disetujui dan dibayar, satu ditolak.
+    settleTx: "0xebc5365420395715815d912ee6b75c337039fc858358412debae319a64d0d553",
+    rejectTx: "0xdca33d634ca3bb317fcf33a7983975cee87395246bfb2ca04c710b0fbc5d8d40",
+    sourcify: "https://repo.sourcify.dev/97/0xdA149c0939c0C3450EDE5c8a0A0e8cF3AF36481a",
   },
   builder: {
     name: "Gifari Kemal Suryo",
@@ -34,7 +44,7 @@ export const hero = {
     { href: "/cara-kerja", label: "Lihat cara kerja", kind: "ghost" as const },
   ],
   proof: [
-    { k: "On-chain", v: "BNB testnet", d: "kontrak verified, tiap settlement tercatat di BscScan" },
+    { k: "On-chain", v: "BNB testnet", d: "kontrak live di chain 97, tiap settlement tercatat di BscScan" },
     { k: "AI otonom", v: "zero-click", d: "verifier menilai lalu membayar sendiri, tanpa tangan manusia" },
     { k: "Hardware nyata", v: "SRT-MGATE", d: "gateway SURIOTA yang sudah dijual dan ter-deploy" },
   ],
