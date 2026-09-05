@@ -60,6 +60,18 @@ Kolom **Gate ditutup** menandai hard submission gate yang diselesaikan di sesi i
 
 ---
 
+> [!NOTE]
+> **Realisasi per 5 September 2026.** Kolom "Gate ditutup" di atas adalah rencana kurikulum,
+> dan realisasinya bergeser. Deploy ke chain 97, `submitReading`, dan `attestAndSettle` tidak
+> tuntas di Sesi 6 dan 7, melainkan baru dieksekusi sekaligus pada 5 September 2026 di bulan
+> build. Hasilnya kontrak live, 11 transaksi confirmed, dan pool sudah di-fund. Yang masih
+> terbuka dari rangkaian itu hanya lencana verified BscScan, sebab butuh kunci Etherscan V2.
+> Integrasi ERC-8004 juga berubah bentuk, dari menulis ke Validation Registry (ternyata belum
+> ter-deploy di chain 97) menjadi pendaftaran agent di Identity Registry yang live. Rincian di
+> [10 Deployment](<10 Deployment dan On-chain Ops.md>) dan [07 AI Verifier](<07 AI Verifier.md>).
+
+---
+
 ## 🗓️ Milestone Resmi dan Timeline
 
 <div align="center">
@@ -96,10 +108,10 @@ Detail tick-with-proof ada di [21 Checklist Submission](<21 Checklist Submission
 
 > ⚠️ Musuh terbesar solo builder bukan kekurangan fitur, melainkan over-scoping yang mematahkan determinisme demo dan lupa mencentang satu checkbox gate. Tahan garis. Delta kontrak paling kecil di atas base 6-test PASS adalah pilihan yang benar, bukan pilihan malas.
 
-**Evolve, bukan rewrite.** Semua pekerjaan kontrak adalah delta di atas `ProofOfWatt.sol` yang sudah 6 test PASS. `submitReading` dan guard-nya tidak disentuh. Yang berubah hanya struct plus event, `attestAndSettle`, SafeERC20 plus ReentrancyGuard plus solvency, reputation, fee, dan NatSpec.
+**Evolve, bukan rewrite.** Semua pekerjaan kontrak adalah delta di atas `ProofOfWatt.sol` yang sudah 6 test PASS. `submitReading` dan guard-nya tidak disentuh. Yang berubah hanya struct plus event, `attestAndSettle`, SafeERC20 plus ReentrancyGuard plus solvency, reputation, fee, dan NatSpec. Disiplin ini bertahan sampai akhir: suite yang di-ship tumbuh menjadi 20 test hijau, dan domain EIP-712 sengaja tetap `ProofOfWatt/1` supaya fixture tanda tangan lama tidak perlu dibuat ulang.
 
 ---
 
 <div align="center">
-<sub>© 2026 PT Surya Inovasi Prioritas (SURIOTA) · <a href="README.md">Hub WattSettle</a> · Update 7 Juli 2026</sub>
+<sub>© 2026 PT Surya Inovasi Prioritas (SURIOTA) · <a href="README.md">Hub WattSettle</a> · Update 5 September 2026</sub>
 </div>

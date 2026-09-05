@@ -88,17 +88,71 @@ Bukti selera juri, RWA plus real-world settlement.
 
 ## 🔗 ERC-8004 / BEP-620
 
-Trust primitive yang wajib diintegrasi, bukan di-mirror.
+Trust primitive yang wajib diintegrasi, bukan di-mirror. **Kartu ini dikoreksi total pada
+5 September 2026**, sebab versi sebelumnya memuat tiga kekeliruan faktual yang bisa
+dipatahkan juri dalam hitungan detik.
 
-| Atribut | Detail |
+> [!CAUTION]
+> Yang salah di versi lama, dan sudah dibuang: (1) klaim ada Validation Registry live di
+> chain 97, (2) dua alamat registry yang sebenarnya berada di mainnet chain 56, dan (3) tipe
+> parameter `tag` pada `validationResponse`. Jangan pakai lagi angka atau alamat dari versi
+> lama kartu ini.
+
+### Yang benar-benar ter-deploy di BSC testnet 97
+
+| Registry | Alamat | Bukti pembacaan |
+|:--|:--|:--|
+| IdentityRegistry | `0x8004A818BFB912233c491871b3d84c89A494BD9e` | `name()` mengembalikan `AgentIdentity`, `symbol()` mengembalikan `AGENT` |
+| ReputationRegistry | `0x8004B663056A597Dffe9eCcC1965A193B7388713` | terverifikasi ada kodenya di chain 97 |
+| ValidationRegistry | **tidak ada** | Tabel deployment kanonik hanya memuat Identity dan Reputation. Teks EIP menyatakan bagian Validation Registry masih dalam revisi aktif |
+
+### Dua alamat lama itu ada di mainnet, bukan testnet
+
+| Alamat | Rantai sebenarnya | Catatan |
+|:--|:--|:--|
+| `0xfA09B3397fAC75424422C4D28b1729E3D4f659D7` | BSC **mainnet 56** | `name()` menjawab "BRC8004 Identity Registry" |
+| `0x17860530385Bdde7992c4Da71B9ec7791E474C08` | BSC **mainnet 56** | ReputationRegistry |
+
+`eth_getCode` langsung ke chain 97 mengembalikan kosong untuk keduanya.
+
+### Signature `validationResponse` yang benar
+
+```solidity
+function validationResponse(
+    bytes32 requestHash,
+    uint8   response,      // skor 0..100
+    string  responseURI,
+    bytes32 responseHash,
+    string  tag            // string, BUKAN bytes32
+) external;
+```
+
+Draft forum BEP-620 mencetak `tag` sebagai `bytes32`, dan hampir pasti dari situlah
+kekeliruan lama berasal. Draft forum itu bertentangan dengan teks EIP sekaligus dengan ABI
+dan sumber implementasi referensi, jadi yang dipakai adalah teks EIP. Dua syarat pemakaian
+yang juga sering terlewat: sebuah `validationRequest` yang cocok harus ada lebih dulu dan
+hanya bisa dibuat pemilik agent, sedangkan response-nya hanya bisa dipanggil oleh alamat
+validator yang disebut di request itu.
+
+### Yang dikerjakan sebagai gantinya, dan kenapa lebih kuat
+
+Agent verifier WattSettle didaftarkan sungguhan ke Identity Registry live chain 97 lewat
+`register(string agentURI)`.
+
+| Item | Nilai |
 |:--|:--|
-| Status | Validation Registry LIVE di BSC mainnet dan testnet 97 sejak 4 Februari 2026 |
-| Sifat | Singleton live, satu registry kanonik di rantai yang sama tempat kita deploy |
-| Reference impl | CC0 (BRC8004), IdentityRegistry `0xfA09B3397fAC75424422C4D28b1729E3D4f659D7`, ReputationRegistry `0x17860530385Bdde7992c4Da71B9ec7791E474C08` |
-| Ekosistem | BNBAgent SDK live testnet, explorer BASCAN.io dan 8004scan |
-| Fungsi kunci | `validationResponse(bytes32 requestHash, uint8 response, string responseUri, bytes32 responseHash, bytes32 tag)`, response skala 0 sampai 100 |
+| agentId | **2116** |
+| Pemilik | `0xce4D51524eDECD04B5417F6C8B6E6B6b9e594291` |
+| `tokenURI` | `https://raw.githubusercontent.com/GifariKemal/wattsettle/main/proofofwatt/agent/agent-card.json` |
+| Transaksi | `0x7216d78dc573bb5b1f9b780cf4a8fbdca7c1cbab882ec633051e488a3ecbaa5d` |
 
-**Kenapa integrasi, bukan mirror.** Karena registry sudah live di rantai yang sama, framing "self-contained mirror of ERC-8004" adalah bunuh diri di depan juri BNB (lihat kill-shot di [16 Risiko dan Kill-shots](<16 Risiko dan Kill-shots.md>)). Setelah `attestAndSettle` menuliskan settlement, Hermes verifier JUGA memanggil `validationResponse` di Validation Registry testnet 97 untuk reading yang sama. Pitch, "device physical-DePIN saya adalah agent pertama yang menulis ke registry live BNB, dan settlement rail saya adalah lapisan pembayaran di atasnya." Detail integrasi di [07 AI Verifier](<07 AI Verifier.md>).
+**Kenapa tetap integrasi, bukan mirror.** Kita benar-benar menulis ke registry BNB yang live,
+dan kita jujur tentang bagian yang belum bisa ditulis karena kontraknya memang belum ada.
+Rationale attestation sementara hidup di event `ReadingAttested` milik kita sendiri, yang
+nama fieldnya sengaja mencerminkan semantik `validationResponse` supaya bisa dimigrasikan pada
+hari Validation Registry rilis. Framing "self-contained mirror" tetap harus mati, dan begitu
+juga klaim "menulis ke Validation Registry live". Detail integrasi di
+[07 AI Verifier](<07 AI Verifier.md>).
 
 ---
 
@@ -126,8 +180,14 @@ Sumber terverifikasi yang menopang klaim load bearing di seluruh Build Bible.
 
 | Klaim | Sumber | Waktu verifikasi |
 |:--|:--|:--|
-| ERC-8004 / BEP-620 spec dan `validationResponse` | forum.bnbchain.org (BEP-620) | Feb dan Jul 2026 |
-| Reference impl CC0 plus alamat kontrak | github.com/BRC8004 | Feb dan Jul 2026 |
+| ERC-8004 spec dan signature `validationResponse` (`tag` bertipe `string`) | Teks EIP, ABI referensi, dan sumber implementasi referensi | 5 Sep 2026 |
+| Tidak ada Validation Registry ter-deploy di chain 97 | Tabel deployment kanonik `erc-8004/erc-8004-contracts` dan BRC8004 | 5 Sep 2026 |
+| Alamat registry live chain 97 (Identity dan Reputation) | Pembacaan langsung ke rantai, `name()` mengembalikan `AgentIdentity` | 5 Sep 2026 |
+| Dua alamat registry lama ada di mainnet 56, bukan testnet 97 | `eth_getCode` langsung ke kedua rantai | 5 Sep 2026 |
+| Pendaftaran agent WattSettle, agentId 2116 | Transaksi `0x7216d78d...3ecbaa5d` di testnet 97 | 5 Sep 2026 |
+| Kontrak `WattSettle` live, 11 transaksi confirmed, 20 test hijau | Pembacaan balik saldo dan status dari chain 97, `forge test` lokal | 5 Sep 2026 |
+| Etherscan V1 mati sejak 15 Agu 2025, verifikasi lewat V2 terpadu | Percobaan verifikasi langsung, kunci khusus BscScan ditolak | 5 Sep 2026 |
+| Draft forum BEP-620 (mencetak `tag` sebagai `bytes32`, keliru) | forum.bnbchain.org (BEP-620) | Feb dan Jul 2026 |
 | x402 live di BNB, aset settle, facilitator | bnbchain.org blog, github.com/unibaseio/unibase-x402-bsc | Jul 2026 |
 | Lifecycle agent (identity, pays, reputation) | knowyouragent.network, 8004scan | Jul 2026 |
 | Timeline resmi hackathon (Submission 1 sampai 30 Sep, Finalist 14 Okt, Demo Day 31 Okt) | luma.com/pcc699dv, x.com/coinvestasi, x.com/nkskrdwyn | Jul 2026 |
@@ -137,10 +197,10 @@ Sumber terverifikasi yang menopang klaim load bearing di seluruh Build Bible.
 | Rubrik de-facto BNB 5-pillar | Framework penjurian BNB co-organizer | Jul 2026 |
 | Kontrak base 6 test PASS, Foundry v1.7.1 | Verifikasi lokal `forge test` | 7 Jul 2026 |
 
-> 💡 Peringatan sumber. Beberapa fakta awalnya keliru di brief (misal tanggal Demo Day). Angka dan tanggal di tabel ini sudah dikoreksi terhadap sumber resmi. Jangan pakai angka dari draft awal, pakai ledger ini.
+> 💡 Peringatan sumber. Beberapa fakta awalnya keliru di brief (misal tanggal Demo Day) dan beberapa lagi keliru di bab ini sendiri sampai 5 September 2026 (alamat registry ERC-8004 dan tipe parameter `tag`). Angka dan tanggal di tabel ini sudah dikoreksi terhadap sumber resmi dan terhadap pembacaan langsung ke rantai. Jangan pakai angka dari draft awal maupun dari versi lama kartu ERC-8004, pakai ledger ini.
 
 ---
 
 <div align="center">
-<sub>© 2026 PT Surya Inovasi Prioritas (SURIOTA) · <a href="README.md">Hub WattSettle</a> · Update 7 Juli 2026</sub>
+<sub>© 2026 PT Surya Inovasi Prioritas (SURIOTA) · <a href="README.md">Hub WattSettle</a> · Update 5 September 2026</sub>
 </div>

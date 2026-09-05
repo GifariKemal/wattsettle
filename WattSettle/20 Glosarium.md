@@ -27,13 +27,13 @@ Glosarium ini alfabetis. Kolom kiri adalah istilah atau identifier apa adanya (t
 | **Anomaly score** | Skor kelainan sebuah bacaan, dinyatakan sebagai `anomalyScoreBps` (0 sampai 10000). Semakin tinggi semakin jauh dari perilaku normal perangkat, dipakai sebagai salah satu gerbang approve atau reject. |
 | **Attestation** | Struct on-chain berisi rationale AI verifier atas satu Reading, yaitu delta kWh terhadap baseline, anomaly score, model version hash, ruleset hash, dan waktu evaluasi. Ini pengganti boolean approve yang bikin autonomy jadi legible di BscScan. |
 | **Baseline** | Perilaku energi acuan sebuah perangkat yang jadi pembanding bacaan baru. Verifier menghitung `kwhDeltaVsBaseline`, yaitu selisih bacaan terhadap baseline ini. |
-| **BEP-620** | Nomor proposal BNB untuk standar registry agent, secara praktis setara ERC-8004 di ekosistem BNB. Validation Registry-nya sudah live di BSC. |
+| **BEP-620** | Nomor proposal BNB untuk standar registry agent, secara praktis setara ERC-8004 di ekosistem BNB. Draft forumnya memuat kekeliruan tipe pada `validationResponse`, jadi rujuk teks EIP. |
 | **BscScan** | Block explorer untuk BNB Smart Chain. WattSettle memakainya sebagai UI resmi, semua transaksi, event ter-decode, dan verifikasi kontrak dibuktikan di sini. |
 | **CBAM** | Carbon Border Adjustment Mechanism, mekanisme pajak karbon lintas batas Uni Eropa yang live 1 Januari 2026. Jadi pendorong pasar untuk attestation energi hijau terverifikasi. |
 | **chainId 97** | Identitas jaringan BSC testnet, target deploy WattSettle untuk hackathon. |
 | **DePIN** | Decentralized Physical Infrastructure Network, jaringan infrastruktur fisik yang dikoordinasi on-chain. Energi adalah vertikal terbesarnya, dan domain langsung WattSettle. |
 | **EIP-712** | Standar tanda tangan data terstruktur di Ethereum. Perangkat memakainya untuk menandatangani `Reading{deviceId,kWh,timestamp,nonce}` di domain `ProofOfWatt/1`. |
-| **ERC-8004** | Standar registry untuk agent on-chain (identity, reputation, validation). Validation Registry-nya sudah live singleton di BSC, WattSettle mengintegrasi lewat `validationResponse`, bukan meniru. |
+| **ERC-8004** | Standar registry untuk agent on-chain (identity, reputation, validation). Di BSC testnet 97 yang live baru Identity dan Reputation Registry, Validation Registry belum ter-deploy. WattSettle mengintegrasi dengan mendaftarkan agent verifier di Identity Registry (agentId 2116), bukan meniru. |
 | **ERC20** | Standar token fungibel di EVM. Token `suriota` dan `MockUSD` keduanya ERC20 sebagai token settlement. |
 | **Foundry** | Toolchain pengembangan smart contract berbasis Rust (`forge`, `cast`, `anvil`, `chisel`). Versi v1.7.1 dipakai, kontrak base 6 test PASS. |
 | **Hermes** | Infrastruktur agent AI internal SURIOTA di VPS. Dipakai ulang sebagai AI verifier WattSettle yang subscribe event, recompute, dan memanggil `attestAndSettle` tanpa klik manusia. |
@@ -61,5 +61,5 @@ Glosarium ini alfabetis. Kolom kiri adalah istilah atau identifier apa adanya (t
 ---
 
 <div align="center">
-<sub>© 2026 PT Surya Inovasi Prioritas (SURIOTA) · <a href="README.md">Hub WattSettle</a> · Update 7 Juli 2026</sub>
+<sub>© 2026 PT Surya Inovasi Prioritas (SURIOTA) · <a href="README.md">Hub WattSettle</a> · Update 5 September 2026</sub>
 </div>

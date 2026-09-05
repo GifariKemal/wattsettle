@@ -77,12 +77,12 @@ Perbaikannya adalah `SafeERC20.safeTransfer`. Karena OpenZeppelin sudah ada di l
 
 ## 🆕 Struct Attestation
 
-Inti evolusi ada di sini. Alih alih `bool`, verifier menuliskan sebuah `Attestation` yang membawa rationale numerik AI ke on-chain. Nama field-nya sengaja mencerminkan semantik `validationResponse` ERC-8004, sehingga integrasi ke Validation Registry live (dibahas di [07 AI Verifier](<07 AI Verifier.md>)) menjadi natural, bukan tempelan.
+Inti evolusi ada di sini. Alih alih `bool`, verifier menuliskan sebuah `Attestation` yang membawa rationale numerik AI ke on-chain. Nama field-nya sengaja mencerminkan semantik `validationResponse` ERC-8004, sehingga saat Validation Registry akhirnya ter-deploy di chain 97 (per 5 September 2026 belum ada, lihat [07 AI Verifier](<07 AI Verifier.md>)), migrasinya cukup pemetaan field, bukan penulisan ulang.
 
 ```solidity
 /// @notice Rationale AI yang ditulis on-chain, menggantikan boolean approve.
 /// @dev Field-name mencerminkan semantik ERC-8004 validationResponse agar
-///      integrasi ke Validation Registry live tidak perlu terjemahan tambahan.
+///      migrasi ke Validation Registry siap begitu registry-nya ter-deploy.
 struct Attestation {
     int256  kwhDeltaVsBaseline;  // selisih kWh terhadap baseline device (bisa negatif)
     uint16  anomalyScoreBps;     // skor anomali 0..10000 basis points
@@ -208,14 +208,105 @@ Sebagai catatan opsional, `MockUSD` dengan 6 desimal disiapkan in-repo sebagai s
 
 ---
 
+## 🏗️ Bentuk As-Built (per 5 September 2026)
+
+Kontrak sudah ditulis, dikompilasi, dan di-deploy. Beberapa detail implementasinya berbeda
+dari rancangan di atas, dan yang berlaku adalah yang di rantai. Alamat live-nya
+`0xdA149c0939c0C3450EDE5c8a0A0e8cF3AF36481a` di chainId 97, ukuran bytecode 7409 byte.
+
+### Constructor satu argumen
+
+Rancangan awal membayangkan constructor multi-parameter. Yang di-ship justru
+`constructor(IERC20 _rewardToken)`, **satu argumen saja**. Semua parameter lain diberi
+nilai awal di dalam constructor lalu bisa diubah lewat setter admin.
+
+| Parameter | Nilai awal | Setter |
+|:--|:--|:--|
+| `rewardPerKwh` | `1 ether` (1 `suriota` per kWh) | `setRewardPerKwh(uint256)` |
+| `treasury` | `msg.sender` (deployer) | `setTreasury(address)` |
+| `feeBps` | `100` (1 persen) | `setFeeBps(uint16)` |
+| `maxAnomalyBps` | `2000` | `setGateParams(uint16,uint256)` |
+| `maxDeltaBound` | `500` | `setGateParams(uint16,uint256)` |
+
+Alasannya dua. Pertama, constructor pendek berarti argumen deploy pendek, dan argumen
+deploy pendek berarti `--constructor-args` untuk verifikasi hanya perlu satu `address`,
+jadi peluang salah encode saat verify mendekati nol. Kedua, parameter gate memang perlu
+disetel ulang setelah kalibrasi lapangan, jadi setter tetap dibutuhkan walaupun
+constructor-nya panjang. Membawa keduanya berarti membayar dua kali untuk satu hal.
+
+### Setter yang dibatasi, bukan setter bebas
+
+Setter admin bukan pintu belakang. Dua batas keras ditanam di kode.
+
+- `setFeeBps` menolak nilai di atas `MAX_FEE_BPS = 1000` bps (10 persen) dengan error
+  `FeeTooHigh`. Admin tidak bisa menaikkan fee sampai produsen tidak menerima apa-apa.
+- `setGateParams` menolak `maxAnomalyBps` di atas `10000` dengan error
+  `InvalidAnomalyBound`, sebab basis points di atas 10000 berarti gate anomali mati total.
+
+### Event `ParametersUpdated`
+
+Setiap perubahan parameter terlihat publik.
+
+```solidity
+event ParametersUpdated(
+    uint256 rewardPerKwh,
+    address treasury,
+    uint16  feeBps,
+    uint16  maxAnomalyBps,
+    uint256 maxDeltaBound
+);
+```
+
+Event ini dipancarkan sekali saat konstruksi dan sekali di tiap setter. Jadi seluruh
+riwayat parameter kontrak bisa direkonstruksi dari log tanpa perlu percaya klaim siapa
+pun. Ini pasangan alami dari `rulesetHash`: ruleset off-chain auditable lewat hash, dan
+parameter on-chain auditable lewat event.
+
+### Error tambahan di luar spesifikasi
+
+| Error | Kapan | Kenapa ditambah |
+|:--|:--|:--|
+| `ZeroAddress` | `setTreasury` atau `registerDevice` menerima alamat nol | Tanpa ini payout bisa terbakar ke `address(0)` |
+| `FeeTooHigh` | `setFeeBps` di atas 1000 bps | Batas keras take-rate |
+| `InvalidAnomalyBound` | `setGateParams` dengan bound anomali di atas 10000 | Mencegah gate anomali dimatikan diam-diam |
+
+> [!IMPORTANT]
+> `registerDevice` sekarang menolak `signer` nol dan `owner` nol. Ini **validasi yang
+> ditambah**, bukan validasi yang dicabut, jadi tidak melanggar aturan "jangan sentuh
+> `registerDevice`" di atas. Yang dilarang adalah mengubah bentuk data dan model izinnya,
+> dan itu tetap utuh.
+
+### Domain EIP-712 sengaja tidak ikut berganti nama
+
+Kontraknya bernama `WattSettle`, tetapi domain EIP-712-nya tetap `ProofOfWatt` versi `1`.
+Ini keputusan sadar, bukan kelalaian. Mengganti nama domain akan mengubah setiap digest,
+sehingga seluruh fixture tanda tangan device yang sudah dikumpulkan menjadi tidak sah dan
+harus ditandatangani ulang di lapangan. Harga rename kosmetik itu jauh lebih mahal
+daripada manfaatnya.
+
+### Toolchain yang dipatok
+
+| Setelan | Nilai | Alasan |
+|:--|:--|:--|
+| `solc` | 0.8.30 | Versi tunggal yang dipatok agar bytecode reproducible |
+| optimizer | aktif, 200 runs | Setelan default Foundry, tidak ada alasan menyimpang |
+| `evm_version` | `shanghai` | Dipilih agar bytecode tidak memakai `MCOPY` atau `TSTORE`, sehingga jalan di semua node BSC testnet |
+
+Sisa permukaan kontrak (struct `Attestation`, struct `Reputation`, mapping
+`deviceReputation`, `attestAndSettle` dengan gate ruleset on-chain, SafeERC20,
+ReentrancyGuard, solvency check, event `ReadingAttested` dan `SettlementFeeTaken`) sesuai
+persis dengan rancangan di bab ini.
+
+---
+
 ## 🧪 Cross-link: Testing dan Keamanan
 
-Setiap perilaku di atas harus ditutup test. Disiplin TDD berjalan pada delta, bukan pada base yang sudah hijau. Target sekitar 14 test deterministik mencakup approve-pays-via-SafeERC20, reject-when-anomaly-over-threshold, reject-when-delta-out-of-bound, reputation increment, reentrancy attempt reverts, insufficient-pool reverts, only-VERIFIER, fee split correct, dan event emits decoded Attestation. Matriks lengkapnya ada di [11 Testing dan QA](<11 Testing dan QA.md>).
+Setiap perilaku di atas ditutup test. Disiplin TDD berjalan pada delta, bukan pada base yang sudah hijau. Yang benar-benar di-ship adalah **20 test deterministik** dan semuanya hijau, mencakup approve-pays-via-SafeERC20, reject-when-anomaly-over-threshold, reject-when-delta-out-of-bound, reputation increment, reentrancy attempt reverts, insufficient-pool reverts, only-VERIFIER, fee split correct, dan event emits decoded Attestation. Matriks lengkapnya ada di [11 Testing dan QA](<11 Testing dan QA.md>).
 
 Sisi trust boundary, threat model, dan alasan setiap guard dipertahankan dibahas tuntas di [09 Keamanan](<09 Keamanan.md>). Bab ini menulis kontraknya, bab keamanan membuktikan kenapa kontrak ini aman.
 
 ---
 
 <div align="center">
-<sub>© 2026 PT Surya Inovasi Prioritas (SURIOTA) · <a href="README.md">Hub WattSettle</a> · Update 7 Juli 2026</sub>
+<sub>© 2026 PT Surya Inovasi Prioritas (SURIOTA) · <a href="README.md">Hub WattSettle</a> · Update 5 September 2026</sub>
 </div>

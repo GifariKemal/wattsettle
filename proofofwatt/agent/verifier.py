@@ -133,6 +133,12 @@ def main() -> int:
     evaluated_at = int(w3.eth.get_block("latest")["timestamp"])
 
     settled = 0
+    skipped = 0
+    # ponytail: pemindaian O(n) dari id nol tiap run. Cukup untuk skala demo dan
+    # membuat agent idempoten tanpa berkas state. Kalau jumlah bacaan menembus
+    # ribuan, ganti dengan kursor yang hanya maju melewati bacaan non-Pending
+    # yang berurutan, jangan kursor "id terakhir" polos karena itu akan melewatkan
+    # bacaan lama yang sempat gagal di-settle.
     for reading_id in range(total):
         device_id, kwh, timestamp, _nonce, status = ws.functions.submissions(reading_id).call()
         device_hex = "0x" + device_id.hex()
@@ -141,7 +147,17 @@ def main() -> int:
             print(f"  #{reading_id} lewati, status {STATUS_NAME.get(status, status)}")
             continue
 
-        att = evaluate(ruleset, ruleset_hash, device_hex, kwh, evaluated_at)
+        # Device tanpa baseline TIDAK boleh menjatuhkan seluruh run. Kalau ini
+        # dibiarkan melempar, satu perangkat asing membuat semua bacaan sesudahnya
+        # ikut tidak ter-settle. Lewati yang ini saja, lanjutkan sisanya, dan
+        # laporkan di akhir supaya tetap terlihat operator.
+        try:
+            att = evaluate(ruleset, ruleset_hash, device_hex, kwh, evaluated_at)
+        except KeyError as exc:
+            print(f"  #{reading_id} DILEWATI, {exc}")
+            skipped += 1
+            continue
+
         would_approve = predict_gate(att, max_anomaly_bps, max_delta_bound)
 
         print(
@@ -181,8 +197,10 @@ def main() -> int:
         )
         settled += 1
 
-    print(f"selesai, {settled} bacaan di-settle")
-    return 0
+    print(f"selesai, {settled} bacaan di-settle, {skipped} dilewati")
+    # Keluar bukan nol bila ada bacaan yang tidak bisa dievaluasi, supaya cron atau
+    # watchdog di server ikut menyalakan alarm dan tidak diam-diam menganggap sukses.
+    return 1 if skipped else 0
 
 
 if __name__ == "__main__":

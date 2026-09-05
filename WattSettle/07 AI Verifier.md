@@ -151,54 +151,86 @@ Runbook demo lengkap ada di [15 Demo dan Pitch](<15 Demo dan Pitch.md>).
 
 ---
 
-## 🔗 Integrasi ERC-8004 (Validation Registry LIVE)
+## 🔗 Integrasi ERC-8004 (Identity Registry LIVE, koreksi 5 September 2026)
 
-Ini perbaikan untuk Kill-shot #1, dan ini yang membuat WattSettle berhenti terlihat seperti mirror dan mulai terlihat seperti warga ekosistem BNB.
+Ini perbaikan untuk Kill-shot #1, dan ini yang membuat WattSettle berhenti terlihat seperti mirror dan mulai terlihat seperti warga ekosistem BNB. Bentuk integrasinya berubah setelah riset verifikasi 5 September 2026, dan versi yang benar justru lebih kuat daripada rencana lama.
 
-ERC-8004 dan BEP-620 sudah LIVE di BSC testnet 97 sejak 4 Februari 2026. Framing lama "self-contained mirror of ERC-8004" adalah bunuh diri di depan juri BNB, karena mereka tahu registry mereka sudah ada di rantai yang sama dengan tempat kita deploy. Pertanyaan mematikannya: kenapa hand-roll event bespoke yang meniru standar kami, alih-alih menulis ke Validation Registry yang live di testnet 97.
+### Apa yang salah di rencana lama
 
-Jawabannya adalah **integrate, bukan mirror**. Setelah `attestAndSettle` emit `ReadingAttested`, Hermes JUGA memanggil `validationResponse` di Validation Registry ERC-8004 yang live untuk bacaan yang sama. Kontrak settlement self-contained tetap menjadi core pembayaran, tetapi rationale AI juga tercatat di registry resmi BNB. Kita tidak me-reimplement BEP-620, device physical-DePIN kita menjadi agent real-world pertama yang menulis ke registry live BNB, dan settlement rail kita menjadi payment layer di atasnya.
+> [!WARNING]
+> Rencana sebelumnya di bab ini, "Hermes memanggil `validationResponse` di Validation
+> Registry ERC-8004 yang live di chain 97", **tidak bisa dieksekusi**. Tidak ada yang bisa
+> dipanggil.
 
-Signature fungsi yang dituju, terverifikasi dari forum BEP-620:
+Tiga temuan yang membatalkannya, semuanya diperiksa langsung ke rantai dan ke teks standar.
+
+| Klaim lama | Keadaan sebenarnya |
+|:--|:--|
+| Validation Registry live di BSC testnet 97 | **Tidak ada Validation Registry yang ter-deploy di chain 97**, baik oleh proyek kanonik `erc-8004/erc-8004-contracts` maupun oleh BRC8004. Tabel deployment kanonik hanya memuat Identity Registry dan Reputation Registry di setiap rantai. Teks EIP-nya sendiri menyatakan bagian Validation Registry masih dalam revisi aktif |
+| Alamat registry yang dicatat di [19 Referensi](<19 Referensi.md>) | Dua alamat itu ada di **BSC mainnet chain 56**, bukan testnet 97. `eth_getCode` langsung di chain 97 mengembalikan kosong untuk keduanya |
+| Parameter terakhir `validationResponse` bertipe `bytes32` | Tipe yang benar adalah `string`. Draft forum BEP-620 mencetak `bytes32` dan hampir pasti dari situlah kekeliruannya berasal, sebab draft forum itu bertentangan dengan teks EIP, ABI referensi, dan sumber implementasi referensi |
+
+Signature yang benar, sesuai teks EIP dan implementasi referensi:
 
 ```solidity
-// Validation Registry ERC-8004 / BEP-620, LIVE di BSC testnet 97.
-// Kita INTEGRATE ke instance live ini, tidak deploy singleton baru.
 function validationResponse(
     bytes32 requestHash,   // identitas request validasi
     uint8   response,      // skor 0..100
-    string  responseUri,   // URI ke rationale off-chain
+    string  responseURI,   // URI ke rationale off-chain
     bytes32 responseHash,  // hash konten response
-    bytes32 tag            // label kategori validasi
+    string  tag            // label kategori validasi, string BUKAN bytes32
 ) external;
 ```
 
-Hermes memanggilnya sebagai leg kedua, tepat setelah settlement confirmed:
+Selain tipe `tag`, ada dua syarat pemakaian yang juga sering terlewat. Sebuah
+`validationRequest` yang cocok harus sudah ada lebih dulu, dan hanya pemilik agent yang
+boleh membuatnya. Response-nya sendiri hanya boleh dipanggil oleh alamat validator yang
+disebut di request itu.
 
-```python
-validation_registry = w3.eth.contract(address=ERC8004_VALIDATION_REGISTRY, abi=ERC8004_ABI)
+### Apa yang benar-benar dikerjakan
 
-def post_validation_response(reading_id: int, anomaly_bps: int, response_uri: str) -> None:
-    """Leg kedua: tulis rationale ke Validation Registry ERC-8004 yang LIVE.
-    Bukan mirror, integrasi ke registry resmi BNB (fix Kill-shot #1)."""
-    request_hash = Web3.solidity_keccak(["uint256"], [reading_id])
-    score = 100 - min(100, anomaly_bps // 100)          # anomali rendah → skor tinggi
-    response_hash = Web3.keccak(text=response_uri)
-    tag = Web3.keccak(text="physical-energy")
+Registry yang **memang live di chain 97** adalah Identity Registry dan Reputation Registry, dan keduanya diverifikasi langsung ke rantai.
 
-    tx = validation_registry.functions.validationResponse(
-        request_hash, score, response_uri, response_hash, tag
-    ).build_transaction({
-        "from": verifier.address,
-        "nonce": w3.eth.get_transaction_count(verifier.address),
-        "gas": 200_000,
-        "gasPrice": w3.eth.gas_price,
-    })
-    signed = verifier.sign_transaction(tx)
-    w3.eth.send_raw_transaction(signed.raw_transaction)
-```
+| Registry | Alamat di chain 97 | Bukti |
+|:--|:--|:--|
+| IdentityRegistry | `0x8004A818BFB912233c491871b3d84c89A494BD9e` | `name()` mengembalikan `AgentIdentity`, `symbol()` mengembalikan `AGENT` |
+| ReputationRegistry | `0x8004B663056A597Dffe9eCcC1965A193B7388713` | terverifikasi ada kodenya di chain 97 |
 
-> ⚠️ Framing "self-contained mirror" harus MATI di seluruh materi. Pitch yang benar: saya tidak me-reimplement BEP-620, device physical-DePIN saya adalah agent real-world pertama yang menulis ke registry live BNB, dan settlement rail saya adalah payment layer di atasnya. Untuk keamanan panggung, leg registry ini bisa di-pre-record sebagai cadangan, tetapi framing integrasinya tetap. Kill-shot lengkap ada di [16 Risiko dan Kill-shots](<16 Risiko dan Kill-shots.md>).
+Maka yang dikerjakan bukan menunggu registry yang tidak ada, melainkan mendaftarkan agent verifier WattSettle ke Identity Registry yang sungguh-sungguh hidup. `register(string agentURI)` dipanggil dari wallet agent, dan hasilnya nyata di rantai.
+
+| Item | Nilai |
+|:--|:--|
+| agentId | **2116** |
+| Pemilik | `0xce4D51524eDECD04B5417F6C8B6E6B6b9e594291` (wallet agent, pemegang `VERIFIER_ROLE`) |
+| `tokenURI` | `https://raw.githubusercontent.com/GifariKemal/wattsettle/main/proofofwatt/agent/agent-card.json` |
+| Transaksi | [`0x7216d78d...3ecbaa5d`](https://testnet.bscscan.com/tx/0x7216d78dc573bb5b1f9b780cf4a8fbdca7c1cbab882ec633051e488a3ecbaa5d) |
+
+### Pitch line yang jujur dan tetap tajam
+
+> [!IMPORTANT]
+> "Verifier DePIN kami adalah agent terdaftar di Identity Registry ERC-8004 milik BNB yang
+> live, agentId 2116. Karena belum ada Validation Registry yang ter-deploy di testnet 97,
+> rationale attestation-nya hidup on-chain di event `ReadingAttested` milik kami sendiri,
+> yang nama fieldnya sengaja mencerminkan semantik `validationResponse` ERC-8004 supaya
+> bisa dimigrasikan pada hari registry-nya rilis."
+
+Framing "integrate, bukan mirror" tetap berlaku, hanya saja sekarang benar. Kita
+benar-benar menulis ke registry BNB yang live, dan kita jujur tentang bagian yang belum
+bisa ditulis karena kontraknya memang belum ada. Kalimat ini lebih tahan pertanyaan juri
+daripada klaim lama, sebab juri BNB tahu persis registry mana yang sudah ter-deploy.
+
+> ⚠️ Framing "self-contained mirror" tetap HARUS MATI di seluruh materi. Yang juga harus
+> mati adalah klaim "menulis ke Validation Registry live", sebab klaim itu bisa dipatahkan
+> dalam sepuluh detik dengan satu `eth_getCode`. Kill-shot lengkap ada di
+> [16 Risiko dan Kill-shots](<16 Risiko dan Kill-shots.md>).
+
+### Item roadmap
+
+Memposting ke Validation Registry ERC-8004 masuk sebagai item roadmap, dijalankan
+**begitu registry-nya benar-benar ter-deploy di chain 97**, bukan sebelumnya. Pekerjaannya
+kecil karena field `Attestation` sudah sejajar: `anomalyScoreBps` dipetakan ke `response`
+skala 0 sampai 100, `rulesetHash` ke `responseHash`, dan URI rationale ke `responseURI`.
+Lihat [18 Roadmap Pasca-Hackathon](<18 Roadmap Pasca-Hackathon.md>).
 
 ---
 
@@ -209,5 +241,5 @@ Kontrak yang dipanggil agent ini didefinisikan di [06 Kontrak WattSettle](<06 Ko
 ---
 
 <div align="center">
-<sub>© 2026 PT Surya Inovasi Prioritas (SURIOTA) · <a href="README.md">Hub WattSettle</a> · Update 7 Juli 2026</sub>
+<sub>© 2026 PT Surya Inovasi Prioritas (SURIOTA) · <a href="README.md">Hub WattSettle</a> · Update 5 September 2026</sub>
 </div>
