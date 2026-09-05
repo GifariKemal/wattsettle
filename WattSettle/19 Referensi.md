@@ -185,7 +185,9 @@ Sumber terverifikasi yang menopang klaim load bearing di seluruh Build Bible.
 | Alamat registry live chain 97 (Identity dan Reputation) | Pembacaan langsung ke rantai, `name()` mengembalikan `AgentIdentity` | 5 Sep 2026 |
 | Dua alamat registry lama ada di mainnet 56, bukan testnet 97 | `eth_getCode` langsung ke kedua rantai | 5 Sep 2026 |
 | Pendaftaran agent WattSettle, agentId 2116 | Transaksi `0x7216d78d...3ecbaa5d` di testnet 97 | 5 Sep 2026 |
-| Kontrak `WattSettle` live, 11 transaksi confirmed, 20 test hijau | Pembacaan balik saldo dan status dari chain 97, `forge test` lokal | 5 Sep 2026 |
+| Kontrak `WattSettle` live, 12 transaksi confirmed, 28 test hijau | Pembacaan balik saldo dan status dari chain 97, `forge test` lokal | 5 Sep 2026 |
+| Gate dua lapis menolak attestation palsu, verifier hanya memegang hak veto | Transaksi `0x7e8ba5a7...98391781` di testnet 97, dibaca balik dari rantai | 5 Sep 2026 |
+| `rulesetHash` kanonik `0xcce6c15c...90df6b41`, CRLF menghasilkan hash berbeda dari LF | Perbandingan langsung byte berkas (1501 versus 1470) lalu penguncian lewat `.gitattributes` | 5 Sep 2026 |
 | Etherscan V1 mati sejak 15 Agu 2025, verifikasi lewat V2 terpadu | Percobaan verifikasi langsung, kunci khusus BscScan ditolak | 5 Sep 2026 |
 | Draft forum BEP-620 (mencetak `tag` sebagai `bytes32`, keliru) | forum.bnbchain.org (BEP-620) | Feb dan Jul 2026 |
 | x402 live di BNB, aset settle, facilitator | bnbchain.org blog, github.com/unibaseio/unibase-x402-bsc | Jul 2026 |

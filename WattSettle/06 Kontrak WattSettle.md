@@ -36,7 +36,7 @@ Base `ProofOfWatt.sol` sudah benar pada bagian yang paling rawan salah, yaitu kr
 | EIP-712 recover via `ECDSA.recover` | Membuktikan bacaan datang dari signer device sah | Inti trust boundary fisik ke on-chain |
 | `usedDigest` replay guard | Mencegah bacaan yang sama diproses dua kali | Satu digest, satu kali, itu jaminan anti double pay |
 | `lastTs` monotonic guard | Menolak timestamp yang tidak maju | Mencegah reorder dan replay bertopeng timestamp lama |
-| `registerDevice()` | Mendaftarkan signer dan owner device | AccessControl sudah menjaga, tidak ada alasan mengubah bentuk |
+| `registerDevice()` | Mendaftarkan signer dan owner device | AccessControl sudah menjaga, model izinnya tetap. Satu parameter `baselineKwh` ditambahkan belakangan, lihat bagian As-Built |
 | Roles `DEFAULT_ADMIN_ROLE`, `VERIFIER_ROLE` | Gating siapa boleh apa | Model izin sudah cukup, jangan tambah role tanpa kebutuhan |
 | `READING_TYPEHASH`, `Device`, `Submission`, `Status`, events lama | Bentuk data dan sinyal | Konsumen off-chain (verifier) bergantung pada bentuk ini |
 
@@ -108,7 +108,7 @@ Setiap field membawa beban makna, tidak ada yang dekoratif:
 
 ## ⚙️ Fungsi attestAndSettle
 
-Ini fungsi tunggal yang menggantikan `verifyReading`. Ia menerima `Attestation`, menjalankan gate ruleset on-chain, memutuskan approve atau reject secara deterministik, lalu menyelesaikan pembayaran dengan disiplin checks-effects-interactions penuh.
+Ini fungsi tunggal yang menggantikan `verifyReading`. Ia menerima `Attestation`, menjalankan gate dua lapis on-chain, memutuskan approve atau reject secara deterministik, lalu menyelesaikan pembayaran dengan disiplin checks-effects-interactions penuh.
 
 ```solidity
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
@@ -119,10 +119,17 @@ import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol
 
 error InsufficientRewardPool();
 
-event ReadingAttested(uint256 indexed id, bytes32 indexed deviceId, bool approved, Attestation a);
+event ReadingAttested(
+    uint256 indexed id,
+    bytes32 indexed deviceId,
+    bool approved,
+    Attestation a,
+    int256 chainDelta,          // hitungan kontrak sendiri, di samping hitungan verifier
+    uint16 chainAnomalyBps
+);
 event SettlementFeeTaken(uint256 indexed id, address indexed treasury, uint256 fee);
 
-/// @notice Menerima rationale AI, menjalankan gate ruleset on-chain, lalu settle.
+/// @notice Menerima rationale AI, menjalankan gate dua lapis on-chain, lalu settle.
 /// @dev Menggantikan verifyReading(id,bool). VERIFIER_ROLE only, nonReentrant.
 ///      Checks-effects-interactions: status di-set SEBELUM transfer apa pun.
 function attestAndSettle(uint256 id, Attestation calldata a)
@@ -133,10 +140,15 @@ function attestAndSettle(uint256 id, Attestation calldata a)
     Submission storage s = submissions[id];
     if (s.status != Status.Pending) revert NotPending();
 
-    // ── GATE RULESET ON-CHAIN (deterministik, bukan cap karet) ──
-    // Approve hanya jika skor anomali di bawah batas DAN delta dalam bound fisik.
-    bool approved = (a.anomalyScoreBps <= maxAnomalyBps)
-                 && (_abs(a.kwhDeltaVsBaseline) <= maxDeltaBound);
+    // ── GATE DUA LAPIS (deterministik, bukan cap karet) ──
+    // Lapis satu, hitungan kontrak sendiri dari baseline on-chain. Verifier tidak bisa mempengaruhinya.
+    (int256 chainDelta, uint16 chainAnomalyBps) = _assess(devices[s.deviceId].baselineKwh, s.kWh);
+    bool contractApproves = (chainAnomalyBps <= maxAnomalyBps) && (_abs(chainDelta) <= maxDeltaBound);
+
+    // Lapis dua, penilaian verifier. Hanya bisa memperketat, tidak pernah melonggarkan.
+    bool verifierApproves = (a.anomalyScoreBps <= maxAnomalyBps) && (_abs(a.kwhDeltaVsBaseline) <= maxDeltaBound);
+
+    bool approved = contractApproves && verifierApproves;
 
     // ── EFFECTS: status di-set sebelum interaksi eksternal ──
     s.status = approved ? Status.Approved : Status.Rejected;
@@ -148,7 +160,10 @@ function attestAndSettle(uint256 id, Attestation calldata a)
     } else {
         rep.rejectedReadings += 1;
     }
-    rep.avgAnomalyBps = _rollAvg(rep.avgAnomalyBps, a.anomalyScoreBps, rep.approvedReadings + rep.rejectedReadings);
+    // Yang dicatat adalah skor anomali TERBURUK di antara keduanya, jadi verifier yang
+    // longgar tidak bisa memoles rekam jejak sebuah perangkat.
+    uint16 worstBps = chainAnomalyBps > a.anomalyScoreBps ? chainAnomalyBps : a.anomalyScoreBps;
+    rep.avgAnomalyBps = _rollAvg(rep.avgAnomalyBps, worstBps, rep.approvedReadings + rep.rejectedReadings);
 
     // ── INTERACTIONS: hitung reward, fee split, solvency, lalu transfer ──
     uint256 reward = 0;
@@ -165,7 +180,8 @@ function attestAndSettle(uint256 id, Attestation calldata a)
         }
     }
 
-    emit ReadingAttested(id, s.deviceId, approved, a);        // rationale ter-decode di BscScan
+    // Rationale ter-decode di BscScan, dan hitungan kontrak berdampingan dengan hitungan verifier.
+    emit ReadingAttested(id, s.deviceId, approved, a, chainDelta, chainAnomalyBps);
 }
 
 function _abs(int256 x) internal pure returns (uint256) {
@@ -181,13 +197,13 @@ function _abs(int256 x) internal pure returns (uint256) {
 
 ### Apa yang membuat fungsi ini benar
 
-- **Gate ruleset on-chain.** Keputusan approve bukan boolean yang di-supply mentah, melainkan hasil evaluasi dua kondisi terhadap parameter kontrak, `maxAnomalyBps` dan `maxDeltaBound`. Verifier memasok rationale, kontrak yang memutus. Ini yang membalik tuduhan "cap karet".
+- **Gate dua lapis, dan keduanya wajib lolos.** Kontrak tidak lagi menilai semata angka yang dipasok verifier. Ia menghitung sendiri delta dan skor anomali dari `baselineKwh` yang tersimpan on-chain, lalu meng-AND-kan hasilnya dengan penilaian verifier. Konsekuensinya lugas: **verifier yang berbohong tidak bisa lagi memaksa pembayaran, ia memegang hak veto, bukan kuasa menyetujui.** Ia tetap bisa menolak bacaan yang secara aritmetika terlihat wajar (karena ia melihat cuaca, kesehatan perangkat, atau sinyal kecurangan yang tidak terlihat di rantai), dan justru itulah yang membuat AI-nya tetap berguna. Yang tidak bisa ia lakukan adalah menyetujui apa yang kontraknya sendiri tolak.
 - **Checks-effects-interactions.** Status di-set sebelum transfer apa pun. Base sudah benar di sini, kita mempertahankannya dan menambahkan `nonReentrant` sebagai sabuk pengaman kedua.
-- **Reputation counters.** `approvedReadings`, `rejectedReadings`, dan `avgAnomalyBps` per device. Ini bukan hiasan, ini health score dan trust score per unit yang menjadi produk after-sales.
+- **Reputation counters.** `approvedReadings`, `rejectedReadings`, dan `avgAnomalyBps` per device. Yang dicatat adalah skor anomali terburuk di antara hitungan kontrak dan hitungan verifier, jadi verifier yang longgar tidak bisa memoles rekam jejak sebuah unit. Ini bukan hiasan, ini health score dan trust score per unit yang menjadi produk after-sales.
 - **Reward dan fee split.** `reward = kWh * rewardPerKwh`. `fee = reward * feeBps / 10000` masuk ke `treasury`. Ini substansi Finance, mengubah "transfer" menjadi "payment rail dengan revenue model" (Kill-shot #4 fix).
 - **Solvency check.** Jika balance kontrak kurang dari reward, revert `InsufficientRewardPool`. Kontrak tidak pernah mencoba membayar uang yang tidak dimilikinya.
 - **SafeERC20.** Semua transfer lewat `safeTransfer`, menutup gap 2.
-- **Events legible.** `ReadingAttested` membawa seluruh `Attestation`, sehingga rationale ter-decode langsung di BscScan. `SettlementFeeTaken` membuat setiap potongan fee terlihat publik.
+- **Events legible.** `ReadingAttested` membawa seluruh `Attestation` **berdampingan dengan hitungan kontrak sendiri** (`chainDelta`, `chainAnomalyBps`), sehingga siapa pun bisa membaca apa yang verifier KATAKAN di sebelah apa yang kontrak HITUNG. Perbedaan di antara keduanya itu sendiri adalah sinyal. `SettlementFeeTaken` membuat setiap potongan fee terlihat publik.
 
 ---
 
@@ -212,7 +228,77 @@ Sebagai catatan opsional, `MockUSD` dengan 6 desimal disiapkan in-repo sebagai s
 
 Kontrak sudah ditulis, dikompilasi, dan di-deploy. Beberapa detail implementasinya berbeda
 dari rancangan di atas, dan yang berlaku adalah yang di rantai. Alamat live-nya
-`0xdA149c0939c0C3450EDE5c8a0A0e8cF3AF36481a` di chainId 97, ukuran bytecode 7409 byte.
+`0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12` di chainId 97, ukuran bytecode 8322 byte.
+
+### Baseline tersimpan on-chain, dan gerbangnya jadi dua lapis
+
+Ini perubahan keamanan terpenting di seluruh kontrak, dan ia lahir dari satu pertanyaan
+yang versi lama tidak bisa jawab: **bagaimana kalau verifier-nya yang berbohong?**
+
+Sebelumnya, gerbang on-chain hanya menilai angka yang dipasok verifier. Kontrak tidak tahu
+baseline perangkat, jadi ia tidak punya cara menghitung ulang deviasinya sendiri. Artinya
+verifier yang berbohong bisa meloloskan bacaan palsu dan menguras reward pool, dan
+kontraknya tidak akan pernah tahu.
+
+Sekarang `Device` menyimpan `uint96 baselineKwh` di rantai, dan kontrak menghitung
+penilaiannya sendiri. Gerbangnya dua lapis, dan **keduanya wajib lolos**.
+
+```solidity
+// Lapis satu, hitungan kontrak sendiri dari baseline on-chain. Verifier tidak bisa mempengaruhinya.
+(int256 chainDelta, uint16 chainAnomalyBps) = _assess(devices[s.deviceId].baselineKwh, s.kWh);
+bool contractApproves = (chainAnomalyBps <= maxAnomalyBps) && (_abs(chainDelta) <= maxDeltaBound);
+
+// Lapis dua, penilaian verifier. Hanya bisa memperketat, tidak pernah melonggarkan.
+bool verifierApproves = (a.anomalyScoreBps <= maxAnomalyBps) && (_abs(a.kwhDeltaVsBaseline) <= maxDeltaBound);
+
+bool approved = contractApproves && verifierApproves;
+```
+
+> [!IMPORTANT]
+> Sifat keamanannya, dinyatakan lugas: **verifier yang berbohong tidak bisa lagi memaksa
+> pembayaran. Ia memegang hak veto, bukan kuasa menyetujui.** Ia tetap bisa menolak bacaan
+> yang secara aritmetika terlihat wajar, karena ia melihat cuaca, kesehatan perangkat, atau
+> sinyal kecurangan yang tidak terlihat di rantai, dan justru itulah yang membuat AI-nya
+> tetap berguna. Yang tidak pernah bisa ia lakukan adalah menyetujui apa yang kontraknya
+> sendiri tolak.
+
+**Ini bukan klaim, ini sudah dibuktikan di rantai.** Sebuah attestation yang sengaja dibuat
+tidak jujur dikirim untuk bacaan #2 (900 kWh terhadap baseline 100), mengaku
+`kwhDeltaVsBaseline = 0` dan `anomalyScoreBps = 0`. Kontrak menghitung sendiri 800 dan
+10000 bps, lalu **MENOLAK** tanpa membayar apa pun. Transaksinya
+`0x7e8ba5a7b1e09f33a8015c043383500276fda8ad59e61bac861f78ce98391781`.
+
+### Baseline nol berarti tidak terkalibrasi, dan tidak pernah dibayar
+
+`baselineKwh` bernilai nol berarti perangkat itu **belum terkalibrasi**. Perangkat seperti
+itu tidak akan pernah bisa dibayar, sebab pembaginya dipaksa menjadi 1 sehingga bacaan
+sekecil apa pun langsung memperoleh skor anomali maksimum. Ini disengaja: lebih baik
+menolak membayar daripada membayar terhadap baseline yang tidak pernah disetel.
+
+### `registerDevice` empat parameter, `setDeviceBaseline`, dan `assess`
+
+| Fungsi | Bentuk | Catatan |
+|:--|:--|:--|
+| `registerDevice` | `registerDevice(bytes32 deviceId, address signer, address owner, uint96 baselineKwh)` | Baseline ditetapkan sejak pendaftaran, jadi tidak ada jendela perangkat terdaftar tanpa acuan |
+| `setDeviceBaseline` | `setDeviceBaseline(bytes32 deviceId, uint96 baselineKwh)`, admin saja, revert `UnknownDevice` | Baseline bergeser mengikuti musim dan beban, sedangkan mendaftarkan ulang perangkat akan mereset `lastTs` |
+| `assess` | `assess(bytes32 deviceId, uint256 kWh) returns (int256 delta, uint16 anomalyBps)`, view publik | Siapa pun bisa mensimulasikan putusan kontrak dari tab Read Contract sebelum mengirim apa pun |
+
+`DeviceRegistered` kini ikut membawa `baselineKwh`, dan ada event baru
+`DeviceBaselineUpdated` supaya setiap penyesuaian baseline terbaca publik.
+
+### `ImplausibleReading` dan `MAX_KWH_PER_READING`
+
+Error baru `ImplausibleReading` dan konstanta `MAX_KWH_PER_READING = 1e12` ditegakkan di
+`submitReading`. Batas ini **tidak pernah menolak bacaan yang sah**. Fungsinya menjaga
+aritmetika di dalam `_assess` tetap jauh dari batas `uint256` dan `int256`, sehingga bacaan
+raksasa tidak bisa dipakai untuk membuat perhitungannya melimpah.
+
+### Tidak ada fungsi tarik dana untuk admin
+
+Ini properti yang disengaja dan layak disebut sebagai kekuatan: **tidak ada fungsi withdraw
+untuk reward pool**. Begitu token dikomitkan ke kontrak, admin tidak bisa menariknya
+kembali. Produsen karena itu tahu bahwa uang yang sudah disisihkan untuk mereka tidak bisa
+diambil lagi.
 
 ### Constructor satu argumen
 
@@ -269,12 +355,15 @@ parameter on-chain auditable lewat event.
 | `ZeroAddress` | `setTreasury` atau `registerDevice` menerima alamat nol | Tanpa ini payout bisa terbakar ke `address(0)` |
 | `FeeTooHigh` | `setFeeBps` di atas 1000 bps | Batas keras take-rate |
 | `InvalidAnomalyBound` | `setGateParams` dengan bound anomali di atas 10000 | Mencegah gate anomali dimatikan diam-diam |
+| `ImplausibleReading` | `submitReading` dengan kWh di atas `MAX_KWH_PER_READING` (1e12) | Menjaga aritmetika `_assess` jauh dari batas tipe |
+| `UnknownDevice` | `setDeviceBaseline` untuk `deviceId` yang belum terdaftar | Baseline tidak bisa disetel untuk perangkat yang tidak ada |
 
 > [!IMPORTANT]
-> `registerDevice` sekarang menolak `signer` nol dan `owner` nol. Ini **validasi yang
-> ditambah**, bukan validasi yang dicabut, jadi tidak melanggar aturan "jangan sentuh
-> `registerDevice`" di atas. Yang dilarang adalah mengubah bentuk data dan model izinnya,
-> dan itu tetap utuh.
+> `registerDevice` sekarang menolak `signer` nol dan `owner` nol, dan menerima parameter
+> keempat `baselineKwh`. Keduanya **menambah** pertahanan, bukan mencabutnya: validasi
+> alamat nol menutup payout yang terbakar, dan baseline on-chain adalah yang membuat
+> gerbang dua lapis mungkin ada. Model izinnya tetap `DEFAULT_ADMIN_ROLE` seperti semula,
+> dan bentuk data `Reading` beserta seluruh jalur EIP-712 tidak disentuh sama sekali.
 
 ### Domain EIP-712 sengaja tidak ikut berganti nama
 
@@ -293,15 +382,15 @@ daripada manfaatnya.
 | `evm_version` | `shanghai` | Dipilih agar bytecode tidak memakai `MCOPY` atau `TSTORE`, sehingga jalan di semua node BSC testnet |
 
 Sisa permukaan kontrak (struct `Attestation`, struct `Reputation`, mapping
-`deviceReputation`, `attestAndSettle` dengan gate ruleset on-chain, SafeERC20,
-ReentrancyGuard, solvency check, event `ReadingAttested` dan `SettlementFeeTaken`) sesuai
-persis dengan rancangan di bab ini.
+`deviceReputation`, `attestAndSettle` dengan gate dua lapis, SafeERC20, ReentrancyGuard,
+solvency check, event `ReadingAttested` dan `SettlementFeeTaken`) sesuai persis dengan
+rancangan di bab ini.
 
 ---
 
 ## 🧪 Cross-link: Testing dan Keamanan
 
-Setiap perilaku di atas ditutup test. Disiplin TDD berjalan pada delta, bukan pada base yang sudah hijau. Yang benar-benar di-ship adalah **20 test deterministik** dan semuanya hijau, mencakup approve-pays-via-SafeERC20, reject-when-anomaly-over-threshold, reject-when-delta-out-of-bound, reputation increment, reentrancy attempt reverts, insufficient-pool reverts, only-VERIFIER, fee split correct, dan event emits decoded Attestation. Matriks lengkapnya ada di [11 Testing dan QA](<11 Testing dan QA.md>).
+Setiap perilaku di atas ditutup test. Disiplin TDD berjalan pada delta, bukan pada base yang sudah hijau. Yang benar-benar di-ship adalah **28 test deterministik** dan semuanya hijau, mencakup approve-pays-via-SafeERC20, reject-when-anomaly-over-threshold, reject-when-delta-out-of-bound, reputation increment, reentrancy attempt reverts, insufficient-pool reverts, only-VERIFIER, fee split correct, dan event emits decoded Attestation. Yang paling penting di antaranya adalah `testLyingVerifierCannotForcePayout`, yang mengunci sifat keamanan gerbang dua lapis. Matriks lengkapnya ada di [11 Testing dan QA](<11 Testing dan QA.md>).
 
 Sisi trust boundary, threat model, dan alasan setiap guard dipertahankan dibahas tuntas di [09 Keamanan](<09 Keamanan.md>). Bab ini menulis kontraknya, bab keamanan membuktikan kenapa kontrak ini aman.
 

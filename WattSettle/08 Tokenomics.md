@@ -77,12 +77,12 @@ Contoh angka dengan `feeBps = 100` (1%):
 
 Ini bug demo paling penting dan harus dieksekusi jauh sebelum hari-H. Payout memakai `safeTransfer` **dari saldo kontrak itu sendiri**, bukan mint. Fungsi `mint` di token `suriota` adalah `onlyOwner`, dan owner adalah wallet deployer, bukan kontrak WattSettle. Artinya jika reward pool kontrak kosong, `attestAndSettle` akan revert `InsufficientRewardPool` di panggung.
 
-**Aksi wajib:** transfer sekitar **500000 suriota** ke alamat kontrak WattSettle setelah deploy, sebelum menjalankan loop demo.
+**Aksi wajib:** transfer **50000 suriota** ke alamat kontrak WattSettle setelah deploy, sebelum menjalankan loop demo. Angka itu sengaja dipatok untuk kebutuhan demo, bukan diisi berlebihan, sebab **kontrak tidak punya fungsi tarik dana**.
 
 ```bash
-# pre-fund reward pool: kirim 500000 suriota ke kontrak WattSettle
+# pre-fund reward pool: kirim 50000 suriota ke kontrak WattSettle
 cast send $SURIOTA_TOKEN \
-  "transfer(address,uint256)" $WATTSETTLE_CONTRACT 500000000000000000000000 \
+  "transfer(address,uint256)" $WATTSETTLE_CONTRACT 50000000000000000000000 \
   --rpc-url $BSC_TESTNET_RPC --private-key $DEPLOYER_PK
 
 # verifikasi saldo pool kontrak
@@ -90,7 +90,13 @@ cast call $SURIOTA_TOKEN "balanceOf(address)(uint256)" $WATTSETTLE_CONTRACT \
   --rpc-url $BSC_TESTNET_RPC
 ```
 
-> ⚠️ Angka `500000000000000000000000` adalah 500000 dikali 10^18 karena `suriota` memakai 18 desimal. Bila nanti ditukar ke `MockUSD` yang 6 desimal, jumlah unit ini harus disesuaikan. Solvency check `balanceOf(address(this)) < reward` di kontrak adalah jaring pengaman terakhir bila pool kurang, tapi jangan mengandalkannya di panggung. Assert saldo cukup pada night-before checklist di [10 Deployment dan On-chain Ops](<10 Deployment dan On-chain Ops.md>).
+> ⚠️ Angka `50000000000000000000000` adalah 50000 dikali 10^18 karena `suriota` memakai 18 desimal. Bila nanti ditukar ke `MockUSD` yang 6 desimal, jumlah unit ini harus disesuaikan. Solvency check `balanceOf(address(this)) < reward` di kontrak adalah jaring pengaman terakhir bila pool kurang, tapi jangan mengandalkannya di panggung. Assert saldo cukup pada night-before checklist di [10 Deployment dan On-chain Ops](<10 Deployment dan On-chain Ops.md>).
+
+> [!IMPORTANT]
+> **Tidak ada fungsi withdraw untuk reward pool, dan itu disengaja.** Begitu token masuk ke
+> kontrak, admin tidak bisa menariknya kembali. Bagi produsen ini jaminan bahwa uang yang
+> sudah disisihkan untuk mereka tidak bisa diambil lagi. Bagi operator ini disiplin: isi
+> sesuai kebutuhan, karena kelebihannya tidak bisa dipulihkan.
 
 ---
 
@@ -107,11 +113,12 @@ Ini selaras dengan pelajaran PiggyCell bahwa token flow harus di-back aktivitas 
 - Default settlement token adalah `suriota`, sudah verified di testnet 97, nol risiko token baru.
 - `MockUSD` 6 desimal adalah cadangan one-line constructor swap, dipakai bila keyword stablecoin penting di hari-H.
 - Fee protokol dipungut on-chain dalam bps, demo pakai 1%, sisanya ke produsen.
-- Pre-fund sekitar 500000 suriota ke kontrak sebelum demo karena payout memakai transfer dari saldo kontrak, bukan mint.
+- Pre-fund 50000 suriota ke kontrak sebelum demo karena payout memakai transfer dari saldo kontrak, bukan mint.
+- Tidak ada fungsi tarik dana bagi admin, jadi isi pool sesuai kebutuhan dan perlakukan setiap pengisian sebagai komitmen yang tidak bisa dibatalkan.
 - Framing tegas utility token bukan security, nilai di-back aktivitas nyata seperti pelajaran PiggyCell.
 
 ---
 
 <div align="center">
-<sub>© 2026 PT Surya Inovasi Prioritas (SURIOTA) · <a href="README.md">Hub WattSettle</a> · Update 7 Juli 2026</sub>
+<sub>© 2026 PT Surya Inovasi Prioritas (SURIOTA) · <a href="README.md">Hub WattSettle</a> · Update 5 September 2026</sub>
 </div>

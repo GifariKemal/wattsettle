@@ -22,7 +22,7 @@ WattSettle paling mudah dipahami sebagai gabungan dua benda yang selama ini dian
 
 Rel pembayaran adalah bagian yang men-settle. Ketika sebuah bacaan energi dinyatakan sah, kontrak otomatis mentransfer token settlement ke produsen energi dan memungut fee protokol. Tidak ada invoice manual, tidak ada bank sebagai perantara, tidak ada klik manusia.
 
-Wasit AI adalah bagian yang menilai. Sebelum rel membayar, sebuah verifier AI otonom memeriksa ulang angka yang masuk terhadap baseline perangkat, menghitung seberapa jauh angka itu menyimpang, lalu menuliskan alasan keputusannya ke rantai. Wasit ini tidak sekadar menekan tombol setuju, ia mengevaluasi, dan ia bisa menolak.
+Wasit AI adalah bagian yang menilai. Sebelum rel membayar, sebuah verifier AI otonom memeriksa ulang angka yang masuk terhadap baseline perangkat, menghitung seberapa jauh angka itu menyimpang, lalu menuliskan alasan keputusannya ke rantai. Wasit ini tidak sekadar menekan tombol setuju, ia mengevaluasi, dan ia bisa menolak. Yang tidak bisa ia lakukan adalah memaksa pembayaran, sebab kontraknya menghitung sendiri dari baseline yang tersimpan di rantai.
 
 > 💡 Perbedaan inti dengan sistem lama: keputusan verifier bukan lagi boolean tak terbaca `true` atau `false`, melainkan sebuah **rationale yang legible on-chain**. Angka delta, skor anomali, dan hash model semuanya tercatat, sehingga siapa pun bisa memeriksa kenapa sebuah pembayaran terjadi atau ditolak.
 
@@ -34,7 +34,7 @@ Semuanya bermula dari sebuah `Reading`. Ini adalah paket data yang ditandatangan
 
 | Field | Tipe | Makna |
 |:--|:--|:--|
-| `deviceId` | `bytes32` | Identitas unik perangkat yang sudah terdaftar via `registerDevice` |
+| `deviceId` | `bytes32` | Identitas unik perangkat yang sudah terdaftar via `registerDevice`, lengkap dengan `baselineKwh`-nya |
 | `kWh` | `uint256` | Angka energi yang diklaim untuk periode ini |
 | `timestamp` | `uint64` | Waktu bacaan, dijaga monotonik naik agar tidak bisa mundur |
 | `nonce` | `uint256` | Penghitung unik per perangkat, penjaga terhadap replay |
@@ -56,7 +56,9 @@ Setelah verifier AI selesai memeriksa, ia tidak hanya menyimpulkan sah atau tida
 | `rulesetHash` | `bytes32` | keccak256 dari file ruleset yang dipublikasikan, cocok dengan file di repo |
 | `evaluatedAt` | `uint64` | Waktu evaluasi dilakukan oleh verifier |
 
-Dua field terakhir penting untuk kredibilitas. Karena `modelVersionHash` dan `rulesetHash` tertulis di rantai dan cocok dengan file di repo, juri atau auditor bisa memverifikasi bahwa keputusan itu **dihitung, bukan di-hardcode**. Gerbang persetujuan di kontrak lalu bersifat sederhana dan transparan, yaitu approve jika `anomalyScoreBps` di bawah ambang dan besar `kwhDeltaVsBaseline` masih di dalam batas yang ditetapkan.
+Dua field terakhir penting untuk kredibilitas. Karena `modelVersionHash` dan `rulesetHash` tertulis di rantai dan cocok dengan file di repo, juri atau auditor bisa memverifikasi bahwa keputusan itu **dihitung, bukan di-hardcode**.
+
+Gerbang persetujuan di kontrak bersifat **dua lapis**, dan keduanya wajib lolos. Lapis pertama adalah hitungan kontrak sendiri: ia menyimpan `baselineKwh` per perangkat di rantai, menghitung delta dan skor anomalinya sendiri, lalu menilai keduanya terhadap ambang yang berlaku. Lapis kedua adalah penilaian verifier, yang dinilai dengan ambang yang sama. Konsekuensinya penting dan sederhana: **verifier yang berbohong tidak bisa memaksa pembayaran, ia hanya memegang hak veto**. Ia masih bisa menolak bacaan yang secara aritmetika terlihat wajar, karena ia melihat sinyal yang tidak terlihat di rantai, dan itulah yang membuatnya tetap berguna.
 
 ---
 
@@ -68,7 +70,7 @@ Berikut satu putaran lengkap dari perangkat menandatangani sampai pembayaran ata
 <img src="assets/mmd-02-1.png" alt="Diagram 02 Konsep dan Cara Kerja 1">
 </div>
 
-Urutan langkahnya. Perangkat memanggil `submitReading` dengan `Reading` yang sudah ditandatangani. Kontrak memverifikasi tanda tangan lalu melewatkannya melalui replay guard dan monotonic guard, kemudian memancarkan event `ReadingSubmitted`. Verifier AI Hermes yang berlangganan event itu bangun sendiri lewat cron tanpa klik, menghitung ulang delta terhadap baseline, mengukur anomali, lalu membangun `Attestation`. Verifier memanggil `attestAndSettle` dengan `VERIFIER_ROLE`. Kontrak memeriksa ruleset gate on-chain. Jika lolos, kontrak membayar produsen memakai `safeTransfer` dan memungut fee protokol. Jika tidak lolos, nol token dibayar dan anomali tetap tercatat sebagai bukti abadi. Kedua cabang sama-sama memancarkan `ReadingAttested` dengan rationale yang bisa didecode di BscScan.
+Urutan langkahnya. Perangkat memanggil `submitReading` dengan `Reading` yang sudah ditandatangani. Kontrak memverifikasi tanda tangan lalu melewatkannya melalui replay guard dan monotonic guard, kemudian memancarkan event `ReadingSubmitted`. Verifier AI Hermes yang berlangganan event itu bangun sendiri lewat cron tanpa klik, menghitung ulang delta terhadap baseline, mengukur anomali, lalu membangun `Attestation`. Verifier memanggil `attestAndSettle` dengan `VERIFIER_ROLE`. Kontrak menghitung penilaiannya sendiri dari baseline on-chain, lalu meng-AND-kan dengan penilaian verifier. Jika keduanya lolos, kontrak membayar produsen memakai `safeTransfer` dan memungut fee protokol. Jika tidak lolos, nol token dibayar dan anomali tetap tercatat sebagai bukti abadi. Kedua cabang sama-sama memancarkan `ReadingAttested` dengan rationale yang bisa didecode di BscScan.
 
 ---
 
@@ -99,5 +101,5 @@ Daftar lengkap istilah dan singkatan ada di [20 Glosarium](<20 Glosarium.md>).
 ---
 
 <div align="center">
-<sub>© 2026 PT Surya Inovasi Prioritas (SURIOTA) · <a href="README.md">Hub WattSettle</a> · Update 7 Juli 2026</sub>
+<sub>© 2026 PT Surya Inovasi Prioritas (SURIOTA) · <a href="README.md">Hub WattSettle</a> · Update 5 September 2026</sub>
 </div>

@@ -47,19 +47,21 @@ diketahui**, dua sisanya masih gelap, jadi jangan diasumsikan.
 
 Diperiksa langsung ke rantai dan ke berkas pada 5 September 2026, bukan dari ingatan. Situasinya
 berbalik dari pemeriksaan 30 Agustus: entri hackathon **sudah di-deploy**, dan rangkaian gate 3,
-5, serta 9 tertutup sekaligus dalam satu sesi kerja.
+5, serta 9 tertutup sekaligus dalam satu sesi kerja. Kontraknya kemudian di-deploy ulang pada
+hari yang sama untuk membawa peningkatan keamanan gate dua lapis, dan seluruh alamat serta
+tautan transaksi di halaman ini sudah menunjuk ke deployment final itu.
 
 | Gate | Keadaan sebenarnya |
 |:--|:--|
 | 1 Repo publik dengan riwayat commit asli | ✅ Terpenuhi. Repo publik sejak 7 Juli 2026 dengan commit bertanggal sepanjang kurikulum |
 | 2 Langkah verifikasi wallet | ⏳ Masih menunggu instruksi panitia. Portalnya sudah diketahui (`indonesiaweb3hack.xyz`), tetapi isian dan langkahnya baru terlihat setelah wallet tersambung |
-| 3 Deploy chain 97 | ✅ **Terpenuhi.** `WattSettle` live di `0xdA149c0939c0C3450EDE5c8a0A0e8cF3AF36481a`, tx deploy `0x9cc1cd17...2ebd017e` |
+| 3 Deploy chain 97 | ✅ **Terpenuhi.** `WattSettle` live di `0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12`, tx deploy `0xe1b2fefc...7cf31e00` |
 | 4 Kontrak verified | ⚠️ **Sebagian.** Sumber sudah terverifikasi publik di Sourcify dengan hasil `exact_match`, tetapi lencana verified di BscScan belum menyala |
-| 5 Minimal dua transaksi | ✅ **Terpenuhi dan terlampaui.** Sebelas transaksi confirmed, termasuk `submitReading` dan `attestAndSettle`, satu approve yang membayar dan satu reject yang tidak membayar |
+| 5 Minimal dua transaksi | ✅ **Terpenuhi dan terlampaui.** Dua belas transaksi confirmed pada kontrak ini, termasuk `submitReading` dan `attestAndSettle`, satu approve yang membayar, satu reject yang jujur, dan satu reject yang menolak walaupun verifier berbohong |
 | 6 README plus roadmap | ⏳ Sedang dikerjakan terpisah |
 | 7 Video demo | ❌ Belum direkam |
 | 8 Tweet | ❌ Belum dikirim |
-| 9 Pre-fund pool hadiah | ✅ **Terpenuhi.** 500000 `suriota` sudah ditransfer, sisa 499895 setelah payout demo |
+| 9 Pre-fund pool hadiah | ✅ **Terpenuhi.** 50000 `suriota` sudah ditransfer, ukurannya dipatok untuk kebutuhan demo, sisa 49895 setelah payout |
 
 > [!CAUTION]
 > **Satu-satunya penghalang teknis yang tersisa adalah gate 4.** Verifikasi Sourcify tidak
@@ -104,13 +106,13 @@ Dua pekerjaan rumah non-teknis di luar tabel gate:
 |:--:|:--|:--:|:--|
 | 1 | Repo public dengan commit history genuine (bukan single squash) | ✅ | https://github.com/GifariKemal/wattsettle publik sejak 7 Juli 2026, commit bertanggal sepanjang kurikulum Juli sampai Agustus |
 | 2 | Wallet token-verify step tuntas | ⬜ | Portal `https://indonesiaweb3hack.xyz/en/my`, langkahnya baru terlihat setelah wallet tersambung |
-| 3 | Deploy ke BSC testnet 97 | ✅ | `0xdA149c0939c0C3450EDE5c8a0A0e8cF3AF36481a`, tx `0x9cc1cd173cb6164312b4de14e40ad43c0e183ed38ba797ec591e4e452ebd017e` |
-| 4 | Kontrak VERIFIED di BscScan | ⚠️ | Sourcify `exact_match` sudah terbit di `https://repo.sourcify.dev/97/0xdA149c0939c0C3450EDE5c8a0A0e8cF3AF36481a`. Lencana BscScan **belum**, butuh kunci Etherscan V2 |
-| 5 | Minimal 2 real on-chain tx (`submitReading` plus `attestAndSettle`) | ✅ | `submitReading` `0x7630a99d...542a4544`, `attestAndSettle` APPROVED `0xebc53654...64d0d553`, `attestAndSettle` REJECTED `0xdca33d63...bc5d8d40`. Sebelas tx confirmed seluruhnya, daftar lengkap di [10 Deployment](<10 Deployment dan On-chain Ops.md>) |
+| 3 | Deploy ke BSC testnet 97 | ✅ | `0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12`, tx `0xe1b2fefcd43ad357b57a32f8b5cb2bc78c463bdc3b6bc998e25421f17cf31e00` |
+| 4 | Kontrak VERIFIED di BscScan | ⚠️ | Sourcify `exact_match` sudah terbit di `https://repo.sourcify.dev/97/0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12`. Lencana BscScan **belum**, butuh kunci Etherscan V2 |
+| 5 | Minimal 2 real on-chain tx (`submitReading` plus `attestAndSettle`) | ✅ | `submitReading` `0xa917b196...5251d853`, `attestAndSettle` APPROVED `0xff78c3ec...4ee9254c`, `attestAndSettle` REJECTED `0xbf21a819...1af49934`, dan `attestAndSettle` yang **menolak walaupun verifier berbohong** `0x7e8ba5a7...98391781`. Dua belas tx confirmed seluruhnya, daftar lengkap di [10 Deployment](<10 Deployment dan On-chain Ops.md>) |
 | 6 | README plus roadmap | ⏳ | Sedang dikerjakan terpisah |
 | 7 | Demo video | ⬜ | Link video, loop identik flawless |
 | 8 | Tweet dengan handle dan hashtag tepat | ⬜ | Link tweet, screenshot |
-| 9 | Pre-fund reward pool sebelum demo | ✅ | 500000 `suriota` masuk lewat tx `0x5ed3d825d342157bbd747d30723a515524cd0628fd802e6e016686aac5a1107f`, sisa 499895 setelah payout demo |
+| 9 | Pre-fund reward pool sebelum demo | ✅ | 50000 `suriota` masuk lewat tx `0x30e1d99874395fa3653813c600cc56705bddd9ac7fe49f9b36180c08516c7dbc`, sisa 49895 setelah payout demo |
 
 > 💡 Update kolom Status jadi ✅ hanya setelah link bukti tertempel. Kolom bukti kosong berarti gate belum benar-benar tutup.
 
@@ -122,13 +124,13 @@ Salin blok ini ke README repo dan centang saat tuntas.
 
 - [x] **Repo public, commit history genuine.** Commit harian mulai Sesi 1, jangan pernah squash jadi satu commit. Burst commit terbaca sebagai pola "backdated" dan jadi red flag.
 - [ ] **Wallet token-verify step.** Sambungkan wallet ke `indonesiaweb3hack.xyz/en/my`, baca langkah yang diminta panitia, lalu selesaikan.
-- [x] **Deploy BSC testnet 97.** `WattSettle` live di `0xdA149c0939c0C3450EDE5c8a0A0e8cF3AF36481a`.
+- [x] **Deploy BSC testnet 97.** `WattSettle` live di `0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12`.
 - [ ] **Contract VERIFIED di BscScan.** Sourcify sudah `exact_match`, tetapi itu sistem terpisah dan tidak menyalakan lencana BscScan. Terbitkan kunci Etherscan V2 terpadu lalu jalankan `forge verify-contract ... --verifier etherscan`. Ingat, base yang verified bukan berarti kontrak baru `attestAndSettle` ikut verified.
-- [x] **Minimal 2 real on-chain tx.** `submitReading` dan `attestAndSettle` sudah menyala, termasuk satu approve yang membayar dan satu reject yang tidak, dari total sebelas transaksi confirmed.
+- [x] **Minimal 2 real on-chain tx.** `submitReading` dan `attestAndSettle` sudah menyala, termasuk satu approve yang membayar, satu reject yang jujur, dan satu reject yang menolak walaupun verifier berbohong, dari total dua belas transaksi confirmed.
 - [ ] **README plus roadmap.** README lengkap dengan link, plus bab roadmap pasca-hackathon.
 - [ ] **Demo video.** Rekam loop deterministik flawless sebagai fallback panggung.
 - [ ] **Tweet handle dan hashtag EXACT.** Handle harus persis: `@BNBChain` `@BinanceAcademy` `@coinvestasi` `@devweb3jogja`, dan hashtag `#IndonesiaWeb3Hackathon`. Salah satu handle salah eja sama dengan gate gagal.
-- [x] **Pre-fund reward pool.** 500000 `suriota` sudah masuk ke kontrak, sisa 499895 setelah payout demo, jadi payout tidak akan revert di panggung.
+- [x] **Pre-fund reward pool.** 50000 `suriota` sudah masuk ke kontrak, sisa 49895 setelah payout demo, jadi payout tidak akan revert di panggung.
 
 ---
 
@@ -140,7 +142,7 @@ Untuk tiap gate, simpan screenshot sebagai bukti tahan-audit, bukan hanya link y
 |:--|:--|
 | Commit history | Grafik contribution dan daftar commit bertanggal |
 | Contract verified | Tab Contract BscScan dengan lencana verified |
-| 2 tx on-chain | Kedua halaman tx dengan event ter-expand dan ter-decode |
+| 2 tx on-chain | Ketiga halaman `attestAndSettle` dengan event ter-expand dan ter-decode, termasuk yang menolak verifier berbohong |
 | Tweet | Tweet penuh dengan keempat handle dan hashtag terlihat |
 | Reward pool | Halaman token kontrak yang menunjukkan saldo cukup |
 
@@ -150,7 +152,7 @@ Untuk tiap gate, simpan screenshot sebagai bukti tahan-audit, bukan hanya link y
 
 ## 🚦 Ringkasan Jujur
 
-Empat gate sudah tertutup dengan bukti on-chain: repo publik, deploy chain 97, dua transaksi nyata (sebelas, tepatnya), dan pre-fund reward pool. Yang tersisa terbagi tiga jenis. Gate 7 dan 8 murni pekerjaan sendiri, tinggal dikerjakan. Gate 6 sedang berjalan terpisah. Gate 2 menunggu portal panitia dibuka dengan wallet tersambung.
+Empat gate sudah tertutup dengan bukti on-chain: repo publik, deploy chain 97, dua transaksi nyata (dua belas, tepatnya), dan pre-fund reward pool. Yang tersisa terbagi tiga jenis. Gate 7 dan 8 murni pekerjaan sendiri, tinggal dikerjakan. Gate 6 sedang berjalan terpisah. Gate 2 menunggu portal panitia dibuka dengan wallet tersambung.
 
 Satu gate berdiri sendiri dan pantas disebut terakhir: **gate 4 adalah satu-satunya penghalang teknis yang tersisa, dan hanya pemilik akun yang bisa membukanya**, sebab yang dibutuhkan adalah kunci Etherscan V2 dari akun yang kata sandinya juga belum dirotasi. Satu kunjungan ke akun itu menutup dua pekerjaan sekaligus. Jangan sampai engineering yang sudah benar dan sudah terbukti di rantai dijatuhkan oleh satu kunci API yang belum diambil.
 

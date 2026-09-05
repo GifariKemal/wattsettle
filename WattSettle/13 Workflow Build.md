@@ -108,7 +108,7 @@ Detail tick-with-proof ada di [21 Checklist Submission](<21 Checklist Submission
 
 > ⚠️ Musuh terbesar solo builder bukan kekurangan fitur, melainkan over-scoping yang mematahkan determinisme demo dan lupa mencentang satu checkbox gate. Tahan garis. Delta kontrak paling kecil di atas base 6-test PASS adalah pilihan yang benar, bukan pilihan malas.
 
-**Evolve, bukan rewrite.** Semua pekerjaan kontrak adalah delta di atas `ProofOfWatt.sol` yang sudah 6 test PASS. `submitReading` dan guard-nya tidak disentuh. Yang berubah hanya struct plus event, `attestAndSettle`, SafeERC20 plus ReentrancyGuard plus solvency, reputation, fee, dan NatSpec. Disiplin ini bertahan sampai akhir: suite yang di-ship tumbuh menjadi 20 test hijau, dan domain EIP-712 sengaja tetap `ProofOfWatt/1` supaya fixture tanda tangan lama tidak perlu dibuat ulang.
+**Evolve, bukan rewrite.** Semua pekerjaan kontrak adalah delta di atas `ProofOfWatt.sol` yang sudah 6 test PASS. `submitReading` dan guard-nya tidak disentuh. Yang berubah hanya struct plus event, `attestAndSettle`, SafeERC20 plus ReentrancyGuard plus solvency, reputation, fee, dan NatSpec, lalu belakangan `baselineKwh` on-chain beserta gate dua lapisnya. Disiplin ini bertahan sampai akhir: suite yang di-ship tumbuh menjadi 28 test hijau, dan domain EIP-712 sengaja tetap `ProofOfWatt/1` supaya fixture tanda tangan lama tidak perlu dibuat ulang.
 
 ---
 

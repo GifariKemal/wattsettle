@@ -76,13 +76,10 @@ def evaluate(ruleset: dict, ruleset_hash: bytes, device_id: str, kwh: int, evalu
     }
 
 
-def predict_gate(attestation: dict, max_anomaly_bps: int, max_delta_bound: int) -> bool:
-    """Cermin gate on-chain, dipakai hanya untuk logging supaya operator tahu apa yang
-    akan terjadi. Yang mengikat tetap keputusan kontrak, bukan fungsi ini."""
-    return (
-        attestation["anomalyScoreBps"] <= max_anomaly_bps
-        and abs(attestation["kwhDeltaVsBaseline"]) <= max_delta_bound
-    )
+def passes_gate(delta: int, anomaly_bps: int, max_anomaly_bps: int, max_delta_bound: int) -> bool:
+    """Cermin satu lapis gate on-chain, dipakai hanya untuk logging supaya operator tahu apa
+    yang akan terjadi. Yang mengikat tetap keputusan kontrak, bukan fungsi ini."""
+    return anomaly_bps <= max_anomaly_bps and abs(delta) <= max_delta_bound
 
 
 def main() -> int:
@@ -124,6 +121,18 @@ def main() -> int:
     print(f"rulesetHash: 0x{ruleset_hash.hex()}")
     print(f"gate       : maxAnomalyBps={max_anomaly_bps} maxDeltaBound={max_delta_bound}")
 
+    # Baseline di ruleset HARUS sama dengan yang tersimpan di kontrak. Kalau berbeda,
+    # kontrak dan agent akan menilai bacaan yang sama dengan angka berbeda, dan yang
+    # terjadi bukan bug yang berisik melainkan penolakan diam-diam yang membingungkan.
+    # Lebih baik diteriakkan di awal.
+    for device_hex, meta in ruleset["baselines"].items():
+        on_chain = ws.functions.devices(bytes.fromhex(device_hex[2:])).call()[3]
+        if on_chain != int(meta["expected_kwh"]):
+            print(
+                f"PERINGATAN : baseline {meta['label']} berbeda, "
+                f"ruleset={meta['expected_kwh']} kontrak={on_chain}"
+            )
+
     total = ws.functions.submissionCount().call()
     print(f"bacaan     : {total} total on-chain")
 
@@ -158,12 +167,25 @@ def main() -> int:
             skipped += 1
             continue
 
-        would_approve = predict_gate(att, max_anomaly_bps, max_delta_bound)
+        # Penilaian kontrak sendiri, dibaca langsung dari rantai. Agent TIDAK bisa
+        # mempengaruhinya, dan menampilkannya di sini membuat perbedaan pendapat antara
+        # kontrak dan agent langsung terlihat operator.
+        chain_delta, chain_anomaly_bps = ws.functions.assess(device_id, kwh).call()
+
+        mine_ok = passes_gate(att["kwhDeltaVsBaseline"], att["anomalyScoreBps"], max_anomaly_bps, max_delta_bound)
+        chain_ok = passes_gate(chain_delta, chain_anomaly_bps, max_anomaly_bps, max_delta_bound)
+        would_approve = mine_ok and chain_ok
 
         print(
-            f"  #{reading_id} kWh={kwh} ts={timestamp} delta={att['kwhDeltaVsBaseline']} "
-            f"anomali={att['anomalyScoreBps']}bps prediksi={'APPROVE' if would_approve else 'REJECT'}"
+            f"  #{reading_id} kWh={kwh} ts={timestamp}\n"
+            f"      agent   : delta={att['kwhDeltaVsBaseline']:>8} anomali={att['anomalyScoreBps']:>5}bps "
+            f"{'lolos' if mine_ok else 'tolak'}\n"
+            f"      kontrak : delta={chain_delta:>8} anomali={chain_anomaly_bps:>5}bps "
+            f"{'lolos' if chain_ok else 'tolak'}\n"
+            f"      prediksi: {'APPROVE' if would_approve else 'REJECT'}"
         )
+        if (att["kwhDeltaVsBaseline"], att["anomalyScoreBps"]) != (chain_delta, chain_anomaly_bps):
+            print("      CATATAN : agent dan kontrak berbeda pendapat, periksa baseline di ruleset")
 
         if args.dry_run:
             continue

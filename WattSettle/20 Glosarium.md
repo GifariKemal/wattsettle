@@ -25,8 +25,9 @@ Glosarium ini alfabetis. Kolom kiri adalah istilah atau identifier apa adanya (t
 | Istilah | Definisi |
 |:--|:--|
 | **Anomaly score** | Skor kelainan sebuah bacaan, dinyatakan sebagai `anomalyScoreBps` (0 sampai 10000). Semakin tinggi semakin jauh dari perilaku normal perangkat, dipakai sebagai salah satu gerbang approve atau reject. |
-| **Attestation** | Struct on-chain berisi rationale AI verifier atas satu Reading, yaitu delta kWh terhadap baseline, anomaly score, model version hash, ruleset hash, dan waktu evaluasi. Ini pengganti boolean approve yang bikin autonomy jadi legible di BscScan. |
-| **Baseline** | Perilaku energi acuan sebuah perangkat yang jadi pembanding bacaan baru. Verifier menghitung `kwhDeltaVsBaseline`, yaitu selisih bacaan terhadap baseline ini. |
+| **Assess** | View publik `assess(bytes32 deviceId, uint256 kWh)` yang mengembalikan delta dan skor anomali versi kontrak sendiri. Siapa pun bisa mensimulasikan putusan kontrak dari tab Read Contract sebelum mengirim transaksi. |
+| **Attestation** | Struct on-chain berisi rationale AI verifier atas satu Reading, yaitu delta kWh terhadap baseline, anomaly score, model version hash, ruleset hash, dan waktu evaluasi. Ini pengganti boolean approve yang bikin autonomy jadi legible di BscScan. Sejak gate dua lapis terpasang, event `ReadingAttested` juga membawa hitungan kontrak sendiri di sebelahnya. |
+| **Baseline** | Perilaku energi acuan sebuah perangkat yang jadi pembanding bacaan baru. Verifier menghitung `kwhDeltaVsBaseline`, yaitu selisih bacaan terhadap baseline ini. Nilainya juga tersimpan on-chain sebagai `Device.baselineKwh`, dan baseline nol berarti perangkat belum terkalibrasi sehingga tidak pernah bisa dibayar. |
 | **BEP-620** | Nomor proposal BNB untuk standar registry agent, secara praktis setara ERC-8004 di ekosistem BNB. Draft forumnya memuat kekeliruan tipe pada `validationResponse`, jadi rujuk teks EIP. |
 | **BscScan** | Block explorer untuk BNB Smart Chain. WattSettle memakainya sebagai UI resmi, semua transaksi, event ter-decode, dan verifikasi kontrak dibuktikan di sini. |
 | **CBAM** | Carbon Border Adjustment Mechanism, mekanisme pajak karbon lintas batas Uni Eropa yang live 1 Januari 2026. Jadi pendorong pasar untuk attestation energi hijau terverifikasi. |
@@ -40,6 +41,7 @@ Glosarium ini alfabetis. Kolom kiri adalah istilah atau identifier apa adanya (t
 | **kWh** | Kilowatt-hour, satuan energi yang diukur perangkat lapangan dan yang di-settle on-chain. Yang di-settle adalah bacaan meter itu sendiri. |
 | **M2M** | Machine-to-Machine, komunikasi dan pembayaran antar mesin tanpa manusia di tengah. WattSettle adalah settlement rail M2M untuk energi. |
 | **MockUSD** | Token ERC20 stablecoin tiruan (6 desimal) di dalam repo, cadangan pengganti `suriota` lewat swap satu baris di constructor bila keyword "stablecoin" penting di hari-H. |
+| **Gate dua lapis** | Gerbang persetujuan di `attestAndSettle` yang menuntut dua hal lolos sekaligus, yaitu hitungan kontrak sendiri terhadap `baselineKwh` on-chain, dan penilaian verifier. Sifatnya: verifier yang berbohong memegang hak veto, bukan kuasa menyetujui. |
 | **Monotonic guard** | Penjaga di `submitReading` yang menolak timestamp yang tidak lebih baru dari `lastTs`, mencegah bacaan basi atau berurutan mundur. |
 | **MRV** | Measurement, Reporting, and Verification, kerangka baku pelaporan emisi dan energi. Attestation WattSettle adalah bentuk MRV yang machine-verified. |
 | **nonce** | Angka sekali pakai dalam `Reading` yang, bersama replay guard, mencegah satu tanda tangan dipakai ulang. |

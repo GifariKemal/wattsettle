@@ -9,7 +9,8 @@ const tokenUrl = `${scanBase}/token/${site.chain.token}`;
 // "kontrak" tidak pernah benar-benar membuka kontrak WattSettle.
 const contractUrl = `${scanBase}/address/${site.chain.contract}`;
 const txUrl = `${scanBase}/tx/${site.chain.settleTx}`;
-const proofHref = [contractUrl, tokenUrl, txUrl];
+const lyingTxUrl = `${scanBase}/tx/${site.chain.lyingVerifierTx}`;
+const proofHref = [contractUrl, tokenUrl, txUrl, lyingTxUrl];
 ---
 
 <!-- HERO -->

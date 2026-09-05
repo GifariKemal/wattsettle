@@ -152,10 +152,11 @@ export const proof = {
   eyebrow: "Bukti on-chain",
   title: "Semua bisa dicek di BscScan",
   lead:
-    "Setiap keadaan yang perlu ditunjukkan sudah tersedia sebagai transaksi publik di BscScan. Event ReadingAttested membawa seluruh Attestation yang ter-decode, transfer suriota terlihat, fee ke treasury terlihat. BscScan menjadi UI sekaligus API.",
+    "Setiap keadaan yang perlu ditunjukkan sudah tersedia sebagai transaksi publik di BscScan. Event ReadingAttested membawa dua angka bersebelahan, yang DIKATAKAN verifier dan yang DIHITUNG kontrak, sehingga perbedaan pendapat di antara keduanya langsung terlihat. Transfer suriota terlihat, fee ke treasury terlihat. BscScan menjadi UI sekaligus API.",
   links: [
     { ic: "ph:file-code", t: "Kontrak WattSettle", d: "Live di chain 97, sumber terverifikasi exact match di Sourcify.", tone: "flow" },
     { ic: "ph:coins", t: "Token suriota", d: "ERC20 verified, dipakai ulang sebagai settlement token.", tone: "gold" },
     { ic: "ph:receipt", t: "Settlement yang disetujui", d: "Agent AI membayar 103,95 suriota ke produsen, fee 1,05 ke treasury.", tone: "watt" },
+    { ic: "ph:shield-check", t: "Verifier berbohong, tetap ditolak", d: "Verifier sengaja mengaku bacaan 900 kWh tidak menyimpang. Kontrak menghitung sendiri dan menolak membayar.", tone: "flow" },
   ],
 } as const;

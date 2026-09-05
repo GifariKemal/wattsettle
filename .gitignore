@@ -29,3 +29,12 @@ proofofwatt/lib/
 # proofofwatt/broadcast/ SENGAJA ikut ter-commit. Isinya catatan deploy chain 97
 # (alamat plus hash transaksi) yang jadi bukti hard gate submission, dan tidak memuat
 # rahasia. Nilai sensitif ditulis Foundry ke proofofwatt/cache/ yang tetap diabaikan.
+#
+# Kecuali catatan per-run SubmitReading. Rehearsal menghasilkan puluhan berkas seperti itu
+# tiap kali dijalankan, dan tidak satu pun membawa informasi yang belum ada di rantai atau
+# di dokumen. Yang disimpan cukup run-latest.json.
+proofofwatt/broadcast/SubmitReading.s.sol/*/run-[0-9]*.json
+
+# Log rehearsal, artefak lokal tiap kali loop dijalankan. Ringkasannya ada di dokumen,
+# lognya sendiri tidak perlu masuk riwayat.
+proofofwatt/scripts/rehearsal-*.log

@@ -32,6 +32,12 @@ contract WattSettle is AccessControl, EIP712, ReentrancyGuard {
     ///      seluruh reward produsen lewat satu panggilan setter.
     uint16 private constant MAX_FEE_BPS = 1_000;
 
+    /// @dev Batas atas bacaan per pengiriman, satu triliun kWh. Angka ini absurd untuk satu
+    ///      meter, jadi tidak pernah menolak bacaan sah. Gunanya menjaga aritmetika di
+    ///      `_assess` tetap jauh dari batas `uint256` dan `int256`, sehingga bacaan raksasa
+    ///      tidak bisa dipakai membuat perhitungan meluap.
+    uint256 private constant MAX_KWH_PER_READING = 1e12;
+
     /// @dev Typed struct yang ditandatangani firmware device. JANGAN diubah, fixture lapangan
     ///      dan test base bergantung pada bentuk persis ini.
     bytes32 private constant READING_TYPEHASH =
@@ -41,10 +47,15 @@ contract WattSettle is AccessControl, EIP712, ReentrancyGuard {
     /// @param signer Alamat publik kunci ECDSA device, tujuan `ECDSA.recover`.
     /// @param owner Penerima pembayaran atas bacaan yang disetujui.
     /// @param lastTs Timestamp bacaan terakhir yang diterima, penjaga monotonic.
+    /// @param baselineKwh Konsumsi wajar device per interval. Kontrak memakainya untuk
+    ///        menghitung sendiri penyimpangan sebuah bacaan, tanpa bergantung pada angka
+    ///        yang dikirim verifier. Baseline nol berarti device belum dikalibrasi, dan
+    ///        bacaannya tidak akan pernah lolos gate.
     struct Device {
         address signer;
         address owner;
         uint64 lastTs;
+        uint96 baselineKwh;
     }
 
     /// @notice Siklus hidup satu bacaan.
@@ -65,8 +76,13 @@ contract WattSettle is AccessControl, EIP712, ReentrancyGuard {
     }
 
     /// @notice Rationale AI yang ditulis on-chain, menggantikan boolean approve.
-    /// @dev Nama field mencerminkan semantik `validationResponse` ERC-8004 agar integrasi ke
-    ///      Validation Registry live tidak perlu terjemahan tambahan.
+    /// @dev Ini adalah penilaian INDEPENDEN milik verifier, bukan sumber kebenaran. Kontrak
+    ///      menghitung angkanya sendiri dari baseline on-chain, lalu keduanya harus sama-sama
+    ///      lolos. Artinya verifier bisa menolak bacaan yang secara aritmetika terlihat wajar
+    ///      (misalnya karena sinyal cuaca atau kesehatan perangkat yang hanya dia lihat),
+    ///      tetapi tidak pernah bisa meloloskan bacaan yang ditolak kontrak.
+    ///      Nama field mencerminkan semantik `validationResponse` ERC-8004 agar integrasi ke
+    ///      Validation Registry tidak perlu terjemahan tambahan.
     /// @param kwhDeltaVsBaseline Selisih kWh terhadap baseline device, boleh negatif.
     /// @param anomalyScoreBps Skor anomali 0..10000 basis points. Nilai di luar rentang hanya bisa
     ///        berujung reject, tidak pernah menaikkan payout, jadi tidak perlu divalidasi terpisah.
@@ -121,11 +137,25 @@ contract WattSettle is AccessControl, EIP712, ReentrancyGuard {
     /// @notice Seluruh bacaan yang pernah masuk, index-nya adalah reading id.
     Submission[] public submissions;
 
-    event DeviceRegistered(bytes32 indexed deviceId, address signer, address owner);
+    event DeviceRegistered(bytes32 indexed deviceId, address signer, address owner, uint96 baselineKwh);
+    event DeviceBaselineUpdated(bytes32 indexed deviceId, uint96 baselineKwh);
     event ReadingSubmitted(uint256 indexed id, bytes32 indexed deviceId, uint256 kWh, uint64 timestamp);
 
-    /// @notice Rationale AI lengkap, ter-decode di block explorer.
-    event ReadingAttested(uint256 indexed id, bytes32 indexed deviceId, bool approved, Attestation a);
+    /// @notice Rationale AI lengkap berdampingan dengan hitungan kontrak sendiri.
+    /// @dev Dua angka sengaja ditulis bersebelahan supaya siapa pun bisa membandingkan apa
+    ///      yang DIKATAKAN verifier dengan apa yang DIHITUNG kontrak. Selisih di antara
+    ///      keduanya adalah sinyal, bukan detail teknis.
+    /// @param a Penilaian verifier.
+    /// @param chainDelta Selisih kWh terhadap baseline, dihitung kontrak sendiri.
+    /// @param chainAnomalyBps Skor anomali, dihitung kontrak sendiri.
+    event ReadingAttested(
+        uint256 indexed id,
+        bytes32 indexed deviceId,
+        bool approved,
+        Attestation a,
+        int256 chainDelta,
+        uint16 chainAnomalyBps
+    );
 
     /// @notice Setiap potongan fee protokol terlihat publik.
     event SettlementFeeTaken(uint256 indexed id, address indexed treasury, uint256 fee);
@@ -144,6 +174,7 @@ contract WattSettle is AccessControl, EIP712, ReentrancyGuard {
     error ZeroAddress();
     error FeeTooHigh();
     error InvalidAnomalyBound();
+    error ImplausibleReading();
 
     /// @notice Memasang settlement token dan parameter default yang siap demo.
     /// @dev Constructor sengaja hanya menerima satu argumen supaya perintah deploy dan
@@ -170,14 +201,30 @@ contract WattSettle is AccessControl, EIP712, ReentrancyGuard {
     // Admin
     // ---------------------------------------------------------------------
 
-    /// @notice Mendaftarkan satu unit meter beserta signer dan penerima pembayarannya.
+    /// @notice Mendaftarkan satu unit meter beserta signer, penerima pembayaran, dan baselinenya.
     /// @param deviceId Identitas device, contoh keccak256("SRT-MGATE-1210-#001").
     /// @param signer Alamat publik kunci ECDSA device.
     /// @param owner Penerima pembayaran. Wajib bukan alamat nol supaya payout tidak terbakar.
-    function registerDevice(bytes32 deviceId, address signer, address owner) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    /// @param baselineKwh Konsumsi wajar per interval, dipakai kontrak untuk menilai sendiri.
+    ///        Boleh nol saat pendaftaran awal, tetapi selama masih nol seluruh bacaan device
+    ///        ini akan ditolak gate. Kalibrasi dulu lewat `setDeviceBaseline`.
+    function registerDevice(bytes32 deviceId, address signer, address owner, uint96 baselineKwh)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
         if (signer == address(0) || owner == address(0)) revert ZeroAddress();
-        devices[deviceId] = Device({signer: signer, owner: owner, lastTs: 0});
-        emit DeviceRegistered(deviceId, signer, owner);
+        devices[deviceId] = Device({signer: signer, owner: owner, lastTs: 0, baselineKwh: baselineKwh});
+        emit DeviceRegistered(deviceId, signer, owner, baselineKwh);
+    }
+
+    /// @notice Mengkalibrasi ulang baseline sebuah device.
+    /// @dev Baseline bergeser mengikuti musim dan perubahan beban, jadi ia memang harus bisa
+    ///      diperbarui tanpa mendaftar ulang device (mendaftar ulang akan mereset `lastTs`).
+    function setDeviceBaseline(bytes32 deviceId, uint96 baselineKwh) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        Device storage d = devices[deviceId];
+        if (d.signer == address(0)) revert UnknownDevice();
+        d.baselineKwh = baselineKwh;
+        emit DeviceBaselineUpdated(deviceId, baselineKwh);
     }
 
     /// @notice Mengatur token wei yang dibayar per kWh.
@@ -230,6 +277,7 @@ contract WattSettle is AccessControl, EIP712, ReentrancyGuard {
         Device storage d = devices[deviceId];
         if (d.signer == address(0)) revert UnknownDevice();
         if (timestamp <= d.lastTs) revert StaleTimestamp();
+        if (kWh > MAX_KWH_PER_READING) revert ImplausibleReading();
 
         bytes32 digest = _hashTypedDataV4(keccak256(abi.encode(READING_TYPEHASH, deviceId, kWh, timestamp, nonce)));
         if (usedDigest[digest]) revert ReplayedReading();
@@ -248,30 +296,50 @@ contract WattSettle is AccessControl, EIP712, ReentrancyGuard {
     // ---------------------------------------------------------------------
 
     /// @notice Menerima rationale AI, menjalankan gate ruleset on-chain, lalu menyelesaikan pembayaran.
-    /// @dev Menggantikan `verifyReading(uint256,bool)` dari base. Verifier hanya memasok angka,
-    ///      kontrak yang memutus. Urutan checks-effects-interactions dijaga penuh, status di-set
-    ///      sebelum transfer apa pun, diperkuat `nonReentrant` dan solvency check.
+    /// @dev Menggantikan `verifyReading(uint256,bool)` dari base.
+    ///
+    ///      Gate-nya berlapis dua dan urutannya penting. Kontrak lebih dulu menghitung
+    ///      penyimpangan bacaan terhadap baseline device yang tersimpan on-chain, memakai
+    ///      aritmetikanya sendiri. Baru sesudah itu penilaian verifier ikut diperhitungkan.
+    ///      Keduanya harus sama-sama lolos.
+    ///
+    ///      Konsekuensinya adalah properti keamanan yang paling penting di kontrak ini:
+    ///      verifier yang berbohong TIDAK BISA memaksa pembayaran. Ia hanya bisa menolak
+    ///      bacaan yang secara aritmetika terlihat wajar, misalnya karena melihat sinyal cuaca
+    ///      atau kesehatan perangkat yang tidak terlihat on-chain. Hak veto ada padanya, hak
+    ///      meloloskan tidak.
+    ///
+    ///      Urutan checks-effects-interactions dijaga penuh, status di-set sebelum transfer
+    ///      apa pun, diperkuat `nonReentrant` dan solvency check.
     /// @param id Reading id hasil `submitReading`.
-    /// @param a Rationale numerik dari verifier.
+    /// @param a Penilaian independen dari verifier.
     function attestAndSettle(uint256 id, Attestation calldata a) external onlyRole(VERIFIER_ROLE) nonReentrant {
         Submission storage s = submissions[id];
         if (s.status != Status.Pending) revert NotPending();
 
-        // Gate ruleset on-chain, deterministik, bukan cap karet.
-        bool approved = (a.anomalyScoreBps <= maxAnomalyBps) && (_abs(a.kwhDeltaVsBaseline) <= maxDeltaBound);
+        // Lapis satu, hitungan kontrak sendiri dari baseline on-chain. Tidak bisa dipengaruhi verifier.
+        (int256 chainDelta, uint16 chainAnomalyBps) = _assess(devices[s.deviceId].baselineKwh, s.kWh);
+        bool contractApproves = (chainAnomalyBps <= maxAnomalyBps) && (_abs(chainDelta) <= maxDeltaBound);
+
+        // Lapis dua, penilaian verifier. Hanya bisa memperketat, tidak pernah melonggarkan.
+        bool verifierApproves = (a.anomalyScoreBps <= maxAnomalyBps) && (_abs(a.kwhDeltaVsBaseline) <= maxDeltaBound);
+
+        bool approved = contractApproves && verifierApproves;
 
         // Effects, status di-set sebelum interaksi eksternal.
         s.status = approved ? Status.Approved : Status.Rejected;
 
-        // Counter reputasi per device.
+        // Counter reputasi per device. Yang dicatat adalah skor yang lebih buruk di antara
+        // kedua penilaian, supaya reputasi tidak bisa dipoles verifier yang lunak.
         Reputation storage rep = deviceReputation[s.deviceId];
         if (approved) {
             rep.approvedReadings += 1;
         } else {
             rep.rejectedReadings += 1;
         }
+        uint16 worstAnomalyBps = a.anomalyScoreBps > chainAnomalyBps ? a.anomalyScoreBps : chainAnomalyBps;
         rep.avgAnomalyBps =
-            _rollAvg(rep.avgAnomalyBps, a.anomalyScoreBps, uint256(rep.approvedReadings) + rep.rejectedReadings);
+            _rollAvg(rep.avgAnomalyBps, worstAnomalyBps, uint256(rep.approvedReadings) + rep.rejectedReadings);
 
         // Interactions, hitung reward, fee split, solvency, lalu transfer.
         if (approved) {
@@ -287,7 +355,7 @@ contract WattSettle is AccessControl, EIP712, ReentrancyGuard {
             }
         }
 
-        emit ReadingAttested(id, s.deviceId, approved, a);
+        emit ReadingAttested(id, s.deviceId, approved, a, chainDelta, chainAnomalyBps);
     }
 
     // ---------------------------------------------------------------------
@@ -297,6 +365,44 @@ contract WattSettle is AccessControl, EIP712, ReentrancyGuard {
     /// @notice Jumlah bacaan yang pernah masuk.
     function submissionCount() external view returns (uint256) {
         return submissions.length;
+    }
+
+    /// @notice Menghitung penyimpangan sebuah bacaan terhadap baseline, persis seperti yang
+    ///         dilakukan kontrak saat menyelesaikan pembayaran.
+    /// @dev Dibuka sebagai `public view` supaya siapa pun bisa mensimulasikan penilaian
+    ///      kontrak sebelum mengirim apa pun, dan supaya klaim "kontrak menghitung sendiri"
+    ///      bisa dicek langsung dari tab Read Contract di block explorer.
+    /// @param deviceId Device yang dinilai.
+    /// @param kWh Bacaan yang hendak diuji.
+    /// @return delta Selisih terhadap baseline, bertanda.
+    /// @return anomalyBps Skor anomali 0..10000 basis points.
+    function assess(bytes32 deviceId, uint256 kWh) external view returns (int256 delta, uint16 anomalyBps) {
+        return _assess(devices[deviceId].baselineKwh, kWh);
+    }
+
+    /// @dev Aritmetika penilaian, sengaja bilangan bulat penuh supaya hasilnya identik dengan
+    ///      yang dihitung ulang siapa pun di luar rantai.
+    ///
+    ///      Baseline nol diperlakukan sebagai device belum dikalibrasi. Pembaginya dipaksa
+    ///      satu, sehingga bacaan sekecil apa pun menghasilkan skor anomali maksimum dan
+    ///      pasti ditolak gate. Ini disengaja: lebih baik menolak membayar device yang belum
+    ///      dikalibrasi daripada membayar berdasarkan baseline yang tidak pernah ditetapkan.
+    ///
+    ///      `kWh` sudah dibatasi `MAX_KWH_PER_READING` di `submitReading` dan `baselineKwh`
+    ///      muat di `uint96`, jadi `diff * BPS_DENOMINATOR` tidak mungkin meluap dan
+    ///      konversi ke `int256` selalu aman.
+    function _assess(uint96 baselineKwh, uint256 kWh) internal pure returns (int256 delta, uint16 anomalyBps) {
+        uint256 baseline = uint256(baselineKwh);
+        uint256 diff = kWh >= baseline ? kWh - baseline : baseline - kWh;
+        uint256 span = baseline == 0 ? 1 : baseline;
+
+        uint256 bps = (diff * BPS_DENOMINATOR) / span;
+        anomalyBps = bps > BPS_DENOMINATOR ? BPS_DENOMINATOR : uint16(bps);
+
+        // casting to 'int256' is safe because diff is bounded by MAX_KWH_PER_READING plus
+        // type(uint96).max, jauh di bawah type(int256).max
+        // forge-lint: disable-next-line(unsafe-typecast)
+        delta = kWh >= baseline ? int256(diff) : -int256(diff);
     }
 
     /// @dev Nilai mutlak, dipakai gate delta terhadap baseline.

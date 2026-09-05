@@ -14,10 +14,11 @@
   ],
   "settlement": {
     "chainId": 97,
-    "contract": "0xdA149c0939c0C3450EDE5c8a0A0e8cF3AF36481a",
+    "contract": "0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12",
     "contractName": "WattSettle",
     "settlementToken": "0x5f730750388176206cC3A7FE894c413675381B05",
-    "entrypoint": "attestAndSettle(uint256,(int256,uint16,bytes32,bytes32,uint64))"
+    "entrypoint": "attestAndSettle(uint256,(int256,uint16,bytes32,bytes32,uint64))",
+    "note": "Kontrak menghitung sendiri penyimpangan bacaan terhadap baseline on-chain. Penilaian agent hanya bisa memperketat keputusan, tidak pernah melonggarkan."
   },
   "trustModels": ["crypto-economic", "reproducible-computation"],
   "evidence": {

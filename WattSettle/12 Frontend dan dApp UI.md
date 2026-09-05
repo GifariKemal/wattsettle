@@ -56,7 +56,7 @@ Aturan disiplin dua tab (lihat runbook di [15 Demo dan Pitch](<15 Demo dan Pitch
 
 **Tab 1, log dan trigger agent.** Terminal atau panel yang menampilkan verifier Hermes bangun sendiri lewat cron, membaca event `ReadingSubmitted`, menghitung ulang delta dan anomaly, lalu memanggil `attestAndSettle` tanpa klik manusia. Ini bukti autonomy, bukan tombol yang ditekan presenter.
 
-**Tab 2, BscScan pre-loaded.** Halaman kontrak WattSettle sudah terbuka dengan event terdekode. Saat transaksi konfirmasi, `ReadingAttested` muncul dengan rationale terbaca, delta kWh, anomaly score, `modelVersionHash`, `rulesetHash`, disertai transfer token `suriota` ke produsen dan fee ke treasury. Tab ini juga menyimpan **transaksi konfirmasi nyata dari run sukses sebelumnya**, ter-pin dan ter-expand, sebagai jaring pengaman jika indexer live telat.
+**Tab 2, BscScan pre-loaded.** Halaman kontrak WattSettle sudah terbuka dengan event terdekode. Saat transaksi konfirmasi, `ReadingAttested` muncul dengan rationale terbaca, delta kWh, anomaly score, `modelVersionHash`, `rulesetHash`, **berdampingan dengan hitungan kontrak sendiri** (`chainDelta` dan `chainAnomalyBps`), disertai transfer token `suriota` ke produsen dan fee ke treasury. Kedua penilaian yang tampil bersebelahan itulah yang membuat pertanyaan "bagaimana kalau verifier-nya berbohong" bisa dijawab langsung di layar. Tab ini juga menyimpan **transaksi konfirmasi nyata dari run sukses sebelumnya**, ter-pin dan ter-expand, sebagai jaring pengaman jika indexer live telat.
 
 > 💡 Momen puncak demo adalah 2 sampai 3 detik hening di layar transaksi terkonfirmasi dengan attestation terdekode. Justru karena UI-nya BscScan dan bukan dashboard buatan sendiri, momen itu terasa jujur dan tidak bisa dituduh dipentaskan.
 
@@ -88,5 +88,5 @@ Deliverable Sesi 7 karena itu adalah, halaman viewer statis tipis selesai, minim
 ---
 
 <div align="center">
-<sub>© 2026 PT Surya Inovasi Prioritas (SURIOTA) · <a href="README.md">Hub WattSettle</a> · Update 7 Juli 2026</sub>
+<sub>© 2026 PT Surya Inovasi Prioritas (SURIOTA) · <a href="README.md">Hub WattSettle</a> · Update 5 September 2026</sub>
 </div>

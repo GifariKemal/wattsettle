@@ -56,16 +56,32 @@ DEPLOYER_HAS=$(cast call "$WATTSETTLE_CONTRACT" "hasRole(bytes32,address)(bool)"
 [ "$AGENT_HAS" = "true" ] && ok "agent memegang VERIFIER_ROLE" || bad "agent TIDAK memegang VERIFIER_ROLE"
 [ "$DEPLOYER_HAS" = "false" ] && ok "deployer sudah lepas VERIFIER_ROLE, otonomi terbukti" || bad "deployer masih memegang VERIFIER_ROLE, klaim otonomi jadi lemah"
 
-# 5. Bacaan berikutnya tidak akan tertahan monotonic guard.
-LAST_TS=$(cast call "$WATTSETTLE_CONTRACT" "devices(bytes32)(address,address,uint64)" "$DEVICE_ID" "${R[@]}" 2>/dev/null | tail -1 | num)
+# 5. Titik awal timestamp untuk bacaan berikutnya.
+#
+#    Ini SENGAJA bukan assert yang bisa gagal. Kontrak hanya menuntut timestamp menaik,
+#    bukan mendekati waktu sekarang, jadi `lastTs` yang berada di masa depan (bekas
+#    rehearsal) sama sekali bukan masalah selama pengirim menyemai dari nilai itu.
+#    Versi pertama pemeriksaan ini menuntut `sekarang > lastTs` dan menjatuhkan seluruh
+#    checklist tanpa alasan yang sah.
+LAST_TS=$(cast call "$WATTSETTLE_CONTRACT" "devices(bytes32)(address,address,uint64,uint96)" "$DEVICE_ID" "${R[@]}" 2>/dev/null | sed -n 3p | num)
+BASELINE=$(cast call "$WATTSETTLE_CONTRACT" "devices(bytes32)(address,address,uint64,uint96)" "$DEVICE_ID" "${R[@]}" 2>/dev/null | sed -n 4p | num)
 NOW=$(date +%s)
-if [ -n "$LAST_TS" ] && [ "$NOW" -gt "$LAST_TS" ]; then
-  ok "timestamp sekarang ($NOW) di atas lastTs device ($LAST_TS), bacaan baru akan diterima"
+if [ -n "$LAST_TS" ]; then
+  SEED=$(( LAST_TS > NOW ? LAST_TS : NOW ))
+  ok "lastTs device $LAST_TS, bacaan berikutnya harus memakai timestamp di atas $SEED"
 else
-  bad "lastTs device (${LAST_TS:-?}) tidak di bawah waktu sekarang, bacaan baru akan revert StaleTimestamp"
+  bad "lastTs device tidak terbaca, periksa deviceId dan alamat kontrak"
 fi
 
-# 6. Berapa bacaan yang masih menggantung, supaya tidak ada kejutan saat agent jalan.
+# 6. Device harus sudah dikalibrasi. Baseline nol berarti kontrak akan menolak semua
+#    bacaannya, dan itu akan terlihat seperti demo yang rusak padahal kontraknya benar.
+if [ -n "$BASELINE" ] && [ "$BASELINE" != "0" ]; then
+  ok "baseline device $BASELINE kWh, device sudah dikalibrasi"
+else
+  bad "baseline device nol, semua bacaan akan ditolak. Panggil setDeviceBaseline dulu"
+fi
+
+# 7. Berapa bacaan yang masih menggantung, supaya tidak ada kejutan saat agent jalan.
 PENDING=$(cast call "$WATTSETTLE_CONTRACT" "submissionCount()(uint256)" "${R[@]}" 2>/dev/null | num)
 ok "total bacaan on-chain: ${PENDING:-?}"
 

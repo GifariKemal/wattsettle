@@ -18,7 +18,7 @@
 
 ## 💡 Satu Paragraf
 
-WattSettle adalah **rel settlement on-chain untuk energi fisik**. Perangkat SURIOTA yang terpasang di lapangan menandatangani angka kWh secara kriptografis, sebuah verifier AI otonom memeriksa ulang bacaan itu terhadap baseline perangkat, menuliskan alasannya sebagai attestation on-chain, lalu kontrak membayar produsen energi secara otomatis dan memungut fee protokol. Setiap langkah menjadi transaksi yang bisa dicek publik di BscScan. Tagline kerja: **zkPull untuk energi fisik**.
+WattSettle adalah **rel settlement on-chain untuk energi fisik**. Perangkat SURIOTA yang terpasang di lapangan menandatangani angka kWh secara kriptografis, sebuah verifier AI otonom memeriksa ulang bacaan itu terhadap baseline perangkat dan menuliskan alasannya sebagai attestation on-chain, lalu kontrak menghitung penilaiannya sendiri terhadap baseline yang tersimpan di rantai dan hanya membayar bila kedua penilaian sepakat, sekaligus memungut fee protokol. Setiap langkah menjadi transaksi yang bisa dicek publik di BscScan. Tagline kerja: **zkPull untuk energi fisik**.
 
 ---
 
@@ -73,9 +73,10 @@ punya transaksi yang bisa dibuka di BscScan.
 
 | Komponen | Status |
 |:--|:--|
-| 📄 Kontrak `WattSettle.sol` | **LIVE** di `0xdA149c0939c0C3450EDE5c8a0A0e8cF3AF36481a`, 20 test PASS, ukuran 7409 byte |
-| 🪙 Token `suriota` (ERC20) | deployed dan verified di BscScan testnet 97, reward pool sudah di-fund 500000 `suriota` |
-| 🤖 AI Verifier (Hermes) | wallet `0xce4D51524eDECD04B5417F6C8B6E6B6b9e594291` memegang `VERIFIER_ROLE`, sudah menyelesaikan satu approve dan satu reject on-chain |
+| 📄 Kontrak `WattSettle.sol` | **LIVE** di `0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12`, 28 test PASS, ukuran 8322 byte |
+| 🪙 Token `suriota` (ERC20) | deployed dan verified di BscScan testnet 97, reward pool sudah di-fund 50000 `suriota` |
+| 🤖 AI Verifier (Hermes) | wallet `0xce4D51524eDECD04B5417F6C8B6E6B6b9e594291` memegang `VERIFIER_ROLE`, sudah menyelesaikan satu approve dan dua reject on-chain |
+| 🔒 Gate dua lapis | kontrak menyimpan `baselineKwh` per perangkat dan menghitung penilaiannya sendiri, jadi **verifier yang berbohong memegang hak veto, bukan kuasa menyetujui**, dan itu sudah dibuktikan di rantai |
 | 🔗 ERC-8004 | agent terdaftar di Identity Registry live chain 97, **agentId 2116** |
 | 🔍 Verifikasi sumber | Sourcify `exact_match` sudah terbit, lencana verified BscScan masih menunggu kunci Etherscan V2 |
 | 🌐 Website pemaparan | live di web3.gifariksuryo.xyz |
@@ -85,6 +86,14 @@ punya transaksi yang bisa dibuka di BscScan.
 > 103,95 `suriota` ke produsen plus 1,05 `suriota` fee ke treasury, sedangkan bacaan
 > 4200 kWh ditolak on-chain tanpa satu token pun berpindah. Rincian alamat, transaksi,
 > dan sisa saldo pool ada di [10 Deployment](<10 Deployment dan On-chain Ops.md>).
+
+> [!IMPORTANT]
+> Bukti terkuatnya bacaan ketiga. Sebuah attestation **sengaja dibuat berbohong** untuk
+> bacaan 900 kWh terhadap baseline 100, mengaku delta 0 dan anomali 0. Kontrak menghitung
+> sendiri 800 dan 10000 bps dari baseline yang tersimpan on-chain, lalu menolak tanpa
+> membayar apa pun, lewat tx
+> `0x7e8ba5a7b1e09f33a8015c043383500276fda8ad59e61bac861f78ce98391781`. Sifatnya di
+> [09 Keamanan](<09 Keamanan.md>).
 
 > 💡 Mulai membangun dari [04 Setup Lingkungan](<04 Setup Lingkungan.md>), lalu ikuti peta per sesi di [13 Workflow Build](<13 Workflow Build.md>).
 
