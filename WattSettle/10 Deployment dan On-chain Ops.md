@@ -192,15 +192,30 @@ forge verify-contract 0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12 \
 
 Hasilnya `exact_match`, terbit di `https://repo.sourcify.dev/97/0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12`.
 
-### Yang masih menggantung: lencana verified di BscScan
+### Status verified di BscScan: sudah menyala
 
-> [!CAUTION]
-> Verifikasi Sourcify **tidak** memunculkan status "Verified" di testnet.bscscan.com. Kedua
-> sistem itu berdiri sendiri. Jadi hard gate 4 (lencana verified BscScan) **masih terbuka**,
-> dan satu-satunya yang menutupnya adalah kunci Etherscan V2. Ini kini menjadi satu-satunya
-> penghalang teknis yang tersisa, dan hanya pemilik akun yang bisa membuat kuncinya.
+> [!NOTE]
+> Kontrak **sudah terverifikasi di BscScan chain 97**, dikonfirmasi 5 September 2026 lewat
+> Etherscan V2 `getsourcecode`: `ContractName` WattSettle, solc `v0.8.30+commit.73712a01`,
+> optimizer 200 runs, evmVersion shanghai, `SourceCode` 168.964 karakter. Menjalankan
+> `forge verify-contract --verifier etherscan` untuknya dijawab
+> `is already verified. Skipping verification.`
+>
+> Yang menarik, perintah itu tidak pernah dijalankan lebih dulu untuk alamat ini. Hanya
+> Sourcify. Dugaan paling masuk akal adalah Etherscan mencocokkan bytecode terhadap sumber yang
+> sudah dikenalnya. Kontrolnya bersih sehingga ini bukan false positive: alamat kontrak versi
+> lama dan sebuah alamat dompet biasa sama-sama mengembalikan `SourceCode` kosong pada API yang
+> sama.
 
-Perintahnya sudah siap jalan, tinggal kuncinya diisi:
+> [!WARNING]
+> Dua catatan yang pernah salah di dokumen ini dan pantas diingat. Pertama, klaim bahwa
+> Sourcify tidak pernah memunculkan status verified di BscScan **tidak terbukti** untuk kontrak
+> ini. Kedua, catatan lama di proyek lain menyatakan free tier Etherscan V2 menolak chain 97
+> dengan pesan upgrade plan. Diuji ulang 5 September 2026 dengan kunci gratis yang sama,
+> `chainid=97` menjawab `status:1 OK`. Uji dengan curl sebelum menyimpulkan, jangan mewarisi
+> kesimpulan lama.
+
+Perintah verify tetap dicatat di sini untuk deploy berikutnya:
 
 ```bash
 forge verify-contract 0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12 \
@@ -303,8 +318,7 @@ echo "== Selesai. Jangan start demo bila ada assert gagal. =="
 ## ✅ Ringkas
 
 - ✅ `WattSettle.sol` sudah live di testnet 97 di `0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12`, di-deploy dari WSL Ubuntu dengan forge 1.7.1, constructor satu argumen berisi alamat `suriota`.
-- ✅ Sumber sudah terverifikasi publik di Sourcify dengan hasil `exact_match`.
-- ⏳ Lencana verified di BscScan masih menunggu kunci Etherscan V2 terpadu, perintahnya sudah siap jalan.
+- ✅ Sumber terverifikasi di **dua sistem yang berdiri sendiri**: BscScan chain 97 (solc 0.8.30, optimizer 200 runs) dan Sourcify dengan hasil `exact_match` untuk creation maupun runtime.
 - ✅ Reward pool sudah di-fund 50000 `suriota`, sisa 49895 setelah payout demo.
 - ✅ Dua belas transaksi nyata sudah confirmed, termasuk satu approve yang membayar, satu reject yang jujur, dan satu reject yang menolak walaupun verifier berbohong.
 - ✅ Gate dua lapis terbukti di rantai: kontrak menghitung sendiri dari `baselineKwh` on-chain dan menolak attestation palsu lewat tx `0x7e8ba5a7...98391781`.

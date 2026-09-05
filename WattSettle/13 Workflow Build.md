@@ -64,8 +64,8 @@ Kolom **Gate ditutup** menandai hard submission gate yang diselesaikan di sesi i
 > **Realisasi per 5 September 2026.** Kolom "Gate ditutup" di atas adalah rencana kurikulum,
 > dan realisasinya bergeser. Deploy ke chain 97, `submitReading`, dan `attestAndSettle` tidak
 > tuntas di Sesi 6 dan 7, melainkan baru dieksekusi sekaligus pada 5 September 2026 di bulan
-> build. Hasilnya kontrak live, 11 transaksi confirmed, dan pool sudah di-fund. Yang masih
-> terbuka dari rangkaian itu hanya lencana verified BscScan, sebab butuh kunci Etherscan V2.
+> build. Hasilnya kontrak live, belasan transaksi confirmed, pool sudah di-fund, dan kontrak
+> terverifikasi di BscScan maupun Sourcify. Seluruh gate teknis dari rangkaian itu tertutup.
 > Integrasi ERC-8004 juga berubah bentuk, dari menulis ke Validation Registry (ternyata belum
 > ter-deploy di chain 97) menjadi pendaftaran agent di Identity Registry yang live. Rincian di
 > [10 Deployment](<10 Deployment dan On-chain Ops.md>) dan [07 AI Verifier](<07 AI Verifier.md>).

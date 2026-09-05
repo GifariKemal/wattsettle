@@ -78,7 +78,7 @@ punya transaksi yang bisa dibuka di BscScan.
 | 🤖 AI Verifier (Hermes) | wallet `0xce4D51524eDECD04B5417F6C8B6E6B6b9e594291` memegang `VERIFIER_ROLE`, sudah menyelesaikan satu approve dan dua reject on-chain |
 | 🔒 Gate dua lapis | kontrak menyimpan `baselineKwh` per perangkat dan menghitung penilaiannya sendiri, jadi **verifier yang berbohong memegang hak veto, bukan kuasa menyetujui**, dan itu sudah dibuktikan di rantai |
 | 🔗 ERC-8004 | agent terdaftar di Identity Registry live chain 97, **agentId 2116** |
-| 🔍 Verifikasi sumber | Sourcify `exact_match` sudah terbit, lencana verified BscScan masih menunggu kunci Etherscan V2 |
+| 🔍 Verifikasi sumber | Terverifikasi di **BscScan** chain 97 (solc 0.8.30, optimizer 200 runs) dan di **Sourcify** dengan hasil `exact_match` untuk creation maupun runtime |
 | 🌐 Website pemaparan | live di web3.gifariksuryo.xyz |
 
 > [!NOTE]

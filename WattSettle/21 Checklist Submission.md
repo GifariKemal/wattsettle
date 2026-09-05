@@ -64,20 +64,25 @@ tautan transaksi di halaman ini sudah menunjuk ke deployment final itu.
 | 1 Repo publik dengan riwayat commit asli | ✅ Terpenuhi. Repo publik sejak 7 Juli 2026 dengan commit bertanggal sepanjang kurikulum |
 | 2 Langkah verifikasi wallet | ⏳ Masih menunggu instruksi panitia. Portalnya sudah diketahui (`indonesiaweb3hack.xyz`), tetapi isian dan langkahnya baru terlihat setelah wallet tersambung |
 | 3 Deploy chain 97 | ✅ **Terpenuhi.** `WattSettle` live di `0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12`, tx deploy `0xe1b2fefc...7cf31e00` |
-| 4 Kontrak verified | ⚠️ **Sebagian.** Sumber sudah terverifikasi publik di Sourcify dengan hasil `exact_match`, tetapi lencana verified di BscScan belum menyala |
+| 4 Kontrak verified | ✅ **Terpenuhi.** Terverifikasi di BscScan chain 97, dan terverifikasi pula di Sourcify dengan hasil `exact_match`. Dua sistem terpisah, keduanya hijau |
 | 5 Minimal dua transaksi | ✅ **Terpenuhi dan terlampaui.** Dua belas transaksi confirmed pada kontrak ini, termasuk `submitReading` dan `attestAndSettle`, satu approve yang membayar, satu reject yang jujur, dan satu reject yang menolak walaupun verifier berbohong |
 | 6 README plus roadmap | ✅ Tuntas. README root dan `proofofwatt/README.md` sudah memuat state on-chain, plus Bab 18 Roadmap |
 | 7 Video demo | ❌ Belum direkam |
 | 8 Tweet | ❌ Belum dikirim |
 | 9 Pre-fund pool hadiah | ✅ **Terpenuhi.** 50000 `suriota` sudah ditransfer, ukurannya dipatok untuk kebutuhan demo, sisa 49895 setelah payout |
 
-> [!CAUTION]
-> **Satu-satunya penghalang teknis yang tersisa adalah gate 4.** Verifikasi Sourcify tidak
-> memunculkan status "Verified" di testnet.bscscan.com, karena kedua sistem itu berdiri
-> sendiri. Lencana BscScan menuntut kunci **Etherscan V2 terpadu** dari
-> `https://etherscan.io/myapikey`, dan kunci khusus BscScan ditolak sejak V1 dimatikan pada
-> 15 Agustus 2025. Hanya pemilik akun yang bisa membuat kunci itu. Perintah yang sudah siap
-> jalan ada di [10 Deployment](<10 Deployment dan On-chain Ops.md>).
+> [!NOTE]
+> **Gate 4 sudah tertutup, dan penutupannya sempat luput.** Kontrak ternyata SUDAH terverifikasi
+> di BscScan chain 97 tanpa pernah dijalankan `forge verify-contract --verifier etherscan`
+> untuknya. Dikonfirmasi 5 September 2026 lewat Etherscan V2 `getsourcecode`: `ContractName`
+> WattSettle, `CompilerVersion` v0.8.30+commit.73712a01, optimizer 200 runs, evmVersion
+> shanghai, `SourceCode` sepanjang 168.964 karakter. Foundry pun menolak memverifikasi ulang
+> dengan pesan `is already verified. Skipping verification.`
+>
+> Kontrolnya bersih sehingga ini bukan false positive: alamat kontrak V1 yang sudah usang dan
+> sebuah alamat dompet biasa sama-sama mengembalikan `SourceCode` kosong pada API yang sama.
+> Mekanisme paling masuk akal adalah Etherscan mencocokkan bytecode terhadap sumber yang sudah
+> dikenalnya. Mekanismenya tidak mengikat, hasilnya yang mengikat.
 
 Dua pekerjaan rumah non-teknis di luar tabel gate:
 
@@ -94,10 +99,10 @@ Dua pekerjaan rumah non-teknis di luar tabel gate:
   dua hal: kata sandi akun **dan** regenerasi API key.
 
 > [!WARNING]
-> Rotasi itu sekarang **dua kali lebih mendesak**, sebab gate 4 justru menuntut masuk ke
-> keluarga akun Etherscan yang sama untuk membuat kunci API V2. Sekali kunjungan, kerjakan
-> keduanya: rotasi kata sandi lebih dulu, baru terbitkan kunci baru. Hanya pemilik akun yang
-> bisa melakukannya.
+> Rotasi ini **tidak lagi menghalangi gate mana pun**, sebab gate 4 sudah tertutup tanpa perlu
+> kunci baru. Ia sekarang murni utang keamanan, dan justru karena itu gampang ditunda terus.
+> Kata sandi yang bocor tetap bocor selama belum diganti. Hanya pemilik akun yang bisa
+> melakukannya.
 
 > [!WARNING]
 > Menulis ulang riwayat dengan `git filter-repo` tetap bukan jalan keluarnya. Force-push
@@ -116,7 +121,7 @@ Dua pekerjaan rumah non-teknis di luar tabel gate:
 | 1 | Repo public dengan commit history genuine (bukan single squash) | ✅ | https://github.com/GifariKemal/wattsettle publik sejak 7 Juli 2026, commit bertanggal sepanjang kurikulum Juli sampai Agustus |
 | 2 | Wallet token-verify step tuntas | ⬜ | Portal `https://indonesiaweb3hack.xyz/en/my`, langkahnya baru terlihat setelah wallet tersambung |
 | 3 | Deploy ke BSC testnet 97 | ✅ | `0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12`, tx `0xe1b2fefcd43ad357b57a32f8b5cb2bc78c463bdc3b6bc998e25421f17cf31e00` |
-| 4 | Kontrak VERIFIED di BscScan | ⚠️ | Sourcify `exact_match` sudah terbit di `https://repo.sourcify.dev/97/0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12`. Lencana BscScan **belum**, butuh kunci Etherscan V2 |
+| 4 | Kontrak VERIFIED di BscScan | ✅ | BscScan: `ContractName` WattSettle, solc `v0.8.30+commit.73712a01`, optimizer 200 runs, `SourceCode` 168.964 karakter. Sourcify: [`exact_match`](https://repo.sourcify.dev/97/0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12) untuk creation dan runtime |
 | 5 | Minimal 2 real on-chain tx (`submitReading` plus `attestAndSettle`) | ✅ | `submitReading` `0xa917b196...5251d853`, `attestAndSettle` APPROVED `0xff78c3ec...4ee9254c`, `attestAndSettle` REJECTED `0xbf21a819...1af49934`, dan `attestAndSettle` yang **menolak walaupun verifier berbohong** `0x7e8ba5a7...98391781`. Dua belas tx confirmed seluruhnya, daftar lengkap di [10 Deployment](<10 Deployment dan On-chain Ops.md>) |
 | 6 | README plus roadmap | ✅ | [README root](../README.md), [README kontrak](../proofofwatt/README.md), dan [18 Roadmap Pasca-Hackathon](<18 Roadmap Pasca-Hackathon.md>) |
 | 7 | Demo video | ⬜ | Link video, loop identik flawless |
@@ -162,9 +167,17 @@ Untuk tiap gate, simpan screenshot sebagai bukti tahan-audit, bukan hanya link y
 
 ## 🚦 Ringkasan Jujur
 
-Empat gate sudah tertutup dengan bukti on-chain: repo publik, deploy chain 97, dua transaksi nyata (dua belas, tepatnya), dan pre-fund reward pool. Yang tersisa terbagi tiga jenis. Gate 7 dan 8 murni pekerjaan sendiri, tinggal dikerjakan. Gate 6 sedang berjalan terpisah. Gate 2 menunggu portal panitia dibuka dengan wallet tersambung.
+**Seluruh gate teknis sudah tertutup.** Repo publik, deploy chain 97, kontrak verified di
+BscScan, dua transaksi nyata (dua belas, tepatnya), README dan roadmap, serta pre-fund reward
+pool. Tidak ada lagi pekerjaan engineering yang menghalangi submission.
 
-Satu gate berdiri sendiri dan pantas disebut terakhir: **gate 4 adalah satu-satunya penghalang teknis yang tersisa, dan hanya pemilik akun yang bisa membukanya**, sebab yang dibutuhkan adalah kunci Etherscan V2 dari akun yang kata sandinya juga belum dirotasi. Satu kunjungan ke akun itu menutup dua pekerjaan sekaligus. Jangan sampai engineering yang sudah benar dan sudah terbukti di rantai dijatuhkan oleh satu kunci API yang belum diambil.
+Yang tersisa semuanya non-teknis dan hanya bisa dikerjakan pemilik akun: memastikan tim
+terdaftar di Luma (gate 0, syarat yang paling gampang terlewat justru karena bukan pekerjaan
+teknis), menyelesaikan token-verify di portal dengan wallet tersambung (gate 2), merekam video
+demo (gate 7), dan mengirim tweet dengan keempat handle tepat (gate 8).
+
+Rotasi kata sandi akun Etherscan tetap menggantung sebagai utang keamanan, terpisah dari gate
+mana pun. Ia tidak menghalangi submission, tetapi juga tidak hilang sendiri.
 
 ---
 

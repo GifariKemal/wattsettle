@@ -46,7 +46,7 @@ export const hero = {
     { href: "/cara-kerja", label: "Lihat cara kerja", kind: "ghost" as const },
   ],
   proof: [
-    { k: "On-chain", v: "BNB testnet", d: "kontrak live di chain 97, tiap settlement tercatat di BscScan" },
+    { k: "On-chain", v: "BNB testnet", d: "kontrak verified di BscScan, tiap settlement tercatat di sana" },
     { k: "AI otonom", v: "zero-click", d: "verifier menilai lalu membayar sendiri, tanpa tangan manusia" },
     { k: "Hardware nyata", v: "SRT-MGATE", d: "gateway SURIOTA yang sudah dijual dan ter-deploy" },
   ],
