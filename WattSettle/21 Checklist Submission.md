@@ -58,7 +58,7 @@ tautan transaksi di halaman ini sudah menunjuk ke deployment final itu.
 | 3 Deploy chain 97 | ✅ **Terpenuhi.** `WattSettle` live di `0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12`, tx deploy `0xe1b2fefc...7cf31e00` |
 | 4 Kontrak verified | ⚠️ **Sebagian.** Sumber sudah terverifikasi publik di Sourcify dengan hasil `exact_match`, tetapi lencana verified di BscScan belum menyala |
 | 5 Minimal dua transaksi | ✅ **Terpenuhi dan terlampaui.** Dua belas transaksi confirmed pada kontrak ini, termasuk `submitReading` dan `attestAndSettle`, satu approve yang membayar, satu reject yang jujur, dan satu reject yang menolak walaupun verifier berbohong |
-| 6 README plus roadmap | ⏳ Sedang dikerjakan terpisah |
+| 6 README plus roadmap | ✅ Tuntas. README root dan `proofofwatt/README.md` sudah memuat state on-chain, plus Bab 18 Roadmap |
 | 7 Video demo | ❌ Belum direkam |
 | 8 Tweet | ❌ Belum dikirim |
 | 9 Pre-fund pool hadiah | ✅ **Terpenuhi.** 50000 `suriota` sudah ditransfer, ukurannya dipatok untuk kebutuhan demo, sisa 49895 setelah payout |
@@ -109,7 +109,7 @@ Dua pekerjaan rumah non-teknis di luar tabel gate:
 | 3 | Deploy ke BSC testnet 97 | ✅ | `0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12`, tx `0xe1b2fefcd43ad357b57a32f8b5cb2bc78c463bdc3b6bc998e25421f17cf31e00` |
 | 4 | Kontrak VERIFIED di BscScan | ⚠️ | Sourcify `exact_match` sudah terbit di `https://repo.sourcify.dev/97/0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12`. Lencana BscScan **belum**, butuh kunci Etherscan V2 |
 | 5 | Minimal 2 real on-chain tx (`submitReading` plus `attestAndSettle`) | ✅ | `submitReading` `0xa917b196...5251d853`, `attestAndSettle` APPROVED `0xff78c3ec...4ee9254c`, `attestAndSettle` REJECTED `0xbf21a819...1af49934`, dan `attestAndSettle` yang **menolak walaupun verifier berbohong** `0x7e8ba5a7...98391781`. Dua belas tx confirmed seluruhnya, daftar lengkap di [10 Deployment](<10 Deployment dan On-chain Ops.md>) |
-| 6 | README plus roadmap | ⏳ | Sedang dikerjakan terpisah |
+| 6 | README plus roadmap | ✅ | [README root](../README.md), [README kontrak](../proofofwatt/README.md), dan [18 Roadmap Pasca-Hackathon](<18 Roadmap Pasca-Hackathon.md>) |
 | 7 | Demo video | ⬜ | Link video, loop identik flawless |
 | 8 | Tweet dengan handle dan hashtag tepat | ⬜ | Link tweet, screenshot |
 | 9 | Pre-fund reward pool sebelum demo | ✅ | 50000 `suriota` masuk lewat tx `0x30e1d99874395fa3653813c600cc56705bddd9ac7fe49f9b36180c08516c7dbc`, sisa 49895 setelah payout demo |
@@ -127,7 +127,7 @@ Salin blok ini ke README repo dan centang saat tuntas.
 - [x] **Deploy BSC testnet 97.** `WattSettle` live di `0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12`.
 - [ ] **Contract VERIFIED di BscScan.** Sourcify sudah `exact_match`, tetapi itu sistem terpisah dan tidak menyalakan lencana BscScan. Terbitkan kunci Etherscan V2 terpadu lalu jalankan `forge verify-contract ... --verifier etherscan`. Ingat, base yang verified bukan berarti kontrak baru `attestAndSettle` ikut verified.
 - [x] **Minimal 2 real on-chain tx.** `submitReading` dan `attestAndSettle` sudah menyala, termasuk satu approve yang membayar, satu reject yang jujur, dan satu reject yang menolak walaupun verifier berbohong, dari total dua belas transaksi confirmed.
-- [ ] **README plus roadmap.** README lengkap dengan link, plus bab roadmap pasca-hackathon.
+- [x] **README plus roadmap.** README root dan README kontrak memuat alamat live, tabel bukti transaksi, dan cara menjalankan. Bab roadmap pasca-hackathon dirujuk dari keduanya.
 - [ ] **Demo video.** Rekam loop deterministik flawless sebagai fallback panggung.
 - [ ] **Tweet handle dan hashtag EXACT.** Handle harus persis: `@BNBChain` `@BinanceAcademy` `@coinvestasi` `@devweb3jogja`, dan hashtag `#IndonesiaWeb3Hackathon`. Salah satu handle salah eja sama dengan gate gagal.
 - [x] **Pre-fund reward pool.** 50000 `suriota` sudah masuk ke kontrak, sisa 49895 setelah payout demo, jadi payout tidak akan revert di panggung.
