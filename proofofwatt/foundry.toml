@@ -14,4 +14,13 @@ evm_version = "shanghai"
 [fmt]
 line_length = 120
 
+# fail_on_revert sengaja true. Handler invariant ditulis supaya tidak pernah revert, jadi
+# kalau ada panggilan yang gagal itu tanda asumsi handler-nya keliru, bukan sesuatu yang
+# boleh ditelan diam-diam. Dengan false, sebagian besar panggilan bisa gagal tanpa suara
+# dan invariant lolos hanya karena tidak ada yang benar-benar terjadi.
+[invariant]
+runs = 256
+depth = 32
+fail_on_revert = true
+
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options

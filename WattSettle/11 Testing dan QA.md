@@ -4,11 +4,13 @@
 &nbsp;
 ![WattSettle](https://img.shields.io/badge/WattSettle-Build%20Bible-22c55e?style=for-the-badge)
 &nbsp;
-![Tests](https://img.shields.io/badge/28%20test-hijau-22c55e?style=for-the-badge)
+![Tests](https://img.shields.io/badge/37%20test-hijau-22c55e?style=for-the-badge)
+&nbsp;
+![Coverage](https://img.shields.io/badge/coverage-100%25-22c55e?style=for-the-badge)
 
 # 🧪 Testing dan QA
 
-### TDD pada delta, test matrix, dan rehearsal loop
+### TDD pada delta, test matrix, suite invariant, dan rehearsal loop
 
 </div>
 
@@ -18,9 +20,9 @@
 
 ## 💡 Prinsip Satu Kalimat
 
-WattSettle adalah evolusi, bukan rewrite, jadi disiplin testing berjalan **pada delta**, yaitu pertahankan test base tetap hijau setelah rename `verifyReading` menjadi `attestAndSettle`, lalu tambahkan test baru untuk tiap fitur delta. Hasil akhirnya **28 test deterministik dan semuanya lolos**, berada di `proofofwatt/test/WattSettle.t.sol`.
+WattSettle adalah evolusi, bukan rewrite, jadi disiplin testing berjalan **pada delta**, yaitu pertahankan test base tetap hijau setelah rename `verifyReading` menjadi `attestAndSettle`, lalu tambahkan test baru untuk tiap fitur delta. Hasil akhirnya **37 test deterministik dan semuanya lolos**, dengan **coverage 100 persen di keempat sumbu** untuk `src/WattSettle.sol`, tersebar di `proofofwatt/test/WattSettle.t.sol` dan `proofofwatt/test/WattSettle.invariants.t.sol`.
 
-> 💡 TDD memakai superpowers test-driven-development. Tulis test yang gagal dulu (red), lalu implementasi minimal (green), lalu refactor. Delta yang di-cover adalah struct Attestation, event, gate dua lapis, baseline on-chain, SafeERC20, ReentrancyGuard, solvency, reputation, dan fee split.
+> 💡 TDD memakai superpowers test-driven-development. Tulis test yang gagal dulu (red), lalu implementasi minimal (green), lalu refactor. Delta yang di-cover adalah struct Attestation, event, gate dua lapis, baseline on-chain, SafeERC20, ReentrancyGuard, solvency, reputation, dan fee split. Lapis terakhir yang ditambahkan adalah suite invariant, yang menguji properti pada urutan aksi acak, bukan pada contoh yang dipilih sendiri oleh penulis test.
 
 ---
 
@@ -29,14 +31,16 @@ WattSettle adalah evolusi, bukan rewrite, jadi disiplin testing berjalan **pada 
 Base `ProofOfWatt.sol` punya 6 test PASS di Foundry v1.7.1. Setelah rename
 `verifyReading(id, bool)` menjadi `attestAndSettle(id, Attestation)`, test lama disesuaikan
 agar melewatkan struct `Attestation` yang lolos gate, bukan boolean. Suite akhirnya tumbuh
-menjadi dua kontrak test di atas satu harness bersama.
+menjadi tiga kontrak test, dua di atas satu harness bersama dan satu berdiri sendiri di
+berkas invariant.
 
-| Kontrak | Isi | Jumlah |
-|:--|:--|:--:|
-| `abstract contract WattSettleHarness is Test` | setup bersama (deploy, register device, fixture tanda tangan) | - |
-| `WattSettleBaseTest` | jalur masuk, tanda tangan, guard, setter | 9 |
-| `WattSettleDeltaTest` | attest, settle, gate dua lapis, baseline, fee, reputation, reentrancy, batas parameter | 19 |
-| **Total** | | **28** |
+| Kontrak | Berkas | Isi | Jumlah |
+|:--|:--|:--|:--:|
+| `abstract contract WattSettleHarness is Test` | `test/WattSettle.t.sol` | setup bersama (deploy, register device, fixture tanda tangan) | - |
+| `WattSettleBaseTest` | `test/WattSettle.t.sol` | jalur masuk, tanda tangan, guard, setter | 9 |
+| `WattSettleDeltaTest` | `test/WattSettle.t.sol` | attest, settle, gate dua lapis, baseline, fee, reputation, reentrancy, batas parameter, guard constructor dan setter | 22 |
+| `WattSettleInvariantTest` | `test/WattSettle.invariants.t.sol` | 6 properti yang harus bertahan pada ribuan urutan aksi acak | 6 |
+| **Total** | | | **37** |
 
 > [!WARNING]
 > Nama `ProofOfWattBaseTest` yang tercetak di versi lama bab ini **tidak pernah ada**.
@@ -48,14 +52,45 @@ forge test --match-contract WattSettleBaseTest -vv
 
 # jalankan hanya test delta
 forge test --match-contract WattSettleDeltaTest -vv
+
+# jalankan hanya suite invariant
+forge test --match-contract WattSettleInvariantTest -vv
 ```
+
+---
+
+## 📊 Coverage 100 Persen di Empat Sumbu
+
+`src/WattSettle.sol` sekarang tertutup penuh.
+
+| Sumbu | Hasil |
+|:--|:--:|
+| Lines | 88/88 (100 persen) |
+| Statements | 102/102 (100 persen) |
+| Branches | 18/18 (100 persen) |
+| Functions | 14/14 (100 persen) |
+
+Sebelumnya branches berhenti di 88,89 persen dengan dua celah tersisa. Tiga test menutupnya.
+
+| Test penutup celah | Yang ditutup |
+|:--|:--|
+| `testConstructorRejectsZeroToken` | Kontrak tanpa settlement token tidak akan pernah bisa membayar, jadi ia ditolak di constructor, bukan dibiarkan lahir dalam keadaan mati |
+| `testSetTreasuryRejectsZeroAddress` | `setTreasury(address(0))` direvert `ZeroAddress`, jadi potongan fee tidak bisa dibuang ke alamat nol |
+| `testSetGateParamsTightensTheGate` | Jalur sukses `setGateParams`, yang sebelumnya hanya diuji jalur revert-nya. Gate diketatkan ke 400 bps dan 20 kWh, lalu dibuktikan bacaan 105 kWh yang dulu lolos sekarang ditolak |
+
+> [!IMPORTANT]
+> `testSetGateParamsTightensTheGate` memeriksa **keputusan gate berubah**, bukan sekadar
+> memastikan sebuah variabel berubah nilainya. Test setter yang cuma membandingkan getter
+> dengan angka yang baru saja di-set membuktikan penyimpanan, bukan efek. Yang dikunci di
+> sini adalah efeknya pada hasil penilaian.
 
 ---
 
 ## 🧮 Test Matrix
 
-Dua puluh delapan test deterministik, semuanya unit test Foundry, dengan malicious mock token
-khusus untuk kasus reentrancy. Tidak ada satu pun yang bergantung pada waktu nyata atau RPC.
+Tiga puluh satu unit test deterministik di `test/WattSettle.t.sol`, dengan malicious mock token
+khusus untuk kasus reentrancy, ditambah 6 invariant di berkas terpisah. Tidak ada satu pun yang
+bergantung pada waktu nyata atau RPC.
 
 ### `WattSettleBaseTest` (9)
 
@@ -71,7 +106,7 @@ khusus untuk kasus reentrancy. Tidak ada satu pun yang bergantung pada waktu nya
 | 8 | `testRegisterDeviceRejectsZeroOwner` | `owner` nol direvert `ZeroAddress`, payout tidak bisa terbakar |
 | 9 | `testSubmitRejectsImplausibleKwh` | kWh di atas `MAX_KWH_PER_READING` direvert `ImplausibleReading`, aritmetika `_assess` tetap jauh dari batas tipe |
 
-### `WattSettleDeltaTest` (19)
+### `WattSettleDeltaTest` (22)
 
 | # | Nama test | Yang diverifikasi |
 |:--:|:--|:--|
@@ -87,15 +122,147 @@ khusus untuk kasus reentrancy. Tidak ada satu pun yang bergantung pada waktu nya
 | 10 | `testNotPendingOnDoubleAttest` | Attest kedua atas id yang sama direvert `NotPending` |
 | 11 | `testFeeBpsCapEnforced` | `setFeeBps` di atas `MAX_FEE_BPS` direvert `FeeTooHigh` |
 | 12 | `testSetGateParamsRejectsImpossibleBound` | Bound anomali di atas 10000 direvert `InvalidAnomalyBound` |
-| 13 | `testLyingVerifierCannotForcePayout` | **Test terpenting di berkas ini.** Attestation palsu (`delta = 0`, `anomaly = 0`) atas bacaan curang tetap DITOLAK, sebab kontrak menghitung sendiri dari `baselineKwh` on-chain |
-| 14 | `testVerifierCanVetoAReadingTheContractWouldAccept` | Verifier tetap bisa menolak bacaan yang lolos hitungan kontrak, jadi AI-nya tetap berguna, bukan sekadar dilewati |
-| 15 | `testContractComputesOwnAssessment` | `_assess` menghasilkan delta dan anomali yang benar tanpa masukan apa pun dari verifier |
-| 16 | `testDeviceWithoutBaselineIsNeverPaid` | Baseline nol berarti belum terkalibrasi, dan perangkat itu tidak pernah bisa dibayar |
-| 17 | `testSetDeviceBaseline` | Admin bisa menggeser baseline tanpa mereset `lastTs` |
-| 18 | `testSetDeviceBaselineRejectsUnknownDevice` | Baseline untuk `deviceId` tak dikenal direvert `UnknownDevice` |
-| 19 | `testReputationUsesWorstOfBothAssessments` | Reputasi mencatat skor anomali yang lebih buruk, jadi verifier longgar tidak bisa memoles rekam jejak |
+| 13 | `testSetGateParamsTightensTheGate` | **Baru.** Gate diketatkan ke 400 bps dan 20 kWh, lalu bacaan 105 kWh yang dulu lolos terbukti ditolak, jadi yang diuji adalah keputusan gate, bukan isi variabel |
+| 14 | `testSetTreasuryRejectsZeroAddress` | **Baru.** `setTreasury(address(0))` direvert `ZeroAddress` |
+| 15 | `testConstructorRejectsZeroToken` | **Baru.** Deploy tanpa settlement token direvert `ZeroAddress`, kontrak tidak dibiarkan lahir dalam keadaan tak bisa membayar |
+| 16 | `testLyingVerifierCannotForcePayout` | **Test terpenting di berkas ini.** Attestation palsu (`delta = 0`, `anomaly = 0`) atas bacaan curang tetap DITOLAK, sebab kontrak menghitung sendiri dari `baselineKwh` on-chain |
+| 17 | `testVerifierCanVetoAReadingTheContractWouldAccept` | Verifier tetap bisa menolak bacaan yang lolos hitungan kontrak, jadi AI-nya tetap berguna, bukan sekadar dilewati |
+| 18 | `testContractComputesOwnAssessment` | `_assess` menghasilkan delta dan anomali yang benar tanpa masukan apa pun dari verifier |
+| 19 | `testDeviceWithoutBaselineIsNeverPaid` | Baseline nol berarti belum terkalibrasi, dan perangkat itu tidak pernah bisa dibayar |
+| 20 | `testSetDeviceBaseline` | Admin bisa menggeser baseline tanpa mereset `lastTs` |
+| 21 | `testSetDeviceBaselineRejectsUnknownDevice` | Baseline untuk `deviceId` tak dikenal direvert `UnknownDevice` |
+| 22 | `testReputationUsesWorstOfBothAssessments` | Reputasi mencatat skor anomali yang lebih buruk, jadi verifier longgar tidak bisa memoles rekam jejak |
 
-> 💡 Nomor 9 di tabel delta adalah bukti "rationale on-chain" yang menjadi peak pitch, sebab event decodable itulah yang dibaca juri di BscScan. Nomor 11 dan 12 menjaga setter admin tidak berubah menjadi pintu belakang. Nomor 13 adalah yang paling penting di seluruh berkas: ia mengunci sifat bahwa **verifier memegang hak veto, bukan kuasa menyetujui**, dan nomor 14 memastikan hak veto itu benar-benar masih ada.
+> 💡 Nomor 9 di tabel delta adalah bukti "rationale on-chain" yang menjadi peak pitch, sebab event decodable itulah yang dibaca juri di BscScan. Nomor 11 sampai 15 menjaga constructor dan setter admin tidak berubah menjadi pintu belakang. Nomor 16 adalah yang paling penting di seluruh berkas: ia mengunci sifat bahwa **verifier memegang hak veto, bukan kuasa menyetujui**, dan nomor 17 memastikan hak veto itu benar-benar masih ada.
+
+---
+
+## 🎲 Suite Invariant: Properti, Bukan Contoh
+
+Ini tambahan terbesar di ronde testing kali ini. Unit test membuktikan perilaku pada contoh
+yang **dipilih sendiri oleh penulis test**. Invariant membuktikan properti pada ribuan urutan
+aksi acak yang **tidak dipilih penulisnya**. Dua-duanya perlu, dan yang kedua inilah yang
+menangkap kombinasi yang tidak terpikir saat menulis unit test.
+
+Berkas: `proofofwatt/test/WattSettle.invariants.t.sol`.
+
+Strukturnya, sebuah kontrak `Handler` mengemudikan panggilan `submitReading` dan
+`attestAndSettle` secara acak. Yang membuat suite ini bermakna adalah satu keputusan desain,
+**handler bebas berbohong tanpa batas**: ia boleh mengirim `kwhDeltaVsBaseline` dan
+`anomalyScoreBps` yang tidak punya hubungan apa pun dengan bacaan sebenarnya. Verifier di
+dalamnya punya tiga watak, dipilih dari seed lewat `anomalySeed % 3`.
+
+| Watak verifier | Perilaku |
+|:--|:--|
+| Jujur | Memakai hasil `ws.assess` sendiri, jadi keputusannya murni soal bacaannya |
+| Berkhianat | Mengaku `delta = 0` dan anomali `0` apa pun kenyataannya, persis verifier yang sudah membelot. Watak inilah yang membuat invariant utama bermakna |
+| Ngawur | Angka acak dalam rentang sempit, dijaga jauh dari `type(int256).min` supaya negasi di `_abs` aman |
+
+Hasil terukur: **6 lolos, 256 runs, depth 32, 8192 panggilan per invariant, 0 revert**, terdiri
+dari 4027 panggilan `attestAndSettle` dan 4165 `submitReading`. Seluruh suite 37 test selesai
+dalam sekitar 5 detik, jadi tidak ada risiko timeout di CI.
+
+| Invariant | Yang dijamin |
+|:--|:--|
+| `invariant_ApprovedReadingsAlwaysPassContractAssessment` | Setiap bacaan berstatus Approved selalu lolos penilaian kontrak sendiri terhadap baseline on-chain. INI YANG UTAMA, ia membuktikan verifier tidak punya kuasa meloloskan apa pun yang ditolak kontrak |
+| `invariant_PoolDrainEqualsApprovedGross` | Token yang keluar dari pool persis sama dengan total reward kotor bacaan yang disetujui, tanpa kebocoran |
+| `invariant_ProducerPlusTreasuryEqualsGross` | Reward kotor terbagi habis antara produsen dan treasury, tidak ada yang hilang |
+| `invariant_ReputationMatchesSettledCount` | Counter reputasi on-chain tidak pernah menyimpang dari jumlah settle sebenarnya |
+| `invariant_TreasuryNeverExceedsFeeCap` | Treasury tidak pernah menerima lebih dari batas keras fee 1000 bps |
+| `invariant_PoolNeverOverdrawn` | Kontrak tidak pernah membayar melebihi yang pernah dimilikinya |
+
+> [!IMPORTANT]
+> Invariant pertama adalah versi properti dari `testLyingVerifierCannotForcePayout`. Unit test
+> membuktikan satu verifier pembohong gagal pada satu bacaan pilihan penulisnya. Invariant
+> membuktikan verifier pembohong gagal pada **8192 panggilan acak** yang tidak dipilih siapa pun.
+
+### Temuan: Versi Pertama Suite Ini Nyaris Sia-sia
+
+Ini temuan terpenting dari ronde invariant, dan ia layak ditulis eksplisit, bukan disembunyikan.
+
+Handler versi pertama mengacak kWh secara seragam 0 sampai 5000 terhadap baseline 100, dan
+attestation-nya sepenuhnya acak (delta -10000 sampai 10000, anomali 0 sampai 12000). Diukur
+dengan test sementara, hasilnya **1505 settlement dengan NOL approval**.
+
+Artinya empat dari enam invariant hampa. Mereka cuma membandingkan nol dengan nol, dan tetap
+hijau. Hanya invariant utama yang benar-benar bermakna. Tanpa pengukuran itu, bab ini akan
+mengklaim enam invariant terbukti padahal empat di antaranya tidak pernah menyentuh jalur
+pembayaran sama sekali.
+
+Perbaikannya dua sisi.
+
+| Sisi | Sebelum | Sesudah |
+|:--|:--|:--|
+| Sebaran kWh | seragam `bound(seed, 0, 5_000)` terhadap baseline 100 | tiga dari empat bacaan di sekitar baseline `bound(seed, 70, 140)`, sisanya tetap liar `bound(seed, 0, 5_000)` untuk melatih jalur penolakan |
+| Watak verifier | acak seluruhnya | tiga watak dipilih dari seed: jujur, berkhianat, ngawur |
+
+Hasil sesudah diperbaiki: **511 approval dari 1505 settlement**. Jalur pembayaran benar-benar
+terlatih, dan keenam invariant baru punya bahan untuk diuji.
+
+> [!IMPORTANT]
+> Pelajarannya berlaku umum, bukan cuma untuk berkas ini. **Invariant yang hijau belum tentu
+> menguji apa pun.** Ukur dulu apakah jalur yang ingin dibuktikan benar-benar pernah dilewati,
+> baru percaya pada warna hijaunya.
+
+### Suite Ini Diuji dengan Merusak Kontraknya Lebih Dulu, Dua Kali
+
+Invariant yang lolos tapi tidak pernah bisa gagal tidak membuktikan apa pun. Ia hanya
+menghasilkan rasa aman palsu, dan itu lebih buruk daripada tidak punya test sama sekali.
+
+Karena itu kontrak sengaja dirusak dua kali, menyasar dua kelas cacat yang berbeda.
+
+**Mutasi A, gate sisi kontrak dilucuti.** Disisakan `bool approved = verifierApproves;` saja,
+dengan `contractApproves &&` dibuang. `invariant_ApprovedReadingsAlwaysPassContractAssessment`
+langsung gagal.
+
+```text
+approved padahal anomali kontrak di atas ambang: 10000 > 2000
+```
+
+Lima invariant lain tetap hijau, jadi kegagalannya tepat sasaran, bukan kepanikan menyeluruh
+yang tidak menunjuk apa-apa.
+
+**Mutasi B, akuntansi fee dirusak.** Produsen dibayar `reward` penuh, bukan `reward - fee`.
+`invariant_PoolDrainEqualsApprovedGross` dan `invariant_ProducerPlusTreasuryEqualsGross` gagal
+berbarengan.
+
+```text
+assertion failed: 90900000000000 != 90000000000000
+```
+
+Selisihnya persis satu persen, yaitu fee yang terbayar dua kali.
+
+Sesudah tiap mutasi kontrak dipulihkan lewat `git checkout --`, dan bytecode hasil build dicek
+ulang terhadap kontrak yang sudah ter-deploy: hanya nilai immutable yang berbeda, 382 karakter,
+sama seperti sebelumnya.
+
+Disiplinnya layak dicatat sebagai disiplin, bukan sebagai anekdot. **Buktikan dulu bahwa test
+bisa gagal, baru percaya kalau ia lolos.**
+
+### `fail_on_revert = true` itu disengaja
+
+Konfigurasi di `foundry.toml` memakai seksi `[invariant]` baru.
+
+```toml
+[invariant]
+runs = 256
+depth = 32
+fail_on_revert = true
+```
+
+Handler ditulis supaya tidak pernah revert. Ia selalu memajukan timestamp, jadi monotonic guard
+tidak pernah menyala. Ia melewati bacaan yang statusnya bukan Pending, jadi `NotPending` tidak
+pernah menyala. Ia membatasi delta jauh dari `type(int256).min`, jadi negasi di `_abs` aman.
+
+Alasannya sederhana. Dengan `fail_on_revert = false`, sebagian besar panggilan bisa gagal
+diam-diam, dan invariant akan lolos hanya karena **tidak ada apa pun yang benar-benar terjadi**.
+Angka 0 revert pada 8192 panggilan itulah yang memastikan tiap panggilan mengerjakan pekerjaan
+nyata.
+
+> 💡 Alasan serupa juga ada di balik dua angka di `setUp` invariant: reward per kWh diturunkan
+> ke `1e12` dan pool didanai 900000 token, khusus supaya `InsufficientRewardPool` tidak pernah
+> menyala. Revert solvency yang menyala di tengah fuzzing akan menutupi properti yang sedang
+> diuji, dan suite jadi hijau karena alasan yang salah.
 
 ---
 
@@ -135,13 +302,18 @@ forge test --match-test "testReentrancyAttemptReverts|testInsufficientPoolRevert
 ## 🏃 Perintah Forge Test
 
 ```bash
-# seluruh suite, 28 test hijau
+# seluruh suite, 37 test hijau di tiga kontrak test
 forge test -vv
+
+# per kontrak test
+forge test --match-contract WattSettleBaseTest -vv
+forge test --match-contract WattSettleDeltaTest -vv
+forge test --match-contract WattSettleInvariantTest -vv
 
 # dengan gas report
 forge test --gas-report
 
-# coverage untuk memastikan delta ter-cover
+# coverage, sekarang 100 persen di keempat sumbu untuk src/WattSettle.sol
 forge coverage
 
 # fokus test delta attest dan settle
@@ -149,6 +321,9 @@ forge test --match-test "testAttest|testReject|testFee|testReputation" -vv
 
 # fokus pada sifat keamanan gate dua lapis
 forge test --match-test "testLyingVerifier|testVerifierCanVeto|testContractComputesOwnAssessment|testDeviceWithoutBaseline" -vvv
+
+# fokus pada tiga test penutup celah branch
+forge test --match-test "testConstructorRejectsZeroToken|testSetTreasuryRejectsZeroAddress|testSetGateParamsTightensTheGate" -vvv
 ```
 
 ---
@@ -221,6 +396,7 @@ Testing bukan hanya soal benar secara logika, tapi juga menutup hard gate. Suite
 
 - Commit harian genuine sejak Sesi 1, jangan squash, sebab single squash adalah red flag (Kill-shot #6).
 - Jalankan `/ponytail-review` pada diff test dan implementasi, tapi jangan pangkas assertion keamanan.
+- Coverage 100 persen plus suite invariant yang sudah dibuktikan bisa gagal adalah dua bukti kualitas yang jarang dibawa peserta lain ke meja juri.
 - Suite hijau ditambah kontrak verified ditambah dua tx nyata adalah tiga bukti gate yang saling menguatkan.
 - Simpan bukti suite hijau ke [21 Checklist Submission](<21 Checklist Submission.md>).
 
@@ -229,8 +405,13 @@ Testing bukan hanya soal benar secara logika, tapi juga menutup hard gate. Suite
 ## ✅ Ringkas
 
 - TDD berjalan pada delta, dan test base tetap hijau setelah rename ke `attestAndSettle`.
-- Yang di-ship adalah **28 test deterministik** di `proofofwatt/test/WattSettle.t.sol`, terbagi `WattSettleBaseTest` (9) dan `WattSettleDeltaTest` (19) di atas `WattSettleHarness`, plus malicious mock token untuk reentrancy.
-- `testLyingVerifierCannotForcePayout` adalah test terpenting di berkas itu, sebab ia mengunci sifat "verifier memegang hak veto, bukan kuasa menyetujui".
+- Yang di-ship adalah **37 test deterministik**, terbagi `WattSettleBaseTest` (9) dan `WattSettleDeltaTest` (22) di atas `WattSettleHarness` pada `proofofwatt/test/WattSettle.t.sol`, plus `WattSettleInvariantTest` (6) di `proofofwatt/test/WattSettle.invariants.t.sol`, plus malicious mock token untuk reentrancy.
+- **Coverage 100 persen di empat sumbu** untuk `src/WattSettle.sol`: lines 88/88, statements 102/102, branches 18/18, functions 14/14. Dua celah branch terakhir ditutup oleh `testConstructorRejectsZeroToken`, `testSetTreasuryRejectsZeroAddress`, dan `testSetGateParamsTightensTheGate`.
+- `testLyingVerifierCannotForcePayout` adalah test terpenting di berkas unit, sebab ia mengunci sifat "verifier memegang hak veto, bukan kuasa menyetujui".
+- Suite invariant menaikkan sifat itu dari contoh menjadi properti: handler bebas berbohong tanpa batas lewat tiga watak verifier (jujur, berkhianat, ngawur), dan hasilnya 6 lolos, 256 runs, depth 32, 8192 panggilan per invariant (4027 `attestAndSettle` dan 4165 `submitReading`), 0 revert, selesai sekitar 5 detik.
+- **Versi pertama suite invariant nyaris sia-sia.** Sebaran seragam menghasilkan 1505 settlement dengan nol approval, jadi empat invariant hijau tanpa menguji apa pun. Sesudah sebaran kWh dipusatkan di sekitar baseline dan watak verifier dicampur, angkanya menjadi 511 approval dari 1505 settlement. Invariant yang hijau belum tentu menguji apa pun, ukur dulu.
+- Suite invariant diuji dengan **merusak kontraknya lebih dulu, dua kali**: gate sisi kontrak dilucuti (invariant utama gagal, lima lainnya tetap hijau) dan akuntansi fee dirusak (dua invariant akuntansi gagal, selisih persis satu persen). Kontrak dipulihkan lewat `git checkout --` dan bytecode-nya dicek ulang. Buktikan test bisa gagal, baru percaya kalau ia lolos.
+- `fail_on_revert = true` disengaja, sebab dengan `false` invariant bisa lolos hanya karena panggilannya gagal diam-diam dan tidak ada yang benar-benar terjadi.
 - Pakai `--match-contract WattSettleBaseTest`, bukan `ProofOfWattBaseTest` yang tidak pernah ada.
 - `ReplayedReading` hanya terjangkau lewat jalur register ulang device, dan test-nya sengaja menempuh jalur itu supaya guard-nya terbukti hidup.
 - `forge lint src/ script/` bersih, nol peringatan.
