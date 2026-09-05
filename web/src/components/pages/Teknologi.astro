@@ -1,7 +1,7 @@
 ---
 import { Icon } from "astro-icon/components";
 import { site } from "../../content/site";
-import { techHero, contract, guards, verifier, chainIntegration, token, proof } from "../../content/tech";
+import { techHero, contract, guards, verifier, showdown, chainIntegration, token, proof } from "../../content/tech";
 
 const scanBase = site.chain.scan;
 const tokenUrl = `${scanBase}/token/${site.chain.token}`;
@@ -123,6 +123,54 @@ const proofHref = [contractUrl, tokenUrl, txUrl, lyingTxUrl];
         </div>
       </aside>
     </div>
+  </div>
+</section>
+
+<!-- PROPERTI KEAMANAN INTI: konfrontasi dua penilaian -->
+<section class="section-pad showdown-sec">
+  <div class="container">
+    <header class="sec-head rv">
+      <span class="eyebrow">{showdown.eyebrow}</span>
+      <h2 class="sec-title">{showdown.title}</h2>
+      <p class="sec-lead">{showdown.lead}</p>
+    </header>
+
+    <figure class="showdown rv" data-spot>
+      <figcaption class="sd-subject">
+        <span class="sd-subject-k">{showdown.reading.label}</span>
+        <span class="sd-subject-v">
+          {showdown.reading.value}<span class="sd-unit">{showdown.reading.unit}</span>
+        </span>
+        <span class="sd-subject-d">{showdown.reading.baseline}</span>
+      </figcaption>
+
+      <div class="sd-grid">
+        {showdown.sides.map((s) => (
+          <article class={`sd-side sd-${s.kind}`}>
+            <span class={`tag ${s.kind === "claim" ? "tag-heat" : "tag-flow"}`}>{s.tag}</span>
+            <dl class="sd-rows">
+              {s.rows.map((r) => (
+                <div class="sd-row">
+                  <dt>{r.k}</dt>
+                  <dd>{r.v}</dd>
+                </div>
+              ))}
+            </dl>
+            <p class="sd-verdict">{s.verdict}</p>
+            <p class="sd-note">{s.note}</p>
+          </article>
+        ))}
+      </div>
+
+      <div class="sd-outcome">
+        <span class="sd-status">{showdown.outcome.status}</span>
+        <p class="sd-line">{showdown.outcome.line}</p>
+        <p class="sd-punch">{showdown.outcome.punch}</p>
+        <a class="sd-tx" href={lyingTxUrl} target="_blank" rel="noopener">
+          {showdown.outcome.txLabel} <span aria-hidden="true">&rarr;</span>
+        </a>
+      </div>
+    </figure>
   </div>
 </section>
 
@@ -256,6 +304,86 @@ const proofHref = [contractUrl, tokenUrl, txUrl, lyingTxUrl];
     color: var(--color-ink); tab-size: 2;
   }
   .code-card code { font-family: inherit; color: color-mix(in oklab, var(--color-ink) 88%, var(--color-flow)); white-space: pre; }
+
+  /* KONFRONTASI DUA PENILAIAN
+     Satu bacaan, dua penilaian, angka nyata dari rantai. Bobotnya sengaja TIDAK simetris:
+     kolom klaim verifier diredam, kolom hitungan kontrak yang dominan, sebab memang itu
+     yang mengikat. Angka dipasang besar dengan tabular-nums supaya selisih 0 lawan 800
+     terbaca sebagai perbedaan fisik, bukan sekadar teks. */
+  .showdown {
+    margin: 0; border-radius: 1.6rem; border: 1px solid var(--edge-strong);
+    background: color-mix(in oklab, var(--color-panel) 88%, transparent);
+    overflow: hidden;
+  }
+  .sd-subject {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem 1rem;
+    padding: clamp(1.2rem, 3vw, 1.8rem) clamp(1.2rem, 3vw, 2rem);
+    border-bottom: 1px solid var(--edge);
+    background: color-mix(in oklab, var(--color-ink) 2%, transparent);
+  }
+  .sd-subject-k { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--color-faint); }
+  .sd-subject-v { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.03em;
+    font-size: clamp(2rem, 5vw, 2.9rem); line-height: 1; color: var(--color-ink);
+    font-variant-numeric: tabular-nums; }
+  .sd-unit { font-size: 0.42em; margin-left: 0.35rem; color: var(--color-muted); letter-spacing: 0; }
+  .sd-subject-d { font-size: 0.86rem; color: var(--color-faint); }
+
+  .sd-grid { display: grid; }
+  /* Asimetris disengaja, kolom kontrak lebih lebar karena ia yang memutus. */
+  @media (min-width: 860px) { .sd-grid { grid-template-columns: 1fr 1.15fr; } }
+  .sd-side {
+    padding: clamp(1.3rem, 3vw, 1.9rem) clamp(1.2rem, 3vw, 2rem);
+    display: flex; flex-direction: column; gap: 0.85rem;
+    border-bottom: 1px solid var(--edge);
+  }
+  @media (min-width: 860px) { .sd-side + .sd-side { border-left: 1px solid var(--edge); } }
+  /* .sd-side adalah flex column, jadi anaknya melar penuh lebar kalau tidak ditahan.
+     Pil tag harus tetap selebar isinya. */
+  .sd-side > .tag { align-self: flex-start; }
+  .sd-claim { background: color-mix(in oklab, var(--color-heat) 4%, transparent); }
+  .sd-computed { background: color-mix(in oklab, var(--color-flow) 5%, transparent); }
+
+  .sd-rows { margin: 0; display: flex; flex-direction: column; gap: 0.55rem; }
+  .sd-row { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
+    padding-bottom: 0.5rem; border-bottom: 1px dashed var(--edge); }
+  .sd-row dt { font-family: var(--font-mono); font-size: 0.76rem; color: var(--color-muted); }
+  .sd-row dd { margin: 0; font-family: var(--font-mono); font-variant-numeric: tabular-nums;
+    font-size: clamp(1.5rem, 3.4vw, 2.1rem); line-height: 1; letter-spacing: -0.02em; }
+  .sd-claim .sd-row dd { color: color-mix(in oklab, var(--color-heat) 78%, var(--color-ink)); }
+  .sd-computed .sd-row dd { color: var(--color-ink); }
+
+  .sd-verdict { font-family: var(--font-display); font-size: 1.02rem; }
+  .sd-claim .sd-verdict { color: color-mix(in oklab, var(--color-heat) 70%, var(--color-ink));
+    text-decoration: line-through; text-decoration-thickness: 1px;
+    text-decoration-color: color-mix(in oklab, var(--color-heat) 55%, transparent); }
+  .sd-computed .sd-verdict { color: var(--color-ink); }
+  .sd-note { font-size: 0.85rem; line-height: 1.55; color: var(--color-faint); text-wrap: pretty; }
+
+  .sd-outcome {
+    padding: clamp(1.3rem, 3vw, 2rem) clamp(1.2rem, 3vw, 2rem);
+    display: flex; flex-direction: column; gap: 0.7rem; align-items: flex-start;
+    background: color-mix(in oklab, var(--color-void) 45%, transparent);
+  }
+  .sd-status {
+    font-family: var(--font-mono); font-size: 0.74rem; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 0.3rem 0.7rem; border-radius: 0.5rem;
+    color: var(--color-heat); border: 1px solid color-mix(in oklab, var(--color-heat) 38%, transparent);
+    background: color-mix(in oklab, var(--color-heat) 10%, transparent);
+  }
+  .sd-line { color: var(--color-muted); line-height: 1.62; max-width: 62ch; text-wrap: pretty; }
+  .sd-punch {
+    font-family: var(--font-display); font-weight: 600; letter-spacing: -0.02em;
+    font-size: clamp(1.25rem, 3vw, 1.75rem); line-height: 1.25; color: var(--color-ink);
+    max-width: 26ch; text-wrap: balance;
+  }
+  .sd-tx {
+    font-family: var(--font-mono); font-size: 0.8rem; color: var(--color-flow);
+    text-decoration: none; border-bottom: 1px solid color-mix(in oklab, var(--color-flow) 40%, transparent);
+    padding-bottom: 0.1rem; transition: border-color 0.25s, transform 0.25s var(--ease-spring);
+    display: inline-block;
+  }
+  .sd-tx:hover { border-color: var(--color-flow); transform: translateX(2px); }
 
   /* GUARD GRID */
   .guard-grid { list-style: none; display: grid; gap: 1rem; }

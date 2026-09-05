@@ -119,6 +119,46 @@ export const verifier = {
 } as const;
 
 // ── LAPIS 3: BNB CHAIN + ERC-8004 ──
+// Konfrontasi dua penilaian atas SATU bacaan yang sama. Angkanya bukan ilustrasi,
+// semuanya dibaca dari transaksi nyata di chain 97. Ini jawaban atas pertanyaan
+// paling tajam yang bisa diajukan ke arsitektur mana pun yang memakai AI untuk
+// memutus pembayaran, jadi ia berhak jadi bagian paling menonjol di halaman ini.
+export const showdown = {
+  eyebrow: "Properti keamanan inti",
+  title: "Bagaimana kalau AI-nya berbohong?",
+  lead:
+    "Kami menjawabnya dengan cara yang paling tidak nyaman: membuat verifier kami sendiri berbohong, lalu menyiarkannya ke rantai. Bacaan 900 kWh dari perangkat dengan baseline 100, dan verifier mengaku tidak ada penyimpangan sama sekali.",
+  reading: { label: "Bacaan yang dinilai", value: "900", unit: "kWh", baseline: "baseline perangkat 100 kWh" },
+  sides: [
+    {
+      kind: "claim" as const,
+      tag: "Yang dikatakan verifier",
+      note: "Angka yang dipasok agent, sepenuhnya palsu.",
+      rows: [
+        { k: "kwhDeltaVsBaseline", v: "0" },
+        { k: "anomalyScoreBps", v: "0" },
+      ],
+      verdict: "lolos ambang",
+    },
+    {
+      kind: "computed" as const,
+      tag: "Yang dihitung kontrak",
+      note: "Kontrak menyimpan baseline on-chain dan menghitung ulang sendiri. Verifier tidak bisa menyentuh angka ini.",
+      rows: [
+        { k: "chainDelta", v: "800" },
+        { k: "chainAnomalyBps", v: "10000" },
+      ],
+      verdict: "di atas ambang 2000",
+    },
+  ],
+  outcome: {
+    status: "Rejected",
+    line: "Kontrak menolak. Nol pembayaran, nol fee, dan reputasi perangkat dicatat memakai skor yang lebih buruk di antara kedua penilaian.",
+    punch: "Verifier memegang hak veto, bukan hak meloloskan.",
+    txLabel: "Lihat transaksinya",
+  },
+} as const;
+
 export const chainIntegration = {
   eyebrow: "Lapis 3 · BNB Chain · ERC-8004",
   title: "Integrate, bukan mirror",
