@@ -50,7 +50,7 @@ Semuanya di BNB Smart Chain Testnet, chainId 97.
 | Device SRT-MGATE-1210-#001 (signer) | `0xA532b1e8773EC9d7db671d346f801C9f8d0c8D49` |
 | Produsen (penerima pembayaran) | [`0xE07aE16B2Ca0fA9Df8A667FD34729307C3333f8d`](https://testnet.bscscan.com/address/0xE07aE16B2Ca0fA9Df8A667FD34729307C3333f8d) |
 | Treasury (penerima fee protokol) | [`0x703629a46690e30D546e80AA9B8F03538F3F5b0E`](https://testnet.bscscan.com/address/0x703629a46690e30D546e80AA9B8F03538F3F5b0E) |
-| Source verified | [Sourcify `exact_match`](https://repo.sourcify.dev/97/0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12) |
+| Source verified | **BscScan** chain 97, plus [Sourcify `exact_match`](https://repo.sourcify.dev/97/0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12) |
 
 > [!NOTE]
 > `exact_match` berlaku untuk creation maupun runtime bytecode. Membangun ulang dari repo ini
@@ -376,7 +376,17 @@ tidak mungkin memulai demo di atas state yang salah.
 <details>
 <summary>Verifikasi source</summary>
 
-Sudah terverifikasi di Sourcify dengan status `exact_match`, tanpa perlu API key:
+Kontrak sudah terverifikasi di **dua sistem yang berdiri sendiri**, dan keduanya bisa dicek
+tanpa memercayai repo ini.
+
+**BscScan chain 97.** `ContractName` WattSettle, solc `v0.8.30+commit.73712a01`, optimizer 200
+runs, evmVersion shanghai. Cek sendiri:
+
+```bash
+curl -s "https://api.etherscan.io/v2/api?chainid=97&module=contract&action=getsourcecode&address=0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12&apikey=$ETHERSCAN_API_KEY"
+```
+
+**Sourcify**, `exact_match` untuk creation maupun runtime, tanpa perlu API key sama sekali:
 
 ```bash
 forge verify-contract 0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12 \
@@ -385,8 +395,10 @@ forge verify-contract 0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12 \
   --watch
 ```
 
-Lencana Verified di BscScan adalah sistem terpisah dan menuntut kunci Etherscan V2 (kunci khusus
-bscscan.com ditolak, ambil di https://etherscan.io/myapikey):
+Perintah verify BscScan dicatat untuk deploy berikutnya. Untuk alamat di atas, Foundry akan
+menjawab `is already verified. Skipping verification.` Kunci diambil dari
+https://etherscan.io/myapikey, dan tier gratisnya terbukti melayani chain 97 (diuji 5 September
+2026, kunci khusus bscscan.com memang ditolak sejak API V1 dimatikan):
 
 ```bash
 forge verify-contract 0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12 \

@@ -147,7 +147,7 @@ CI             : GitHub Actions, fmt, build, lint, test, plus penjaga rulesetHas
 
 **Sudah berjalan dan bisa dicek publik:**
 
-- [x] Kontrak `WattSettle` live di chain 97, source terverifikasi exact match di Sourcify
+- [x] Kontrak `WattSettle` live di chain 97, terverifikasi di BscScan dan di Sourcify (`exact_match`)
 - [x] Loop penuh device sampai pembayaran berjalan nyata, 12 transaksi on-chain
 - [x] Satu bacaan disetujui dan dibayar, satu ditolak, satu lagi ditolak walau verifier berbohong
 - [x] Gate dua lapis: kontrak menghitung sendiri dari baseline on-chain, verifier hanya bisa memveto
@@ -213,7 +213,7 @@ github.com/GifariKemal/wattsettle
 |:--|:--|
 | Connect wallet dan tanda tangan di portal | Butuh kunci privat di browser |
 | Bentuk tim (ketua tim yang submit) | Terikat wallet Anda |
-| Kunci Etherscan V2 di https://etherscan.io/myapikey | Butuh login akun. Setelah itu lencana Verified di BscScan tinggal satu perintah |
+| Rotasi sandi akun BscScan/Etherscan | Butuh login akun. Ini utang keamanan, bukan lagi penghalang gate, sebab kontrak sudah terverifikasi |
 | Rotasi sandi akun BscScan/Etherscan | Sandi lama pernah bocor di riwayat repo publik. Lakukan di kunjungan yang sama saat mengambil API key |
 | Rekam video demo | Suara dan wajah Anda |
 | Kirim tweet | Akun Anda |
