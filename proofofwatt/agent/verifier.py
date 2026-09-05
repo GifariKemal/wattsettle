@@ -143,6 +143,7 @@ def main() -> int:
 
     settled = 0
     skipped = 0
+    already_settled = 0
     # ponytail: pemindaian O(n) dari id nol tiap run. Cukup untuk skala demo dan
     # membuat agent idempoten tanpa berkas state. Kalau jumlah bacaan menembus
     # ribuan, ganti dengan kursor yang hanya maju melewati bacaan non-Pending
@@ -153,7 +154,7 @@ def main() -> int:
         device_hex = "0x" + device_id.hex()
 
         if status != STATUS_PENDING:
-            print(f"  #{reading_id} lewati, status {STATUS_NAME.get(status, status)}")
+            already_settled += 1
             continue
 
         # Device tanpa baseline TIDAK boleh menjatuhkan seluruh run. Kalau ini
@@ -219,6 +220,8 @@ def main() -> int:
         )
         settled += 1
 
+    if already_settled:
+        print(f"  ({already_settled} bacaan sebelumnya sudah selesai, dilewati)")
     print(f"selesai, {settled} bacaan di-settle, {skipped} dilewati")
     # Keluar bukan nol bila ada bacaan yang tidak bisa dievaluasi, supaya cron atau
     # watchdog di server ikut menyalakan alarm dan tidak diam-diam menganggap sukses.
