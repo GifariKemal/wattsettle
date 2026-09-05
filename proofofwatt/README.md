@@ -416,6 +416,18 @@ proofofwatt/
   scripts/demo.sh                 runner demo tiga beat, mencetak tautan BscScan tiap tx
 ```
 
+## Arah Selanjutnya
+
+Roadmap pasca-hackathon lengkap ada di
+[`WattSettle/18 Roadmap Pasca-Hackathon.md`](<../WattSettle/18 Roadmap Pasca-Hackathon.md>).
+Tiga hal terdekat yang menyentuh kontrak ini:
+
+- menulis rationale ke Validation Registry ERC-8004 begitu registry itu di-deploy di chain 97
+- menangkap tanda tangan EIP-712 nyata dari unit SRT-MGATE-1210 di lapangan sebagai fixture
+- rotasi dan pencabutan kunci perangkat saat RMA
+
+---
+
 > [!CAUTION]
 > Kunci privat ada di `../.secrets/` yang gitignored, testnet-only. Jangan pernah di-commit dan
 > jangan pernah pakai ulang polanya di mainnet.
