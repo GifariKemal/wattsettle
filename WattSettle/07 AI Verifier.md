@@ -37,7 +37,21 @@ Alur kerjanya empat langkah, dan tidak ada satu pun yang meminta klik manusia.
 1. **Subscribe.** Agent memindai event `ReadingSubmitted` dari kontrak lewat `web3.py`, memakai block filter sederhana dari block terakhir yang sudah diproses.
 2. **Recompute.** Untuk tiap bacaan baru, agent mengambil `kWh` dan menghitung `kwhDeltaVsBaseline` terhadap baseline device yang tersimpan, lalu menjalankan anomaly ruleset yang dipublish di repo.
 3. **Build Attestation.** Agent merakit struct `Attestation` lengkap dengan `anomalyScoreBps`, `modelVersionHash`, `rulesetHash`, dan `evaluatedAt`.
-4. **Settle.** Agent memanggil `attestAndSettle(id, attestation)` dengan wallet ber-`VERIFIER_ROLE`. Kontrak yang memutus approve atau reject lewat gate ruleset on-chain.
+4. **Settle.** Agent memanggil `attestAndSettle(id, attestation)` dengan wallet ber-`VERIFIER_ROLE`. Kontrak yang memutus approve atau reject, lewat **gate dua lapis**: ia menghitung penilaiannya sendiri dari `baselineKwh` yang tersimpan on-chain, lalu meng-AND-kan dengan penilaian agent.
+
+> [!IMPORTANT]
+> Ini menetapkan batas kuasa agent secara tegas. **Agent memegang hak veto, bukan kuasa
+> menyetujui.** Ia bisa menolak bacaan yang secara aritmetika terlihat wajar, karena ia
+> melihat cuaca, kesehatan perangkat, atau sinyal kecurangan yang tidak terlihat di rantai,
+> dan justru itulah nilainya. Yang tidak pernah bisa ia lakukan adalah menyetujui apa yang
+> kontraknya sendiri tolak. Buktinya di rantai, tx
+> `0x7e8ba5a7...98391781`, uraiannya di [09 Keamanan](<09 Keamanan.md>).
+>
+> Konsekuensi operasionalnya satu: **baseline di `ruleset/anomaly_v1.json` wajib sama
+> persis dengan `baselineKwh` di rantai**. Kalau berbeda, agent dan kontrak akan menghitung
+> deviasi yang berlainan, dan bacaan yang sah bisa tertolak tanpa sebab yang terlihat.
+> Baseline yang bergeser disetel lewat `setDeviceBaseline`, dan view publik
+> `assess(bytes32,uint256)` bisa dipakai untuk memeriksa kecocokannya kapan saja.
 
 ```python
 import json
@@ -54,6 +68,9 @@ verifier = w3.eth.account.from_key(VERIFIER_PRIVATE_KEY)  # wallet ber-VERIFIER_
 # rulesetHash on-chain HARUS cocok dengan hash file ini → "computed, not hardcoded".
 RULESET_PATH = Path("ruleset/anomaly_v1.json")
 RULESET = json.loads(RULESET_PATH.read_text())
+# Berkas ruleset ditandai `-text` di .gitattributes supaya git tidak pernah mengonversi
+# akhiran barisnya. Checkout CRLF menghasilkan hash berbeda dari blob LF yang ter-commit,
+# dan itu mematahkan klaim auditabilitas secara diam-diam.
 RULESET_HASH = Web3.keccak(RULESET_PATH.read_bytes())
 MODEL_VERSION_HASH = Web3.keccak(text="wattsettle-verifier/1.0.0")
 
@@ -102,6 +119,20 @@ def on_reading_submitted(event) -> None:
     w3.eth.wait_for_transaction_receipt(tx_hash)
 ```
 
+Padanan perintah barisnya, untuk memeriksa hash yang sama tanpa Python:
+
+```bash
+# BENAR, awalan 0x membuat cast memperlakukan argumennya sebagai byte, bukan teks heks
+cast keccak 0x$(xxd -p -c 999999 ruleset/anomaly_v1.json)
+# hasil kanonik: 0xcce6c15c459cd085ae0c5d364227022f59f70d7036819c7b023598a590df6b41
+```
+
+> [!WARNING]
+> `cast keccak $(xxd -p -c 999999 berkas)` tanpa awalan `0x` **salah**, sebab cast akan
+> menghash teks heksadesimalnya alih-alih byte-nya, dan hasilnya tidak akan pernah cocok
+> dengan nilai on-chain. CI sekarang gagal bila berkas ruleset berubah tanpa nilai
+> kanoniknya ikut diperbarui.
+
 > 💡 Perhatikan bahwa LLM tidak berada di jalur kritis keputusan. `evaluate()` sepenuhnya deterministik, aritmetika murni terhadap baseline. LLM yang menggerakkan Hermes dipakai untuk lapisan penjelasan dan operasional, bukan untuk memutuskan approve atau reject. Keputusan uang harus reproducible dan tahan audit, dan aritmetika deterministik memberi itu. Ini juga yang membuat demo bisa dipatok flawless.
 
 ---
@@ -144,7 +175,7 @@ Checklist determinisme untuk hari-H:
 - **Pre-seed semua bacaan.** Tiga fixture dengan timestamp distinct berantre, sehingga monotonic guard tidak menolak. Tidak ada device, sensor, atau RPC read live di jalur kritis.
 - **Pin confirmed tx.** Tab kedua adalah BscScan tx dari run sukses sebelumnya, event sudah ter-expand. Jangan pernah menunggu indexer live di panggung.
 - **Lock state malam sebelumnya.** Kontrak masih verified, wallet agent punya tBNB cukup untuk lebih dari sepuluh kali gas, saldo `suriota` kontrak melebihi payout, dan reading id demo belum terpakai.
-- **Tunjukkan rejection.** Jalankan dua bacaan, satu bersih yang settle, satu anomalous yang ditolak on-chain tanpa payout. Rejection sepuluh kali lebih meyakinkan daripada approval, dan menjawab Kill-shot #2.
+- **Tunjukkan rejection.** Jalankan tiga bacaan, satu bersih yang settle, satu anomalous yang ditolak on-chain tanpa payout, dan satu lagi yang ditolak walaupun attestation-nya sengaja dibuat berbohong (tx `0x7e8ba5a7...98391781`). Rejection sepuluh kali lebih meyakinkan daripada approval, dan rejection yang bertahan walaupun AI-nya berkhianat menutup Kill-shot #2 sepenuhnya.
 - **Video fallback satu keystroke.** Rekam loop flawless sebelum hari-H. Kalau live tersendat, potong ke video di tengah kalimat tanpa minta maaf.
 
 Runbook demo lengkap ada di [15 Demo dan Pitch](<15 Demo dan Pitch.md>).

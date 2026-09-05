@@ -48,17 +48,27 @@ Layer paling bawah adalah dunia fisik. Di sinilah moat WattSettle berdiri, karen
 
 ## 📄 Layer 2, Settlement Contract
 
-Inti on-chain adalah `WattSettle.sol` yang **sudah di-deploy** ke BSC testnet chainId 97 di alamat `0xdA149c0939c0C3450EDE5c8a0A0e8cF3AF36481a` sejak 5 September 2026. Kontrak ini adalah evolusi dari `ProofOfWatt.sol`, dengan delta yang sengaja dijaga sekecil mungkin (kira-kira satu hari kerja) di atas base yang sudah teruji.
+Inti on-chain adalah `WattSettle.sol` yang **sudah di-deploy** ke BSC testnet chainId 97 di alamat `0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12` sejak 5 September 2026. Kontrak ini adalah evolusi dari `ProofOfWatt.sol`, dengan delta yang sengaja dijaga sekecil mungkin (kira-kira satu hari kerja) di atas base yang sudah teruji.
 
 | Bagian | Perlakuan |
 |:--|:--|
 | `submitReading()` | dipertahankan verbatim, termasuk EIP-712 recover, replay guard `usedDigest`, dan monotonic guard `lastTs` |
-| `registerDevice`, `READING_TYPEHASH`, struct, events, AccessControl roles | dipertahankan apa adanya |
+| `READING_TYPEHASH`, struct `Reading`, events lama, AccessControl roles | dipertahankan apa adanya |
+| `registerDevice` | model izin dan bentuk datanya dipertahankan, ditambah parameter keempat `baselineKwh` |
 | `verifyReading(id, bool)` | **diganti** menjadi `attestAndSettle(id, Attestation calldata a)` |
 | `SafeERC20` dan `ReentrancyGuard` | ditambahkan (keduanya sudah ada di lib OpenZeppelin, zero new deps) |
 | `Attestation` struct, `deviceReputation` mapping, fee split | ditambahkan sebagai substansi Finance |
+| `Device.baselineKwh`, `_assess`, view publik `assess`, `setDeviceBaseline` | ditambahkan supaya kontrak bisa menilai sendiri, bukan sekadar mempercayai verifier |
 
-Fungsi baru `attestAndSettle` menuliskan alasan AI sebagai attestation on-chain yang bisa di-decode di BscScan, menerapkan ruleset gate di dalam kontrak, membayar produsen via `safeTransfer`, dan memungut fee protokol. Detail penuh contract surface ada di [06 Kontrak WattSettle](<06 Kontrak WattSettle.md>).
+Fungsi baru `attestAndSettle` menuliskan alasan AI sebagai attestation on-chain yang bisa di-decode di BscScan, menerapkan **gate dua lapis** di dalam kontrak, membayar produsen via `safeTransfer`, dan memungut fee protokol. Detail penuh contract surface ada di [06 Kontrak WattSettle](<06 Kontrak WattSettle.md>).
+
+> [!IMPORTANT]
+> Gate dua lapis adalah perubahan keamanan terpenting di kontrak ini. `Device` menyimpan
+> `uint96 baselineKwh` di rantai, sehingga kontrak bisa menghitung delta dan skor anomalinya
+> sendiri lewat `_assess`, lalu meng-AND-kan hasilnya dengan penilaian verifier. Akibatnya
+> **verifier yang berbohong memegang hak veto, bukan kuasa menyetujui**. Sifat ini sudah
+> dibuktikan di rantai lewat attestation palsu yang ditolak, tx
+> `0x7e8ba5a7...98391781`, dan uraiannya ada di [09 Keamanan](<09 Keamanan.md>).
 
 > [!NOTE]
 > Domain EIP-712 tetap `ProofOfWatt` versi `1` walaupun kontraknya berganti nama. Ini
@@ -74,13 +84,13 @@ Layer teratas adalah verifier AI otonom yang memakai ulang infra **Hermes**, age
 Alur kerja agent:
 
 1. **Subscribe** event `ReadingSubmitted` lewat BSC testnet RPC (web3.py).
-2. **Recompute** `kwhDeltaVsBaseline` terhadap baseline perangkat plus menjalankan anomaly ruleset.
+2. **Recompute** `kwhDeltaVsBaseline` terhadap baseline perangkat plus menjalankan anomaly ruleset. Baseline di berkas ruleset wajib sama persis dengan `baselineKwh` di rantai.
 3. **Build** struct `Attestation` (delta, anomaly score, hash model, hash ruleset, timestamp evaluasi).
-4. **Panggil** `attestAndSettle()` memakai `VERIFIER_ROLE`, **tanpa klik manusia**.
+4. **Panggil** `attestAndSettle()` memakai `VERIFIER_ROLE`, **tanpa klik manusia**. Kontrak lalu menghitung penilaiannya sendiri dan hanya membayar bila kedua penilaian sepakat.
 
-Di panggung, state di-seed deterministik sehingga hasil sudah bisa diprediksi, tetapi keputusan tetap dihitung oleh agent (bukan di-hardcode). Agent ini sudah berjalan sungguhan: wallet `0xce4D51524eDECD04B5417F6C8B6E6B6b9e594291` memegang `VERIFIER_ROLE` dan sudah menyelesaikan satu approve serta satu reject on-chain. Identitasnya juga sudah terdaftar di ERC-8004 Identity Registry live chain 97 dengan agentId 2116, dibahas di [07 AI Verifier](<07 AI Verifier.md>).
+Di panggung, state di-seed deterministik sehingga hasil sudah bisa diprediksi, tetapi keputusan tetap dihitung oleh agent (bukan di-hardcode). Agent ini sudah berjalan sungguhan: wallet `0xce4D51524eDECD04B5417F6C8B6E6B6b9e594291` memegang `VERIFIER_ROLE` dan sudah menyelesaikan satu approve serta dua reject on-chain. Identitasnya juga sudah terdaftar di ERC-8004 Identity Registry live chain 97 dengan agentId 2116, dibahas di [07 AI Verifier](<07 AI Verifier.md>).
 
-> 💡 Autonomy yang legible: `rulesetHash` on-chain harus cocok dengan file ruleset di repo, sehingga juri bisa memverifikasi bahwa keputusan dihitung, bukan di-hardcode. Menunjukkan satu penolakan (reject) on-chain jauh lebih meyakinkan daripada hanya approval.
+> 💡 Autonomy yang legible: `rulesetHash` on-chain harus cocok dengan file ruleset di repo, sehingga juri bisa memverifikasi bahwa keputusan dihitung, bukan di-hardcode. Menunjukkan satu penolakan (reject) on-chain jauh lebih meyakinkan daripada hanya approval, dan menunjukkan penolakan yang tetap terjadi walaupun verifier-nya berbohong lebih meyakinkan lagi.
 
 ---
 
@@ -99,7 +109,7 @@ Di panggung, state di-seed deterministik sehingga hasil sudah bisa diprediksi, t
 | SRT-MGATE-1210 | 1 | tanda tangan `Reading` EIP-712, jembatan Modbus ke MQTT | hardware SURIOTA existing |
 | Enovatek PM20H20Q | 1 | ukur kWh DC untuk use case HVAC | produk partner Enovatek |
 | Fixture Reading | 1 | bacaan pre-seeded ter-sign untuk demo deterministik | satu tanda tangan lapangan |
-| `WattSettle.sol` | 2 | verifikasi, ruleset gate, payout, fee, reputation | evolusi `ProofOfWatt.sol` |
+| `WattSettle.sol` | 2 | verifikasi, gate dua lapis, baseline device, payout, fee, reputation | evolusi `ProofOfWatt.sol` |
 | `suriota` ERC20 | 2 | settlement token (payout dan fee) | sudah verified di BscScan |
 | Hermes agent | 3 | subscribe, recompute, build Attestation, kirim tx | infra Hermes existing |
 | ERC-8004 Identity Registry | 3 | identitas agent verifier terdaftar on-chain (agentId 2116) | integrate ke registry BNB yang live |

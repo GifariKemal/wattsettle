@@ -6,9 +6,9 @@
 &nbsp;
 ![BNB Chain](https://img.shields.io/badge/BNB%20Chain-Testnet%2097-f0b90b?style=for-the-badge&logo=binance&logoColor=white)
 &nbsp;
-[![Contract](https://img.shields.io/badge/WattSettle-live%20on%20chain%2097-22c55e?style=for-the-badge)](https://testnet.bscscan.com/address/0xdA149c0939c0C3450EDE5c8a0A0e8cF3AF36481a)
+[![Contract](https://img.shields.io/badge/WattSettle-live%20on%20chain%2097-22c55e?style=for-the-badge)](https://testnet.bscscan.com/address/0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12)
 &nbsp;
-![Tests](https://img.shields.io/badge/tests-20%20passing-brightgreen?style=for-the-badge)
+![Tests](https://img.shields.io/badge/tests-28%20passing-brightgreen?style=for-the-badge)
 
 # ⚡ Indonesia Web3 Hackathon 2026
 
@@ -86,7 +86,7 @@ Web3 Hackathon 2026/
 │   ├── README.md                 hub + style guide + peta baca
 │   ├── 00 Ikhtisar.md ... 22 Decision Log.md
 │   └── assets/                   diagram dan aset visual
-├── proofofwatt/                  📄 kontrak Foundry (WattSettle.sol LIVE di chain 97, 20 test PASS)
+├── proofofwatt/                  📄 kontrak Foundry (WattSettle.sol LIVE di chain 97, 28 test PASS)
 │   ├── src/ test/ script/        kontrak, test, script deploy dan submit
 │   ├── agent/                    agent AI verifier otonom (web3.py) + agent card ERC-8004
 │   └── ruleset/                  ruleset anomali yang di-hash ke on-chain
@@ -107,11 +107,11 @@ Web3 Hackathon 2026/
 |:--|:--|:--|
 | 👛 Wallet deployer (Rabby) | `0x52317162A7a228D01353e8907a5C068A6D9a0F2e` | pemegang `DEFAULT_ADMIN_ROLE` |
 | 🪙 Token `suriota` | `0x5f730750388176206cC3A7FE894c413675381B05` | ERC20, verified di BscScan, supply 1.000.000 |
-| 📄 **WattSettle.sol** | [`0xdA149c0939c0C3450EDE5c8a0A0e8cF3AF36481a`](https://testnet.bscscan.com/address/0xdA149c0939c0C3450EDE5c8a0A0e8cF3AF36481a) | **LIVE sejak 5 Sep 2026**, source `exact_match` di Sourcify |
+| 📄 **WattSettle.sol** | [`0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12`](https://testnet.bscscan.com/address/0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12) | **LIVE sejak 5 Sep 2026**, source `exact_match` di Sourcify |
 | 🤖 Agent AI verifier | [`0xce4D51524eDECD04B5417F6C8B6E6B6b9e594291`](https://testnet.bscscan.com/address/0xce4D51524eDECD04B5417F6C8B6E6B6b9e594291) | satu-satunya pemegang `VERIFIER_ROLE`, ERC-8004 agentId **2116** |
-| 💰 Reward pool | 499.895 `suriota` | sudah pre-fund 500.000, terpakai 105 di demo |
+| 💰 Reward pool | 49.895 `suriota` | pre-fund 50.000, terpakai 105 di demo |
 
-Loop penuh sudah berjalan nyata: satu bacaan **disetujui dan dibayar** (103,95 suriota ke produsen, 1,05 fee ke treasury), satu bacaan **ditolak on-chain tanpa pembayaran**. Daftar lengkap tautan transaksi ada di [`proofofwatt/README.md`](proofofwatt/README.md#bukti-on-chain).
+Loop penuh sudah berjalan nyata: satu bacaan **disetujui dan dibayar** (103,95 suriota ke produsen, 1,05 fee ke treasury), satu bacaan **ditolak on-chain**, dan satu lagi tetap ditolak **walau verifier sengaja dibuat berbohong**, sebab kontrak menghitung penyimpangannya sendiri. Daftar lengkap tautan transaksi ada di [`proofofwatt/README.md`](proofofwatt/README.md#bukti-on-chain).
 
 <details>
 <summary><b>🔐 Catatan keamanan (klik untuk buka)</b></summary>
@@ -130,7 +130,7 @@ Loop penuh sudah berjalan nyata: satu bacaan **disetujui dan dibayar** (103,95 s
 <tr><th>Komponen</th><th>Perintah</th></tr>
 <tr><td>🌐 Website produksi</td><td><code>cd web &amp;&amp; npm install &amp;&amp; npm run dev</code> (buka :4321)</td></tr>
 <tr><td>🌐 Website fallback</td><td>double-click <code>Presentasi Opsi 5 6/index.html</code></td></tr>
-<tr><td>📄 Kontrak (Foundry, WSL atau Git Bash)</td><td><code>cd proofofwatt &amp;&amp; forge test</code> (20 test)</td></tr>
+<tr><td>📄 Kontrak (Foundry, WSL atau Git Bash)</td><td><code>cd proofofwatt &amp;&amp; forge test</code> (28 test)</td></tr>
 <tr><td>🤖 Agent AI verifier</td><td><code>cd proofofwatt &amp;&amp; python agent/verifier.py --dry-run</code></td></tr>
 <tr><td>🔒 Pengunci state sebelum demo</td><td><code>cd proofofwatt &amp;&amp; bash scripts/night-before.sh</code></td></tr>
 </table>

@@ -47,10 +47,10 @@ Sebagian besar entri hackathon mati bukan karena idenya lemah, melainkan karena 
 
 | Aspek | Isi |
 |:--|:--|
-| **Risiko** | Juri membaca Solidity, melihat gate di `attestAndSettle` hanya threshold trivial pada nilai yang di-supply agent, lalu menyimpulkan "rubber stamp". Kalau juri minta "run unseeded live", entri terjebak: menolak terlihat staged, menerima lalu tersendat membunuh demo. |
-| **Fix (WAJIB)** | **Tunjukkan satu rejection on-chain.** (1) Live run submit DUA reading, satu bersih yang di-settle, satu anomalous yang **DITOLAK on-chain tanpa payout**. Rejection sepuluh kali lebih meyakinkan daripada approval. (2) Tunjuk cron log dan `rulesetHash` on-chain yang match file ruleset di repo, jadi "computed, bukan hardcoded" bisa diverifikasi. (3) Rehearse jawaban "run one live now", siapkan reading ketiga yang unseeded tetapi known-good, lalu tawarkan. |
+| **Risiko** | Juri membaca Solidity, melihat gate di `attestAndSettle` hanya threshold trivial pada nilai yang di-supply agent, lalu menyimpulkan "rubber stamp". Versi lawas kontrak memang rentan pada tuduhan ini, sebab gerbangnya hanya menilai angka yang dipasok verifier. Kalau juri minta "run unseeded live", entri terjebak: menolak terlihat staged, menerima lalu tersendat membunuh demo. |
+| **Fix (SUDAH DIEKSEKUSI 5 Sep 2026)** | **Gerbangnya dijadikan dua lapis, dan sifatnya dibuktikan di rantai.** (1) Kontrak menyimpan `baselineKwh` per perangkat dan menghitung penilaiannya sendiri lewat `_assess`, lalu meng-AND-kan dengan penilaian verifier. Verifier yang berbohong memegang **hak veto, bukan kuasa menyetujui**. (2) Sebuah attestation yang sengaja dibuat bohong (delta 0, anomali 0 atas 900 kWh terhadap baseline 100) DITOLAK kontrak yang menghitung sendiri 800 dan 10000 bps, tx `0x7e8ba5a7...98391781`, nol token berpindah. (3) Tetap tunjukkan satu penolakan jujur atas bacaan 4200 kWh, tx `0xbf21a819...1af49934`. (4) Tunjuk `rulesetHash` on-chain yang match berkas ruleset di repo, dengan `cast keccak 0x$(xxd -p -c 999999 ruleset/anomaly_v1.json)`. |
 
-> 💡 Prinsipnya, biarkan AI mengubah **outcome** yang tidak bisa di-regex (approve versus reject atas input anomalous), bukan sekadar menulis alasan di atas keputusan yang sudah pasti. Approve yang mulus adalah teater, reject yang benar adalah bukti.
+> 💡 Prinsipnya, biarkan AI mengubah **outcome** yang tidak bisa di-regex (approve versus reject atas input anomalous), bukan sekadar menulis alasan di atas keputusan yang sudah pasti. Approve yang mulus adalah teater, reject yang benar adalah bukti, dan **reject yang tetap terjadi walaupun AI-nya sendiri berbohong adalah bukti yang tidak bisa dibantah**.
 
 ---
 
@@ -76,8 +76,8 @@ Sebagian besar entri hackathon mati bukan karena idenya lemah, melainkan karena 
 
 | Aspek | Isi |
 |:--|:--|
-| **Risiko** | (1) `submitReading` punya monotonic guard dan replay guard, jadi re-run mengkonsumsi slot dan bikin REVERT `StaleTimestamp` atau `ReplayedReading` di panggung. (2) `attestAndSettle` melakukan safeTransfer dari balance kontrak plus solvency check, jadi gas rendah atau pool yang ke-drain saat rehearsal bikin revert. (3) BSC testnet 97 kadang flaky. |
-| **Fix (WAJIB)** | (1) **Fixture fresh**, live reading pakai tuple distinct-timestamp, siapkan tiga fixture berantre, dan script yang refuse start kalau `usedDigest` atau `lastTs` bakal bikin revert. (2) **Checklist malam sebelumnya as code**, assert saldo `suriota` lebih besar sama dengan payout, wallet BNB lebih besar sama dengan sepuluh kali gas satu tx, kontrak masih verified. (3) **Video fallback** satu keystroke yang flawless, kalau live tersendat potong ke video di tengah kalimat tanpa minta maaf. (4) Pin prior confirmed tx di tab kedua, jangan pernah tunggu indexer live di panggung. Rehearse rantai penuh dua puluh kali melawan RPC nyata. |
+| **Risiko** | (1) `submitReading` punya monotonic guard, replay guard, dan batas `MAX_KWH_PER_READING`, jadi re-run mengkonsumsi slot dan bikin REVERT `StaleTimestamp` atau `ReplayedReading` di panggung. (2) `attestAndSettle` melakukan safeTransfer dari balance kontrak plus solvency check, jadi gas rendah atau pool yang ke-drain saat rehearsal bikin revert. (3) BSC testnet 97 kadang flaky. |
+| **Fix (WAJIB)** | (1) **Fixture fresh**, live reading pakai tuple distinct-timestamp, siapkan tiga fixture berantre, dan script yang refuse start kalau `usedDigest` atau `lastTs` bakal bikin revert. (2) **Checklist malam sebelumnya as code**, assert saldo `suriota` lebih besar sama dengan payout, wallet BNB lebih besar sama dengan sepuluh kali gas satu tx, kontrak masih verified. (3) **Video fallback** satu keystroke yang flawless, kalau live tersendat potong ke video di tengah kalimat tanpa minta maaf. (4) Pin prior confirmed tx di tab kedua, jangan pernah tunggu indexer live di panggung. (5) Rehearse rantai penuh melawan RPC nyata dengan `bash scripts/rehearse-loop.sh 20`, yang tiap putaran kelimanya sengaja anomali dan membaca balik status dari rantai, lalu keluar bukan nol bila ada putaran yang gagal. |
 
 ---
 
@@ -102,7 +102,7 @@ Urutan ini penting. Item teratas memberi kenaikan probabilitas terbesar per jam 
 |:--:|:--|:--:|:--|
 | 1 | ✅ **FLIP framing ERC-8004** selesai 5 Sep 2026, stop "self-contained mirror", agent terdaftar di Identity Registry LIVE sebagai agentId 2116 | KS1 | 🟢 Tertinggi, satu perubahan paling menaikkan nominasi di mata juri BNB |
 | 2 | **TIE moat ke chain**, tangkap satu signature EIP-712 nyata dari SRT-MGATE-1210 sebagai demo reading | KS3 | 🟢 Mengubah moat dari klaim atas video jadi properti sistem yang terdemonstrasi |
-| 3 | ✅ **SHOW a rejection** selesai 5 Sep 2026, agent menolak reading 4200 kWh on-chain tanpa payout, tx `0xdca33d63...bc5d8d40` | KS2 | 🟢 Refutasi terkuat atas pertanyaan "is the AI real" |
+| 3 | ✅ **SHOW a rejection** selesai 5 Sep 2026, agent menolak reading 4200 kWh on-chain tanpa payout, tx `0xbf21a819...1af49934`. Ditambah **gate dua lapis** yang menolak attestation palsu, tx `0x7e8ba5a7...98391781` | KS2 | 🟢 Refutasi terkuat atas pertanyaan "is the AI real", sekaligus jawaban tuntas untuk "what if the AI lies" |
 | 4 | **TUTUP semua gate minggu ini dengan proof link**, commit harian, re-verify kontrak baru, dua tx, README plus roadmap, tweet exact handle | KS6 | 🟡 Bukan menaikkan skor, tetapi mencegah nol otomatis |
 | 5 | **VALIDASI track dengan data**, count per track nyata, siapkan dua framing, pilih by data | KS4 | 🟡 Menentukan medan tempur, kalau Finance ramai pindah ke AI Agents |
 | 6 | **TAMBAH finance substance**, fee split take-rate on-chain | KS4 | 🟡 "Payment rail with revenue model", bukan sekadar transfer |
@@ -148,7 +148,7 @@ Juara 1 bergantung pada faktor di luar kendali solo builder, yaitu standout trac
 | Kill-shot | Status yang harus dicapai |
 |:--|:--|
 | 🚫 KS1 framing fatal | Integrasi ERC-8004 live jadi act-2, "mirror" mati dari semua materi |
-| 🤖 KS2 autonomy theater | Satu rejection on-chain terdemonstrasi di live loop |
+| 🤖 KS2 autonomy theater | ✅ Tertutup. Satu rejection jujur plus satu rejection yang menolak verifier berbohong, keduanya terdemonstrasi on-chain |
 | 🔌 KS3 moat melayang | Satu signature hardware nyata jadi seed demo |
 | 💸 KS4 track liability | Densitas track di-scout, fee split on-chain terpasang |
 | 🧨 KS5 demo self-brick | Fixture fresh, checklist as code, video fallback siap |
@@ -157,5 +157,5 @@ Juara 1 bergantung pada faktor di luar kendali solo builder, yaitu standout trac
 ---
 
 <div align="center">
-<sub>© 2026 PT Surya Inovasi Prioritas (SURIOTA) · <a href="README.md">Hub WattSettle</a> · Update 7 Juli 2026</sub>
+<sub>© 2026 PT Surya Inovasi Prioritas (SURIOTA) · <a href="README.md">Hub WattSettle</a> · Update 5 September 2026</sub>
 </div>

@@ -53,6 +53,7 @@ abstract contract WattSettleHarness is Test {
     address internal deviceOwner = address(0xBEEF);
     address internal treasury = address(0xFEE5);
     bytes32 internal deviceId = keccak256("SRT-MGATE-1210-#001");
+    uint96 internal constant BASELINE_KWH = 100;
 
     bytes32 internal constant READING_TYPEHASH =
         keccak256("Reading(bytes32 deviceId,uint256 kWh,uint64 timestamp,uint256 nonce)");
@@ -63,7 +64,7 @@ abstract contract WattSettleHarness is Test {
         ws = new WattSettle(tok);
         ws.setTreasury(treasury);
         assertTrue(tok.transfer(address(ws), 500_000 ether)); // pre-fund reward pool
-        ws.registerDevice(deviceId, deviceSigner, deviceOwner);
+        ws.registerDevice(deviceId, deviceSigner, deviceOwner, BASELINE_KWH);
     }
 
     function _sign(uint256 kWh, uint64 ts, uint256 nonce) internal view returns (bytes memory) {
@@ -108,10 +109,11 @@ contract WattSettleBaseTest is WattSettleHarness {
     }
 
     function testRegisterDevice() public view {
-        (address signer, address owner, uint64 lastTs) = ws.devices(deviceId);
+        (address signer, address owner, uint64 lastTs, uint96 baselineKwh) = ws.devices(deviceId);
         assertEq(signer, deviceSigner);
         assertEq(owner, deviceOwner);
         assertEq(lastTs, 0);
+        assertEq(baselineKwh, BASELINE_KWH);
     }
 
     function testSubmitReadingValidSig() public {
@@ -137,7 +139,7 @@ contract WattSettleBaseTest is WattSettleHarness {
         bytes memory sig = _sign(100, 1000, 1);
         ws.submitReading(deviceId, 100, 1000, 1, sig);
 
-        ws.registerDevice(deviceId, deviceSigner, deviceOwner); // lastTs kembali 0
+        ws.registerDevice(deviceId, deviceSigner, deviceOwner, BASELINE_KWH); // lastTs kembali 0
         vm.expectRevert(WattSettle.ReplayedReading.selector);
         ws.submitReading(deviceId, 100, 1000, 1, sig);
     }
@@ -161,7 +163,13 @@ contract WattSettleBaseTest is WattSettleHarness {
 
     function testRegisterDeviceRejectsZeroOwner() public {
         vm.expectRevert(WattSettle.ZeroAddress.selector);
-        ws.registerDevice(keccak256("zero"), deviceSigner, address(0));
+        ws.registerDevice(keccak256("zero"), deviceSigner, address(0), BASELINE_KWH);
+    }
+
+    function testSubmitRejectsImplausibleKwh() public {
+        uint256 absurd = 1e12 + 1;
+        vm.expectRevert(WattSettle.ImplausibleReading.selector);
+        ws.submitReading(deviceId, absurd, 1000, 1, _sign(absurd, 1000, 1));
     }
 }
 
@@ -232,7 +240,7 @@ contract WattSettleDeltaTest is WattSettleHarness {
         ReentrantToken evil = new ReentrantToken();
         WattSettle victim = new WattSettle(IERC20(address(evil)));
         assertTrue(evil.transfer(address(victim), 500_000 ether));
-        victim.registerDevice(deviceId, deviceSigner, deviceOwner);
+        victim.registerDevice(deviceId, deviceSigner, deviceOwner, BASELINE_KWH);
         victim.grantRole(victim.VERIFIER_ROLE(), address(evil)); // token lolos role, tersisa nonReentrant
 
         WattSettle saved = ws;
@@ -249,7 +257,7 @@ contract WattSettleDeltaTest is WattSettleHarness {
 
     function testInsufficientPoolReverts() public {
         WattSettle poor = new WattSettle(tok);
-        poor.registerDevice(deviceId, deviceSigner, deviceOwner);
+        poor.registerDevice(deviceId, deviceSigner, deviceOwner, BASELINE_KWH);
         assertTrue(tok.transfer(address(poor), 50 ether)); // butuh 100, hanya ada 50
 
         WattSettle saved = ws;
@@ -294,7 +302,8 @@ contract WattSettleDeltaTest is WattSettleHarness {
         vm.expectEmit(true, true, false, true, address(ws));
         emit WattSettle.SettlementFeeTaken(id, treasury, 1 ether);
         vm.expectEmit(true, true, false, true, address(ws));
-        emit WattSettle.ReadingAttested(id, deviceId, true, a);
+        // Angka kontrak ikut masuk event: kWh 100 sama persis dengan baseline, jadi nol dan nol.
+        emit WattSettle.ReadingAttested(id, deviceId, true, a, 0, 0);
 
         ws.attestAndSettle(id, a);
     }
@@ -319,5 +328,91 @@ contract WattSettleDeltaTest is WattSettleHarness {
     function testSetGateParamsRejectsImpossibleBound() public {
         vm.expectRevert(WattSettle.InvalidAnomalyBound.selector);
         ws.setGateParams(10_001, 500);
+    }
+
+    // =================================================================
+    // Properti keamanan inti: verifier tidak bisa memaksa pembayaran
+    // =================================================================
+
+    /// @dev Ini test terpenting di berkas ini. Verifier yang sepenuhnya berbohong,
+    ///      mengaku bacaan 900 kWh sama sekali tidak menyimpang dari baseline 100,
+    ///      tetap tidak bisa membuat kontrak membayar. Kontrak menghitung sendiri.
+    function testLyingVerifierCannotForcePayout() public {
+        uint256 id = _pending(900, 1000, 1); // baseline 100, menyimpang jauh
+
+        ws.attestAndSettle(id, _att(0, 0)); // verifier mengaku nol penyimpangan, nol anomali
+
+        assertEq(tok.balanceOf(deviceOwner), 0);
+        assertEq(tok.balanceOf(treasury), 0);
+        (,,,, WattSettle.Status status) = ws.submissions(id);
+        assertEq(uint8(status), uint8(WattSettle.Status.Rejected));
+    }
+
+    /// @dev Sisi sebaliknya, dan ini yang membuat verifier tetap punya guna. Bacaan yang
+    ///      secara aritmetika sempurna pun bisa ditolak verifier, misalnya karena ia melihat
+    ///      sinyal yang tidak terlihat on-chain. Hak veto ada, hak meloloskan tidak.
+    function testVerifierCanVetoAReadingTheContractWouldAccept() public {
+        uint256 id = _pending(100, 1000, 1); // sama persis dengan baseline
+
+        (int256 chainDelta, uint16 chainAnomalyBps) = ws.assess(deviceId, 100);
+        assertEq(chainDelta, 0);
+        assertEq(chainAnomalyBps, 0); // kontrak sendiri akan meloloskan
+
+        ws.attestAndSettle(id, _att(0, 9000)); // verifier menolak
+
+        assertEq(tok.balanceOf(deviceOwner), 0);
+        (,,,, WattSettle.Status status) = ws.submissions(id);
+        assertEq(uint8(status), uint8(WattSettle.Status.Rejected));
+    }
+
+    function testContractComputesOwnAssessment() public view {
+        (int256 delta, uint16 bps) = ws.assess(deviceId, 120);
+        assertEq(delta, 20);
+        assertEq(bps, 2000); // 20 dari baseline 100 sama dengan 2000 bps
+
+        (delta, bps) = ws.assess(deviceId, 80);
+        assertEq(delta, -20);
+        assertEq(bps, 2000); // penyimpangan ke bawah dinilai sama beratnya
+
+        (, bps) = ws.assess(deviceId, 1_000_000);
+        assertEq(bps, 10_000); // skor dipatok di 10000, tidak meluap
+    }
+
+    /// @dev Device yang belum dikalibrasi tidak boleh dibayar. Lebih baik menolak daripada
+    ///      membayar berdasarkan baseline yang tidak pernah ditetapkan.
+    function testDeviceWithoutBaselineIsNeverPaid() public {
+        ws.setDeviceBaseline(deviceId, 0);
+        uint256 id = _pending(100, 1000, 1);
+
+        ws.attestAndSettle(id, _att(0, 0));
+
+        assertEq(tok.balanceOf(deviceOwner), 0);
+        (,,,, WattSettle.Status status) = ws.submissions(id);
+        assertEq(uint8(status), uint8(WattSettle.Status.Rejected));
+    }
+
+    function testSetDeviceBaseline() public {
+        ws.setDeviceBaseline(deviceId, 250);
+        (,,, uint96 baselineKwh) = ws.devices(deviceId);
+        assertEq(baselineKwh, 250);
+
+        (int256 delta, uint16 bps) = ws.assess(deviceId, 250);
+        assertEq(delta, 0);
+        assertEq(bps, 0);
+    }
+
+    function testSetDeviceBaselineRejectsUnknownDevice() public {
+        vm.expectRevert(WattSettle.UnknownDevice.selector);
+        ws.setDeviceBaseline(keccak256("SRT-MGATE-1210-#404"), 100);
+    }
+
+    /// @dev Reputasi memakai skor terburuk di antara dua penilaian, sehingga verifier yang
+    ///      lunak tidak bisa memoles catatan sebuah device.
+    function testReputationUsesWorstOfBothAssessments() public {
+        uint256 id = _pending(120, 1000, 1); // kontrak menilai 2000 bps
+        ws.attestAndSettle(id, _att(20, 0)); // verifier mengaku 0 bps
+
+        (,, uint16 avgBps) = ws.deviceReputation(deviceId);
+        assertEq(avgBps, 2000); // yang tercatat angka kontrak, bukan angka verifier
     }
 }

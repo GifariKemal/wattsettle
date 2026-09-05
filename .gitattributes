@@ -1,0 +1,19 @@
+# Berkas ruleset di-hash byte demi byte ke on-chain lewat keccak256, dan nilai itu
+# ditulis ke event ReadingAttested. Kalau git boleh mengonversi akhir barisnya, checkout
+# di Windows menghasilkan CRLF sementara checkout di Linux menghasilkan LF, dan kedua
+# pihak akan menghitung rulesetHash yang berbeda untuk file yang isinya sama.
+# Itu mematahkan seluruh klaim "hitung sendiri dan buktikan".
+# Penanda -text mematikan konversi, sehingga byte-nya identik di mana pun.
+proofofwatt/ruleset/*.json -text
+
+# Kartu agent ERC-8004 diambil langsung lewat URL raw GitHub, jadi isinya sebaiknya
+# juga tidak berubah tergantung sistem operasi.
+proofofwatt/agent/agent-card.json -text
+
+# Kontrak dijaga LF supaya forge fmt tidak berselisih dengan git di mesin Windows.
+*.sol text eol=lf
+
+# Script shell WAJIB berakhir baris LF. Dengan core.autocrlf=true, checkout di Windows
+# mengubahnya jadi CRLF dan bash langsung tersedak ("unexpected end of file"), padahal
+# berkasnya tidak salah apa pun. Ini persis yang terjadi pada night-before.sh.
+*.sh text eol=lf

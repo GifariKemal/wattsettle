@@ -8,7 +8,7 @@
 
 # 🔐 Keamanan
 
-### Threat model, replay guard, reentrancy, dan role gating
+### Threat model, gate dua lapis, replay guard, reentrancy, dan role gating
 
 </div>
 
@@ -26,7 +26,7 @@ Keamanan adalah axis bernilai tertinggi di rubrik teknis dan satu-satunya bagian
 
 ## 🎯 Ringkasan Threat Model
 
-Kontrak menghadapi empat kelas ancaman utama, yaitu memalsukan bacaan, mengulang bacaan lama, menguras dana lewat reentrancy, dan bertindak sebagai verifier tanpa izin. Tiap kelas punya mitigasi eksplisit yang sudah ada di kode.
+Kontrak menghadapi lima kelas ancaman utama, yaitu memalsukan bacaan, mengulang bacaan lama, menguras dana lewat reentrancy, bertindak sebagai verifier tanpa izin, dan **verifier sah yang berbohong**. Tiap kelas punya mitigasi eksplisit yang sudah ada di kode.
 
 | Ancaman | Vektor | Mitigasi | Status |
 |:--|:--|:--|:--|
@@ -36,7 +36,10 @@ Kontrak menghadapi empat kelas ancaman utama, yaitu memalsukan bacaan, mengulang
 | Reentrancy | Malicious token panggil balik saat payout | Checks-effects-interactions plus `nonReentrant` plus SafeERC20 | 🟢 diperkuat di delta |
 | Aktor tak berwenang attest | Wallet acak panggil `attestAndSettle` | `onlyRole(VERIFIER_ROLE)` | 🟢 ada, jangan sentuh |
 | Pool kering saat payout | Reward pool kontrak habis | Solvency check `balanceOf(this) < reward` revert `InsufficientRewardPool` | 🟢 ada di delta |
-| Anomali energi | Reading absurd lolos ke payout | On-chain ruleset gate memeriksa anomaly score dan delta bound, lalu reject on-chain | 🟢 ada di delta |
+| Anomali energi | Reading absurd lolos ke payout | Gate on-chain memeriksa anomaly score dan delta bound, lalu reject on-chain | 🟢 ada di delta |
+| **Verifier berbohong** | Wallet ber-`VERIFIER_ROLE` memasok attestation palsu (`delta = 0`, `anomaly = 0`) untuk meloloskan bacaan curang dan menguras pool | **Gate dua lapis.** Kontrak menyimpan `baselineKwh` per device dan menghitung penilaiannya sendiri lewat `_assess`, lalu meng-AND-kan dengan penilaian verifier | 🟢 ditutup 5 Sep 2026, **terbukti on-chain** |
+| Perangkat tidak terkalibrasi | Device terdaftar tanpa baseline lalu dibayar terhadap acuan yang tidak pernah disetel | `baselineKwh` nol memaksa pembagi menjadi 1, sehingga skor anomali maksimum dan perangkat itu tidak pernah bisa dibayar | 🟢 ada di delta |
+| Overflow aritmetika penilaian | Bacaan raksasa dipakai untuk melimpahkan perhitungan `_assess` | `MAX_KWH_PER_READING = 1e12` ditegakkan di `submitReading`, revert `ImplausibleReading` | 🟢 ada di delta |
 
 ---
 
@@ -60,6 +63,103 @@ hidup, bukan kode mati. Uraiannya ada di [11 Testing dan QA](<11 Testing dan QA.
 
 ---
 
+## 🎭 Ancaman Terpenting: Bagaimana Kalau Verifier-nya yang Berbohong?
+
+Versi lama bab ini tidak bisa menjawab pertanyaan ini, dan itu adalah lubang terbesarnya.
+Sekarang jawabannya ada, dan bukan berupa argumen melainkan berupa transaksi.
+
+### Kenapa dulu ini lubang
+
+Gerbang on-chain yang lama hanya menilai **angka yang dipasok verifier**. Kontrak tidak
+menyimpan baseline perangkat, jadi ia tidak punya cara menghitung ulang deviasinya sendiri.
+Konsekuensinya keras: verifier yang berbohong bisa menyetujui bacaan curang dan menguras
+reward pool, dan kontraknya tidak akan pernah tahu. Role gating menjaga siapa yang boleh
+memutus, tetapi tidak menjaga apa yang boleh diputuskan.
+
+### Perbaikannya, gerbang dua lapis
+
+Kontrak kini menyimpan `uint96 baselineKwh` per perangkat dan menghitung penilaiannya
+sendiri. Kedua lapis wajib lolos.
+
+```solidity
+// Lapis satu, hitungan kontrak sendiri dari baseline on-chain. Verifier tidak bisa mempengaruhinya.
+(int256 chainDelta, uint16 chainAnomalyBps) = _assess(devices[s.deviceId].baselineKwh, s.kWh);
+bool contractApproves = (chainAnomalyBps <= maxAnomalyBps) && (_abs(chainDelta) <= maxDeltaBound);
+
+// Lapis dua, penilaian verifier. Hanya bisa memperketat, tidak pernah melonggarkan.
+bool verifierApproves = (a.anomalyScoreBps <= maxAnomalyBps) && (_abs(a.kwhDeltaVsBaseline) <= maxDeltaBound);
+
+bool approved = contractApproves && verifierApproves;
+```
+
+> [!IMPORTANT]
+> **Verifier yang berbohong tidak bisa lagi memaksa pembayaran. Ia memegang hak veto,
+> bukan kuasa menyetujui.** Ia tetap bisa menolak bacaan yang secara aritmetika terlihat
+> wajar, karena ia melihat cuaca, kesehatan perangkat, atau sinyal kecurangan yang tidak
+> terlihat di rantai, dan justru itulah yang membuat AI-nya tetap berguna. Yang tidak
+> pernah bisa ia lakukan adalah menyetujui apa yang kontraknya sendiri tolak.
+
+### Buktinya di rantai, bukan di paragraf
+
+Sebuah attestation yang **sengaja dibuat tidak jujur** dikirim untuk bacaan #2, yaitu
+900 kWh terhadap baseline 100, dengan klaim `kwhDeltaVsBaseline = 0` dan
+`anomalyScoreBps = 0`. Kontrak menghitung sendiri delta 800 dan anomali 10000 bps, lalu
+**menolak tanpa membayar apa pun**.
+
+| Hal | Nilai |
+|:--|:--|
+| Yang verifier KATAKAN | delta 0, anomali 0 bps, artinya "setujui" |
+| Yang kontrak HITUNG | delta 800, anomali 10000 bps, artinya "tolak" |
+| Putusan | REJECTED, nol token berpindah |
+| Transaksi | `0x7e8ba5a7b1e09f33a8015c043383500276fda8ad59e61bac861f78ce98391781` |
+
+Ini bukti tunggal terkuat di seluruh entri, dan pemakaiannya di panggung dijelaskan di
+[15 Demo dan Pitch](<15 Demo dan Pitch.md>) serta [16 Risiko dan Kill-shots](<16 Risiko dan Kill-shots.md>).
+
+### Pertahanan pendamping
+
+- **Event yang membuka kedua penilaian.** `ReadingAttested` kini membawa `chainDelta` dan
+  `chainAnomalyBps` berdampingan dengan `Attestation` dari verifier. Siapa pun bisa membaca
+  apa yang verifier katakan di sebelah apa yang kontrak hitung, dan **perbedaan di antara
+  keduanya itu sendiri adalah sinyal**.
+- **Reputasi memakai yang terburuk.** Reputasi perangkat mencatat skor anomali yang lebih
+  buruk di antara kedua penilaian, jadi verifier yang longgar tidak bisa memoles rekam
+  jejak sebuah unit.
+- **Simulasi sebelum kirim.** View publik `assess(bytes32 deviceId, uint256 kWh)` membuat
+  siapa pun bisa menghitung putusan kontrak dari tab Read Contract sebelum satu transaksi
+  pun dikirim.
+- **Tidak ada withdraw admin.** Reward pool tidak punya fungsi tarik dana. Begitu token
+  masuk ke kontrak, admin tidak bisa mengambilnya kembali.
+
+---
+
+## 🧾 Temuan Auditabilitas: Akhiran Baris Merusak `rulesetHash`
+
+Klaim "hitung sendiri dan buktikan" bertumpu pada satu hal: `rulesetHash` on-chain adalah
+`keccak256` atas **byte mentah** berkas `proofofwatt/ruleset/anomaly_v1.json`. Kalau byte
+itu berbeda antar mesin, klaimnya runtuh diam-diam.
+
+Dan itulah yang terjadi. Git disetel `core.autocrlf=true`, sehingga checkout di Windows
+menghasilkan CRLF (1501 byte) sementara blob yang ter-commit adalah LF (1470 byte). Kedua
+berkas itu menghasilkan hash yang **berbeda**. Dua orang jujur di sistem operasi berbeda
+akan saling membantah, dan tidak satu pun dari mereka salah.
+
+Perbaikannya adalah `.gitattributes` yang menandai berkas ruleset dan kartu agent sebagai
+`-text`, sehingga git tidak pernah mengonversinya dan byte-nya identik di mana pun. Hash
+kanoniknya `0xcce6c15c459cd085ae0c5d364227022f59f70d7036819c7b023598a590df6b41`, dan CI
+sekarang gagal bila berkas itu berubah tanpa nilai tersebut ikut diperbarui.
+
+> [!WARNING]
+> Jebakan kedua yang berkerabat. Perintah `cast keccak $(xxd -p -c 999999 berkas)`
+> **salah**: tanpa awalan `0x`, `cast` menghash teks heksadesimalnya, bukan byte-nya.
+> Yang benar:
+>
+> ```bash
+> cast keccak 0x$(xxd -p -c 999999 ruleset/anomaly_v1.json)
+> ```
+
+---
+
 ## 🛡️ Pertahanan Reentrancy
 
 Payout adalah satu-satunya titik di mana kontrak memanggil kontrak eksternal (transfer token), jadi di situlah reentrancy dipertahankan berlapis.
@@ -70,7 +170,7 @@ function attestAndSettle(uint256 id, Attestation calldata a)
 {
     Submission storage s = submissions[id];
     if (s.status != Status.Pending) revert NotPending();
-    // ... ruleset gate ...
+    // ... gate dua lapis: contractApproves && verifierApproves ...
     s.status = approved ? Status.Approved : Status.Rejected;   // 2. effects SEBELUM interaction
     // ... reputation update ...
     if (approved) {
@@ -94,13 +194,13 @@ Empat lapis pertahanan bekerja bersama:
 
 ## 🔑 Role Gating dan Manajemen Kunci
 
-**Role gating.** Hanya wallet dengan `VERIFIER_ROLE` yang boleh memanggil `attestAndSettle`. Role ini dipegang oleh wallet AI verifier (Hermes agent). Wallet lain yang mencoba attest akan direvert, jadi settlement tidak bisa dipicu aktor sembarang.
+**Role gating.** Hanya wallet dengan `VERIFIER_ROLE` yang boleh memanggil `attestAndSettle`. Role ini dipegang oleh wallet AI verifier (Hermes agent). Wallet lain yang mencoba attest akan direvert, jadi settlement tidak bisa dipicu aktor sembarang. Sejak gate dua lapis terpasang, kompromi atas kunci ini pun tidak berujung pada pembayaran curang, melainkan paling jauh pada penolakan yang tidak semestinya.
 
 **Manajemen kunci device dan agent.** Ada dua kelas kunci yang harus dijaga terpisah.
 
 | Kunci | Pemegang | Fungsi | Disiplin |
 |:--|:--|:--|:--|
-| Device signing key | SRT-MGATE-1210 di lapangan | Menandatangani `Reading` EIP-712 | Provisioning saat manufaktur, `registerDevice` on-chain, rotasi atau revoke saat RMA |
+| Device signing key | SRT-MGATE-1210 di lapangan | Menandatangani `Reading` EIP-712 | Provisioning saat manufaktur, `registerDevice` on-chain beserta `baselineKwh`, rotasi atau revoke saat RMA |
 | Agent verifier key | Hermes agent di VPS SURIOTA | Memegang `VERIFIER_ROLE`, memanggil `attestAndSettle` | Simpan di server, jangan pernah commit |
 | Deployer key | Wallet owner | Deploy, pre-fund pool, admin role | Testnet-only, jangan pernah reuse pola ke mainnet |
 
@@ -130,6 +230,8 @@ Ponytail minimal-code adalah aturan global proyek ini, tapi ada **carve-out kera
 - Solvency check sebelum payout.
 - `VERIFIER_ROLE` gating pada `attestAndSettle`.
 - EIP-712 replay guard (`usedDigest`) dan monotonic guard (`lastTs`) utuh.
+- Gate dua lapis di `attestAndSettle`, termasuk `_assess` terhadap `baselineKwh` on-chain. Melipatnya kembali menjadi satu lapis akan mengembalikan kuasa menyetujui ke tangan verifier.
+- Batas `MAX_KWH_PER_READING` di `submitReading`, yang menjaga aritmetika penilaian jauh dari batas tipe.
 
 Jalankan `/ponytail-review` pada diff untuk memangkas over-engineering, tapi keamanan tetap 100%.
 

@@ -23,6 +23,9 @@ contract Deploy is Script {
         address verifier = vm.envAddress("VERIFIER_ADDR");
         bytes32 deviceId = vm.envBytes32("DEVICE_ID");
         uint256 prefund = vm.envOr("PREFUND_WEI", uint256(500_000 ether));
+        // Baseline wajib cocok dengan angka di ruleset/anomaly_v1.json. Kalau keduanya
+        // berbeda, kontrak dan verifier akan menilai bacaan yang sama dengan angka berbeda.
+        uint96 baselineKwh = uint96(vm.envOr("DEVICE_BASELINE_KWH", uint256(100)));
 
         address deployer = vm.addr(deployerPk);
 
@@ -30,7 +33,7 @@ contract Deploy is Script {
 
         WattSettle ws = new WattSettle(IERC20(token));
         ws.setTreasury(treasury);
-        ws.registerDevice(deviceId, deviceSigner, deviceOwner);
+        ws.registerDevice(deviceId, deviceSigner, deviceOwner, baselineKwh);
 
         bytes32 verifierRole = ws.VERIFIER_ROLE();
         ws.grantRole(verifierRole, verifier);
@@ -45,6 +48,7 @@ contract Deploy is Script {
         console2.log("treasury            :", treasury);
         console2.log("device signer       :", deviceSigner);
         console2.log("device owner        :", deviceOwner);
+        console2.log("baseline kWh        :", baselineKwh);
         console2.log("verifier (agent)    :", verifier);
         console2.log("reward pool (wei)   :", IERC20(token).balanceOf(address(ws)));
         console2.log("deployer masih verifier?", ws.hasRole(verifierRole, deployer));

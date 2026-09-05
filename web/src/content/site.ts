@@ -15,15 +15,17 @@ export const site = {
     tokenSymbol: "suriota",
     scan: "https://testnet.bscscan.com",
     // Deploy 5 September 2026. Sumber terverifikasi di Sourcify dengan status exact_match.
-    contract: "0xdA149c0939c0C3450EDE5c8a0A0e8cF3AF36481a",
+    contract: "0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12",
     // Wallet agent AI, satu-satunya pemegang VERIFIER_ROLE. Terdaftar di Identity
     // Registry ERC-8004 yang live di chain 97 sebagai agentId 2116.
     agent: "0xce4D51524eDECD04B5417F6C8B6E6B6b9e594291",
     agentId: 2116,
     // Dua transaksi settlement nyata: satu disetujui dan dibayar, satu ditolak.
-    settleTx: "0xebc5365420395715815d912ee6b75c337039fc858358412debae319a64d0d553",
-    rejectTx: "0xdca33d634ca3bb317fcf33a7983975cee87395246bfb2ca04c710b0fbc5d8d40",
-    sourcify: "https://repo.sourcify.dev/97/0xdA149c0939c0C3450EDE5c8a0A0e8cF3AF36481a",
+    settleTx: "0xff78c3ec3c97d0ef43b80c025e664d165d60ba09616f58a69f28304e4ee9254c",
+    rejectTx: "0xbf21a81936edbde6d380444bd3d5badd63bc44ebb7bfd1acf929e5f71af49934",
+    // Verifier sengaja dibuat berbohong, kontrak tetap menolak membayar.
+    lyingVerifierTx: "0x7e8ba5a7b1e09f33a8015c043383500276fda8ad59e61bac861f78ce98391781",
+    sourcify: "https://repo.sourcify.dev/97/0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12",
   },
   builder: {
     name: "Gifari Kemal Suryo",

@@ -77,10 +77,17 @@ bisa menghitungnya sendiri dan mencocokkannya. Ini mengubah "percaya AI kami" me
 "hitung sendiri dan buktikan". LLM sengaja tidak diletakkan di jalur keputusan, sebab
 keputusan uang harus reproducible.
 
+Pertanyaan paling tajam untuk arsitektur mana pun yang memakai AI untuk memutus pembayaran
+adalah: apa yang terjadi kalau AI-nya berbohong? Jawabannya ada di kode. Kontrak menyimpan
+baseline tiap perangkat on-chain dan menghitung penyimpangannya sendiri, lalu keputusan
+verifier hanya bisa memperketat hasil itu, tidak pernah melonggarkannya. Verifier memegang
+hak veto, bukan hak meloloskan. Kami membuktikannya dengan sengaja mengirim attestation
+yang berbohong, dan kontrak tetap menolak membayar.
+
 Semuanya sudah berjalan nyata di BNB testnet, bukan simulasi. Satu bacaan bersih disetujui
-dan dibayar, satu bacaan anomali ditolak on-chain tanpa pembayaran sepeser pun. Fee
-protokol satu persen dipungut di kontrak yang sama, sehingga revenue model-nya terbukti
-on-chain dan bukan klaim slide.
+dan dibayar, satu bacaan anomali ditolak on-chain, dan satu lagi ditolak walau verifier
+berbohong. Fee protokol satu persen dipungut di kontrak yang sama, sehingga revenue
+model-nya terbukti on-chain dan bukan klaim slide.
 ```
 
 ---
@@ -91,10 +98,11 @@ on-chain dan bukan klaim slide.
 |:--|:--|
 | Repository | https://github.com/GifariKemal/wattsettle |
 | Website produk | https://web3.gifariksuryo.xyz |
-| Kontrak di BscScan | https://testnet.bscscan.com/address/0xdA149c0939c0C3450EDE5c8a0A0e8cF3AF36481a |
-| Source terverifikasi | https://repo.sourcify.dev/97/0xdA149c0939c0C3450EDE5c8a0A0e8cF3AF36481a |
-| Settlement disetujui | https://testnet.bscscan.com/tx/0xebc5365420395715815d912ee6b75c337039fc858358412debae319a64d0d553 |
-| Settlement ditolak | https://testnet.bscscan.com/tx/0xdca33d634ca3bb317fcf33a7983975cee87395246bfb2ca04c710b0fbc5d8d40 |
+| Kontrak di BscScan | https://testnet.bscscan.com/address/0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12 |
+| Source terverifikasi | https://repo.sourcify.dev/97/0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12 |
+| Settlement disetujui | https://testnet.bscscan.com/tx/0xff78c3ec3c97d0ef43b80c025e664d165d60ba09616f58a69f28304e4ee9254c |
+| Settlement ditolak | https://testnet.bscscan.com/tx/0xbf21a81936edbde6d380444bd3d5badd63bc44ebb7bfd1acf929e5f71af49934 |
+| **Verifier berbohong, tetap ditolak** | https://testnet.bscscan.com/tx/0x7e8ba5a7b1e09f33a8015c043383500276fda8ad59e61bac861f78ce98391781 |
 | Agent di registry ERC-8004 | https://testnet.bscscan.com/tx/0x7216d78dc573bb5b1f9b780cf4a8fbdca7c1cbab882ec633051e488a3ecbaa5d |
 | Dokumentasi teknis | https://github.com/GifariKemal/wattsettle/blob/main/proofofwatt/README.md |
 | Video demo | **belum ada, wajib diisi sebelum submit** |
@@ -104,7 +112,7 @@ on-chain dan bukan klaim slide.
 ## 4. Alamat On-chain
 
 ```
-Kontrak WattSettle : 0xdA149c0939c0C3450EDE5c8a0A0e8cF3AF36481a
+Kontrak WattSettle : 0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12
 Settlement token   : 0x5f730750388176206cC3A7FE894c413675381B05  (suriota, ERC20, verified)
 Agent AI verifier  : 0xce4D51524eDECD04B5417F6C8B6E6B6b9e594291  (ERC-8004 agentId 2116)
 Deployer / admin   : 0x52317162A7a228D01353e8907a5C068A6D9a0F2e
@@ -118,7 +126,8 @@ Chain              : BNB Smart Chain Testnet, chainId 97
 ```
 Smart contract : Solidity 0.8.30, Foundry, OpenZeppelin 5.1
                  (AccessControl, EIP712, ECDSA, SafeERC20, ReentrancyGuard)
-Testing        : Foundry, 20 test deterministik termasuk malicious-token reentrancy
+Testing        : Foundry, 28 test deterministik termasuk malicious-token reentrancy
+                 dan uji verifier berbohong
 AI agent       : Python 3.13, web3.py 7.16, keputusan aritmetika deterministik
 Hardware       : SRT-MGATE-1210, gateway IoT SURIOTA (Modbus RTU/TCP over MQTT, ESP32)
 Frontend       : Astro, 7 halaman statis
@@ -133,13 +142,15 @@ CI             : GitHub Actions, fmt, build, lint, test, plus penjaga rulesetHas
 **Sudah berjalan dan bisa dicek publik:**
 
 - [x] Kontrak `WattSettle` live di chain 97, source terverifikasi exact match di Sourcify
-- [x] Loop penuh device sampai pembayaran berjalan nyata, 11 transaksi on-chain
-- [x] Satu bacaan disetujui dan dibayar, satu bacaan ditolak tanpa pembayaran
+- [x] Loop penuh device sampai pembayaran berjalan nyata, 12 transaksi on-chain
+- [x] Satu bacaan disetujui dan dibayar, satu ditolak, satu lagi ditolak walau verifier berbohong
+- [x] Gate dua lapis: kontrak menghitung sendiri dari baseline on-chain, verifier hanya bisa memveto
+- [x] Rehearsal end to end melawan RPC nyata, **20 dari 20 putaran lolos**, nol gagal
 - [x] Fee protokol 1 persen dipungut on-chain ke treasury terpisah
 - [x] Counter reputasi per perangkat terakumulasi on-chain
 - [x] Agent AI otonom, deployer sudah melepas `VERIFIER_ROLE` sehingga hanya agent yang bisa settle
 - [x] Agent terdaftar di Identity Registry ERC-8004 yang live di chain 97, agentId 2116
-- [x] 20 test hijau, `forge lint` nol warning
+- [x] 28 test hijau, `forge lint` nol warning
 
 **Rencana pasca-hackathon:**
 
@@ -179,13 +190,14 @@ github.com/GifariKemal/wattsettle
 | 0:20 - 0:45 | Solusi tiga lapis. Perangkat menandatangani, AI menghitung ulang, kontrak memutus | Diagram alur |
 | 0:45 - 1:20 | Kirim bacaan bersih 105 kWh. Tunjukkan tanda tangan device, lalu tx `submitReading` | Terminal plus BscScan |
 | 1:20 - 2:00 | Jalankan agent. Tunjukkan agent menghitung delta dan anomali sendiri, lalu tx `attestAndSettle`. Buka event `ReadingAttested` yang ter-decode | Terminal plus BscScan |
-| 2:00 - 2:25 | **Momen kunci.** Kirim bacaan anomali 4200 kWh. Agent tetap jalan, kontrak MENOLAK, nol pembayaran | BscScan, status Rejected |
+| 2:00 - 2:25 | **Momen kunci.** Buat verifier BERBOHONG, mengaku bacaan 900 kWh tidak menyimpang sama sekali. Kontrak menghitung sendiri dan tetap MENOLAK. Tunjukkan kedua angka bersebelahan di event | BscScan, status Rejected |
 | 2:25 - 2:45 | Buktikan auditabilitas. Hitung `keccak256` file ruleset di terminal, cocokkan dengan nilai on-chain | Terminal berdampingan dengan BscScan |
 | 2:45 - 3:00 | Otonomi. `hasRole(VERIFIER_ROLE, deployer)` mengembalikan `false`. Hanya agent yang bisa membayar | BscScan Read Contract |
 
 > [!TIP]
-> Penolakan sepuluh kali lebih meyakinkan daripada persetujuan. Kalau waktu mepet, potong
-> bagian lain, jangan pernah potong bagian penolakan.
+> Penolakan sepuluh kali lebih meyakinkan daripada persetujuan, dan penolakan terhadap AI
+> sendiri seratus kali lebih meyakinkan lagi. Kalau waktu mepet, potong bagian lain, jangan
+> pernah potong beat 2:00.
 
 ---
 
