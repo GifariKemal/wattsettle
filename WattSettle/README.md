@@ -63,6 +63,7 @@ Pembaca baru mulai dari `00`. Saat membangun tiap sesi workshop, buka `13 Workfl
 | 🔤 | [`20 Glosarium`](<20 Glosarium.md>) | Istilah dan singkatan |
 | ✅ | [`21 Checklist Submission`](<21 Checklist Submission.md>) | Tick list hard gate dengan bukti |
 | 🧭 | [`22 Decision Log`](<22 Decision Log.md>) | Keputusan kunci dan alasan |
+| 🎤 | [`23 Naskah Panggung`](<23 Naskah Panggung.md>) | Naskah pitch kata per kata, terhitung waktunya |
 
 ---
 
