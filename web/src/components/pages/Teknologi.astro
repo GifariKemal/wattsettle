@@ -318,7 +318,10 @@ const proofHref = [contractUrl, tokenUrl, txUrl, lyingTxUrl];
 
   /* PROOF LINKS */
   .proof-links { display: grid; gap: 1rem; }
-  @media (min-width: 720px) { .proof-links { grid-template-columns: repeat(3, 1fr); } }
+  /* Empat kartu bukti. Tiga kolom menyisakan satu kartu yatim beserta ruang kosong lebar
+     tepat di seksi paling penting halaman ini, jadi kolomnya dibuat 2 lalu 4, bukan 3. */
+  @media (min-width: 720px) { .proof-links { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1180px) { .proof-links { grid-template-columns: repeat(4, 1fr); } }
   .proof-link {
     display: flex; flex-direction: column; gap: 0.5rem; text-decoration: none;
     padding: 1.4rem 1.35rem; border-radius: 1.25rem; border: 1px solid var(--edge);
