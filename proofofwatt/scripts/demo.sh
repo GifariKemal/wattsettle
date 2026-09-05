@@ -71,7 +71,7 @@ RULES=$(cast keccak 0x$(xxd -p -c 999999 ruleset/anomaly_v1.json))
 TX=$(cast send "$WATTSETTLE_CONTRACT" \
   "attestAndSettle(uint256,(int256,uint16,bytes32,bytes32,uint64))" \
   "$LIE_ID" "(0,0,$MODEL,$RULES,$(date +%s))" \
-  "${R[@]}" --private-key "$VERIFIER_PK" --json 2>/dev/null | grep -o '"transactionHash":"[^"]*"' | cut -d'"' -f4)
+  "${R[@]}" --private-key "$VERIFIER_PK" --json 2>/dev/null   | grep -o '"transactionHash":"[^"]*"' | cut -d'"' -f4 | head -1)
 STATUS=$(cast call "$WATTSETTLE_CONTRACT" "submissions(uint256)(bytes32,uint256,uint64,uint256,uint8)" "$LIE_ID" "${R[@]}" | tail -1 | awk '{print $1}')
 
 echo "   status akhir bacaan $LIE_ID: $STATUS (3 berarti Rejected)"

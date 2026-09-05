@@ -50,6 +50,12 @@ Kerjakan semuanya SEBELUM tombol share screen ditekan. Tidak satu pun boleh terl
 - [ ] Video fallback siap, satu keystroke menuju full-screen
 - [ ] Dompet sudah tersambung. **Jangan pernah** menunjukkan layar connect wallet
 - [ ] Notifikasi mati, mode jangan ganggu menyala
+- [ ] **Tutup aplikasi berat lain lebih dulu.** Foundry berjalan di WSL, dan WSL menolak start
+      sama sekali kalau RAM bebas menipis. Pesannya `Not enough memory resources`, bukan pesan
+      yang menyerupai masalah demo, jadi mudah salah didiagnosis saat panik. Pemulihannya
+      `wsl --shutdown` lalu jalankan lagi
+- [ ] Sekali jalankan `bash proofofwatt/scripts/demo.sh` sebagai gladi bersih, lalu biarkan
+      transaksinya sebagai cadangan Tab 3
 
 > [!CAUTION]
 > Aturan mentor Sesi 9: jangan tunjukkan login atau sign-up. Waktu panggung dipakai untuk satu
