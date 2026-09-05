@@ -10,7 +10,7 @@
 
 </div>
 
-**Navigasi:** [Hub](README.md) · [Sebelumnya: 21 Checklist Submission](<21 Checklist Submission.md>) · [Berikutnya: Hub WattSettle](README.md)
+**Navigasi:** [Hub](README.md) · [Sebelumnya: 21 Checklist Submission](<21 Checklist Submission.md>) · [Berikutnya: 23 Naskah Panggung](<23 Naskah Panggung.md>)
 
 ---
 
