@@ -1,0 +1,87 @@
+name: Contracts CI
+
+# Workflow ini SENGAJA berada di root repo. Versi lama tersimpan di
+# proofofwatt/.github/workflows/ dan tidak pernah benar-benar jalan, sebab GitHub Actions
+# hanya membaca .github/workflows di root repository.
+
+permissions: {}
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: proofofwatt
+
+jobs:
+  contracts:
+    name: Foundry
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+
+      - name: Show Forge version
+        run: forge --version
+
+      # lib/ sengaja gitignored, jadi dependensi dipasang di sini dengan versi dipin.
+      # Versi ini sama persis dengan yang dipakai di mesin build.
+      - name: Install contract dependencies
+        run: forge install foundry-rs/forge-std@v1.9.7 OpenZeppelin/openzeppelin-contracts@v5.1.0
+
+      - name: Format check
+        run: forge fmt --check
+
+      - name: Build
+        run: forge build --sizes
+
+      - name: Lint
+        run: forge lint src/ script/
+
+      - name: Test
+        run: forge test -vvv
+
+  agent:
+    name: Verifier agent
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: pip install web3
+
+      - name: Parse check
+        run: python -c "import ast, pathlib; ast.parse(pathlib.Path('agent/verifier.py').read_text(encoding='utf-8'))"
+
+      # Agent tidak bisa dijalankan penuh di CI karena butuh kunci privat dan RPC.
+      # Yang diuji adalah hal yang bisa diuji tanpa rahasia, dan justru yang paling
+      # penting: rulesetHash yang dihitung dari file di repo harus tetap sama dengan
+      # nilai yang sudah tertulis on-chain di event ReadingAttested. Kalau ruleset
+      # diubah diam-diam, job ini merah dan klaim auditabilitas terselamatkan.
+      - name: Ruleset hash matches the value recorded on-chain
+        run: |
+          python - <<'PY'
+          import pathlib
+          from web3 import Web3
+          expected = "0xcce6c15c459cd085ae0c5d364227022f59f70d7036819c7b023598a590df6b41"
+          actual = "0x" + Web3.keccak(pathlib.Path("ruleset/anomaly_v1.json").read_bytes()).hex()
+          print("expected:", expected)
+          print("actual  :", actual)
+          assert actual == expected, "ruleset berubah tanpa memperbarui nilai on-chain"
+          PY

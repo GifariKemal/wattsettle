@@ -1,0 +1,30 @@
+{
+  "name": "WattSettle Energy Verifier",
+  "description": "Agent verifier otonom untuk WattSettle. Membaca bacaan kWh bertanda tangan EIP-712 dari meter DePIN SRT-MGATE-1210, menghitung ulang delta terhadap baseline dan skor anomali secara deterministik, lalu memicu settlement on-chain. Keputusan uang tidak pernah dihasilkan LLM.",
+  "operator": "PT Surya Inovasi Prioritas (SURIOTA)",
+  "version": "wattsettle-verifier/1.0.0",
+  "registrations": [
+    {
+      "chainId": 97,
+      "agentRegistry": "0x8004A818BFB912233c491871b3d84c89A494BD9e",
+      "agentAddress": "0xce4D51524eDECD04B5417F6C8B6E6B6b9e594291",
+      "agentId": 2116,
+      "registrationTx": "0x7216d78dc573bb5b1f9b780cf4a8fbdca7c1cbab882ec633051e488a3ecbaa5d"
+    }
+  ],
+  "settlement": {
+    "chainId": 97,
+    "contract": "0xdA149c0939c0C3450EDE5c8a0A0e8cF3AF36481a",
+    "contractName": "WattSettle",
+    "settlementToken": "0x5f730750388176206cC3A7FE894c413675381B05",
+    "entrypoint": "attestAndSettle(uint256,(int256,uint16,bytes32,bytes32,uint64))"
+  },
+  "trustModels": ["crypto-economic", "reproducible-computation"],
+  "evidence": {
+    "ruleset": "proofofwatt/ruleset/anomaly_v1.json",
+    "rulesetHash": "0xcce6c15c459cd085ae0c5d364227022f59f70d7036819c7b023598a590df6b41",
+    "modelVersionHash": "0x5f7890455f9702bd3ec705050ec1c7f1b72f3425a35291fbfe1eb444a407a51b",
+    "note": "rulesetHash adalah keccak256 dari byte file ruleset di repo. Siapa pun bisa menghitung ulang dan mencocokkannya dengan nilai di event ReadingAttested."
+  },
+  "source": "https://github.com/GifariKemal/wattsettle"
+}

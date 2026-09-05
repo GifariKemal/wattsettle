@@ -1,0 +1,31 @@
+{
+  "ruleset": "wattsettle/anomaly",
+  "version": "v1",
+  "published": "2026-09-05",
+  "owner": "PT Surya Inovasi Prioritas (SURIOTA)",
+  "notice": "Ruleset ini dipublish apa adanya. rulesetHash yang ditulis on-chain adalah keccak256 dari byte file ini persis, sehingga siapa pun bisa menghitung ulang dan mencocokkannya dengan nilai di event ReadingAttested.",
+  "decision": {
+    "engine": "deterministic-arithmetic",
+    "llm_in_critical_path": false,
+    "explanation": "Keputusan approve atau reject tidak pernah dihasilkan LLM. Verifier hanya menghitung delta dan skor anomali dengan aritmetika di bawah, lalu kontrak yang memutus lewat gate on-chain. LLM hanya dipakai untuk menyusun penjelasan bagi manusia, di luar jalur uang."
+  },
+  "formula": {
+    "delta": "kwh - baseline.expected_kwh",
+    "span": "max(baseline.expected_kwh, 1)",
+    "anomaly_bps": "min(10000, abs(delta) * 10000 // span)",
+    "integer_arithmetic": true
+  },
+  "gate": {
+    "note": "Nilai ini harus sama dengan maxAnomalyBps dan maxDeltaBound di kontrak. Kontrak adalah sumber kebenaran, angka di sini hanya cermin agar verifier bisa memprediksi hasilnya.",
+    "max_anomaly_bps": 2000,
+    "max_delta_bound_kwh": 500
+  },
+  "baselines": {
+    "0x0031a129f3c56572aefe8bb776a9bf495063f06a5388adb62ae2ee56455c1eb8": {
+      "label": "SRT-MGATE-1210-#001",
+      "site": "Unit AC hybrid solar Enovatek, meter DC plus AC",
+      "expected_kwh": 100,
+      "interval": "harian"
+    }
+  }
+}
