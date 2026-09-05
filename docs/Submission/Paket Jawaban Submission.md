@@ -132,8 +132,10 @@ Chain              : BNB Smart Chain Testnet, chainId 97
 ```
 Smart contract : Solidity 0.8.30, Foundry, OpenZeppelin 5.1
                  (AccessControl, EIP712, ECDSA, SafeERC20, ReentrancyGuard)
-Testing        : Foundry, 28 test deterministik termasuk malicious-token reentrancy
-                 dan uji verifier berbohong
+Testing        : Foundry, 37 test dengan coverage 100 persen (baris, statement, cabang,
+                 fungsi). 31 unit test termasuk malicious-token reentrancy dan uji
+                 verifier berbohong, plus 6 invariant yang diuji terhadap 8192
+                 panggilan acak per invariant
 AI agent       : Python 3.13, web3.py 7.16, keputusan aritmetika deterministik
 Hardware       : SRT-MGATE-1210, gateway IoT SURIOTA (Modbus RTU/TCP over MQTT, ESP32)
 Frontend       : Astro, 7 halaman statis
@@ -156,7 +158,8 @@ CI             : GitHub Actions, fmt, build, lint, test, plus penjaga rulesetHas
 - [x] Counter reputasi per perangkat terakumulasi on-chain
 - [x] Agent AI otonom, deployer sudah melepas `VERIFIER_ROLE` sehingga hanya agent yang bisa settle
 - [x] Agent terdaftar di Identity Registry ERC-8004 yang live di chain 97, agentId 2116
-- [x] 28 test hijau, `forge lint` nol warning
+- [x] 37 test hijau, coverage 100 persen di keempat sumbu, `forge lint` bersih
+- [x] 6 invariant membuktikan verifier yang berbohong tidak bisa memaksa pembayaran, diuji terhadap 8192 panggilan acak dan diverifikasi bisa gagal lewat uji mutasi
 
 **Rencana pasca-hackathon:**
 

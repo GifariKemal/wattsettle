@@ -8,7 +8,7 @@
 &nbsp;
 [![Contract](https://img.shields.io/badge/WattSettle-live%20on%20chain%2097-22c55e?style=for-the-badge)](https://testnet.bscscan.com/address/0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12)
 &nbsp;
-![Tests](https://img.shields.io/badge/tests-28%20passing-brightgreen?style=for-the-badge)
+![Tests](https://img.shields.io/badge/tests-37%20passing-brightgreen?style=for-the-badge)
 
 # ⚡ Indonesia Web3 Hackathon 2026
 
@@ -86,7 +86,7 @@ Web3 Hackathon 2026/
 │   ├── README.md                 hub + style guide + peta baca
 │   ├── 00 Ikhtisar.md ... 22 Decision Log.md
 │   └── assets/                   diagram dan aset visual
-├── proofofwatt/                  📄 kontrak Foundry (WattSettle.sol LIVE di chain 97, 28 test PASS)
+├── proofofwatt/                  📄 kontrak Foundry (WattSettle.sol LIVE di chain 97, 37 test PASS, coverage 100 persen)
 │   ├── src/ test/ script/        kontrak, test, script deploy dan submit
 │   ├── agent/                    agent AI verifier otonom (web3.py) + agent card ERC-8004
 │   └── ruleset/                  ruleset anomali yang di-hash ke on-chain
@@ -130,7 +130,7 @@ Loop penuh sudah berjalan nyata: satu bacaan **disetujui dan dibayar** (103,95 s
 <tr><th>Komponen</th><th>Perintah</th></tr>
 <tr><td>🌐 Website produksi</td><td><code>cd web &amp;&amp; npm install &amp;&amp; npm run dev</code> (buka :4321)</td></tr>
 <tr><td>🌐 Website fallback</td><td>double-click <code>Presentasi Opsi 5 6/index.html</code></td></tr>
-<tr><td>📄 Kontrak (Foundry, WSL atau Git Bash)</td><td><code>cd proofofwatt &amp;&amp; forge test</code> (28 test)</td></tr>
+<tr><td>📄 Kontrak (Foundry, WSL atau Git Bash)</td><td><code>cd proofofwatt &amp;&amp; forge test</code> (37 test, coverage 100 persen)</td></tr>
 <tr><td>🤖 Agent AI verifier</td><td><code>cd proofofwatt &amp;&amp; python agent/verifier.py --dry-run</code></td></tr>
 <tr><td>🔒 Pengunci state sebelum demo</td><td><code>cd proofofwatt &amp;&amp; bash scripts/night-before.sh</code></td></tr>
 </table>

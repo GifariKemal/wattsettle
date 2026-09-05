@@ -330,6 +330,34 @@ contract WattSettleDeltaTest is WattSettleHarness {
         ws.setGateParams(10_001, 500);
     }
 
+    /// @dev Jalur sukses `setGateParams`, bukan hanya jalur revert-nya. Mengetatkan ambang
+    ///      harus benar-benar mengubah keputusan gate, bukan sekadar mengubah variabel.
+    function testSetGateParamsTightensTheGate() public {
+        ws.setGateParams(400, 20); // lebih ketat dari default 2000 dan 500
+        assertEq(ws.maxAnomalyBps(), 400);
+        assertEq(ws.maxDeltaBound(), 20);
+
+        // Bacaan 105 kWh menghasilkan anomali 500 bps, dulu lolos, sekarang harus ditolak.
+        uint256 id = _pending(105, 1000, 1);
+        ws.attestAndSettle(id, _att(5, 500));
+
+        assertEq(tok.balanceOf(deviceOwner), 0);
+        (,,,, WattSettle.Status status) = ws.submissions(id);
+        assertEq(uint8(status), uint8(WattSettle.Status.Rejected));
+    }
+
+    function testSetTreasuryRejectsZeroAddress() public {
+        vm.expectRevert(WattSettle.ZeroAddress.selector);
+        ws.setTreasury(address(0));
+    }
+
+    /// @dev Kontrak tanpa settlement token adalah kontrak yang tidak pernah bisa membayar.
+    ///      Ditolak di constructor, bukan dibiarkan lahir dalam keadaan mati.
+    function testConstructorRejectsZeroToken() public {
+        vm.expectRevert(WattSettle.ZeroAddress.selector);
+        new WattSettle(IERC20(address(0)));
+    }
+
     // =================================================================
     // Properti keamanan inti: verifier tidak bisa memaksa pembayaran
     // =================================================================

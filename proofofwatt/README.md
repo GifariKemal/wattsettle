@@ -2,7 +2,9 @@
 
 ![Foundry](https://img.shields.io/badge/built%20with-Foundry-orange?style=for-the-badge)
 &nbsp;
-![Tests](https://img.shields.io/badge/tests-28%20passing-brightgreen?style=for-the-badge)
+![Tests](https://img.shields.io/badge/tests-37%20passing-brightgreen?style=for-the-badge)
+&nbsp;
+![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen?style=for-the-badge)
 &nbsp;
 ![Solidity](https://img.shields.io/badge/Solidity-0.8.30-363636?style=for-the-badge)
 &nbsp;
@@ -12,7 +14,7 @@
 
 ### Rel settlement energi DePIN: bacaan meter bertanda tangan, di-attest AI, dibayar on-chain
 
-`Foundry` - `Solidity 0.8.30` - `OpenZeppelin 5.1` - `EIP-712` - `28 test PASS` - `ERC-8004 agentId 2116`
+`Foundry` - `Solidity 0.8.30` - `OpenZeppelin 5.1` - `EIP-712` - `37 test PASS` - `coverage 100 persen` - `ERC-8004 agentId 2116`
 
 </div>
 
@@ -113,6 +115,62 @@ cast call 0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12 \
 # 800
 # 10000
 ```
+
+---
+
+### Diuji, bukan cuma diklaim
+
+Properti di atas bukan hanya ditulis di komentar. Ia ditegakkan sebagai **invariant** yang
+diuji terhadap ribuan urutan aksi acak, bukan terhadap contoh yang dipilih sendiri.
+
+Handler-nya sengaja diberi kebebasan **berbohong sebebas-bebasnya**: ia mengirim
+`kwhDeltaVsBaseline` dan `anomalyScoreBps` yang tidak ada hubungannya dengan bacaan
+sebenarnya, persis seperti verifier yang berkhianat.
+
+```bash
+forge test --match-contract WattSettleInvariantTest
+# 6 passed, 8192 panggilan per invariant, 0 revert
+```
+
+| Invariant | Yang dijamin |
+|:--|:--|
+| `ApprovedReadingsAlwaysPassContractAssessment` | Setiap bacaan Approved selalu lolos penilaian kontrak sendiri. Ini yang membuktikan verifier tidak punya kuasa meloloskan |
+| `PoolDrainEqualsApprovedGross` | Token yang keluar pool persis sama dengan reward kotor bacaan disetujui, tanpa kebocoran |
+| `ProducerPlusTreasuryEqualsGross` | Reward terbagi habis antara produsen dan treasury |
+| `ReputationMatchesSettledCount` | Counter reputasi tidak pernah menyimpang dari jumlah settle sebenarnya |
+| `TreasuryNeverExceedsFeeCap` | Treasury tidak pernah menerima lebih dari batas keras 1000 bps |
+| `PoolNeverOverdrawn` | Kontrak tidak pernah membayar melebihi yang pernah dimilikinya |
+
+> [!CAUTION]
+> **Sebaran handler menentukan segalanya, dan versi pertama suite ini nyaris sia-sia.**
+> Awalnya kWh diacak seragam 0 sampai 5000 terhadap baseline 100, dan attestation juga
+> sepenuhnya acak. Hasilnya: 1505 settlement, **nol approval**. Empat dari enam invariant
+> jadi hampa, cuma membandingkan nol dengan nol, dan mereka tetap hijau. Kalau tidak diukur,
+> dokumentasi ini akan mengklaim sesuatu yang tidak pernah diuji.
+>
+> Sekarang tiga dari empat bacaan berada di sekitar baseline, dan verifier punya tiga watak
+> yang dipilih dari seed: jujur (memakai hitungan kontrak sendiri), berkhianat (mengaku
+> sempurna apa pun kenyataannya), dan ngawur. Hasilnya 511 approval dari 1505 settlement,
+> sehingga jalur pembayaran benar-benar terlatih.
+
+> [!TIP]
+> Suite ini diuji dengan cara dirusak lebih dulu, dua kali, menyasar dua kelas cacat berbeda.
+>
+> Pertama, lapis penilaian kontrak dilucuti (`approved = verifierApproves` saja). Invariant
+> utamanya langsung gagal: `approved padahal anomali kontrak di atas ambang: 10000 > 2000`.
+>
+> Kedua, akuntansi fee dirusak sehingga produsen dibayar penuh tanpa potongan. Dua invariant
+> akuntansi gagal dengan selisih persis satu persen:
+> `90900000000000 != 90000000000000`.
+>
+> Invariant yang lolos tetapi tidak bisa gagal tidak membuktikan apa pun, jadi kemampuannya
+> gagal ikut diverifikasi. Sesudah tiap mutasi, kontrak dipulihkan lewat `git checkout --` dan
+> bytecode-nya dicek ulang terhadap yang ter-deploy.
+>
+> `fail_on_revert` disetel `true`. Handler ditulis supaya tidak pernah revert, sehingga
+> kalau ada panggilan gagal itu tanda asumsi handler yang keliru, bukan sesuatu yang boleh
+> ditelan diam-diam. Dengan `false`, sebagian besar panggilan bisa gagal tanpa suara dan
+> invariant lolos hanya karena tidak ada yang benar-benar terjadi.
 
 ---
 
@@ -293,7 +351,8 @@ Foundry dijalankan dari WSL Ubuntu atau Git Bash, bukan PowerShell.
 cd proofofwatt
 
 forge build --sizes      # WattSettle 8322 byte
-forge test               # 28 test, semua hijau
+forge test               # 37 test, semua hijau
+forge coverage           # 100 persen baris, statement, cabang, dan fungsi
 forge lint src/ script/  # nol warning
 forge coverage
 ```
@@ -301,8 +360,9 @@ forge coverage
 Fokus per kelompok test:
 
 ```bash
-forge test --match-contract WattSettleBaseTest   # 9 guard kriptografis dan pintu masuk
-forge test --match-contract WattSettleDeltaTest  # 19 test settlement, gate, dan reputasi
+forge test --match-contract WattSettleBaseTest       # 9 guard kriptografis dan pintu masuk
+forge test --match-contract WattSettleDeltaTest      # 22 test settlement, gate, dan reputasi
+forge test --match-contract WattSettleInvariantTest  # 6 invariant, 8192 panggilan acak
 forge test --match-test "testLyingVerifierCannotForcePayout" -vvv
 ```
 
@@ -417,7 +477,8 @@ forge verify-contract 0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12 \
 ```
 proofofwatt/
   src/WattSettle.sol              kontrak settlement, 8322 byte
-  test/WattSettle.t.sol           28 test, base plus delta, malicious token reentrancy
+  test/WattSettle.t.sol           31 test, 9 base plus 22 delta, malicious token reentrancy
+  test/WattSettle.invariants.t.sol  6 invariant, handler yang bebas berbohong
   script/Deploy.s.sol             deploy plus setup role plus pre-fund dalam satu broadcast
   script/SubmitReading.s.sol      device menandatangani, relayer me-relay
   agent/verifier.py               agent AI otonom, scan lalu recompute lalu attest lalu settle
