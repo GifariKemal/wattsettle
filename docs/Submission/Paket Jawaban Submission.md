@@ -22,6 +22,12 @@
 > Halaman `/en/my` menyebut **ketua tim yang melakukan submit**. Kalau ikut sebagai solo
 > builder, tetap perlu membentuk tim berisi satu orang lebih dulu.
 
+> [!CAUTION]
+> **Jendela submission 1 sampai 30 September 2026.** Halaman resmi juga menegaskan
+> submission hanya dihitung bila **tim sudah terdaftar di Luma**. Pastikan itu lebih dulu,
+> sebab syarat administratif seperti ini yang paling sering menjatuhkan entri yang secara
+> teknis sudah menang.
+
 ---
 
 ## 1. Identitas Proyek

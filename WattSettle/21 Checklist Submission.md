@@ -24,6 +24,14 @@ Ini dokumen **hidup**, di-update tiap gate ditutup, dan terakhir diperiksa 5 Sep
 
 ---
 
+> [!CAUTION]
+> **Jendela submission 1 sampai 30 September 2026**, diambil langsung dari halaman resmi
+> `indonesiaweb3hack.xyz` pada 5 September 2026. Halaman yang sama menegaskan submission
+> hanya dihitung bila **tim sudah terdaftar di Luma**, dan syarat itu sebelumnya tidak
+> pernah masuk daftar gate mana pun di dokumen ini.
+
+---
+
 ## ❓ Yang Belum Diumumkan Panitia
 
 Diperiksa ulang pada 5 September 2026. Satu dari tiga hal di tabel lama sekarang **sudah
@@ -104,6 +112,7 @@ Dua pekerjaan rumah non-teknis di luar tabel gate:
 
 | # | Hard gate | Status | Bukti / link |
 |:--:|:--|:--:|:--|
+| 0 | **Tim terdaftar di Luma** | ⬜ | Halaman resmi hackathon menyatakan submission hanya dihitung bila tim sudah terdaftar di Luma. Belum terverifikasi |
 | 1 | Repo public dengan commit history genuine (bukan single squash) | ✅ | https://github.com/GifariKemal/wattsettle publik sejak 7 Juli 2026, commit bertanggal sepanjang kurikulum Juli sampai Agustus |
 | 2 | Wallet token-verify step tuntas | ⬜ | Portal `https://indonesiaweb3hack.xyz/en/my`, langkahnya baru terlihat setelah wallet tersambung |
 | 3 | Deploy ke BSC testnet 97 | ✅ | `0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12`, tx `0xe1b2fefcd43ad357b57a32f8b5cb2bc78c463bdc3b6bc998e25421f17cf31e00` |
@@ -122,6 +131,7 @@ Dua pekerjaan rumah non-teknis di luar tabel gate:
 
 Salin blok ini ke README repo dan centang saat tuntas.
 
+- [ ] **Tim terdaftar di Luma.** Halaman resmi menyatakan submission TIDAK dihitung bila tim belum terdaftar di Luma. Ini syarat administratif yang berada di luar repo dan gampang terlewat justru karena bukan pekerjaan teknis.
 - [x] **Repo public, commit history genuine.** Commit harian mulai Sesi 1, jangan pernah squash jadi satu commit. Burst commit terbaca sebagai pola "backdated" dan jadi red flag.
 - [ ] **Wallet token-verify step.** Sambungkan wallet ke `indonesiaweb3hack.xyz/en/my`, baca langkah yang diminta panitia, lalu selesaikan.
 - [x] **Deploy BSC testnet 97.** `WattSettle` live di `0xCA0A97a70fF720447051bDa247F8EE87e7B8Bb12`.
