@@ -154,8 +154,8 @@ export const proof = {
   lead:
     "Setiap keadaan yang perlu ditunjukkan sudah tersedia sebagai transaksi publik di BscScan. Event ReadingAttested membawa seluruh Attestation yang ter-decode, transfer suriota terlihat, fee ke treasury terlihat. BscScan menjadi UI sekaligus API.",
   links: [
-    { ic: "ph:file-code", t: "Kontrak WattSettle", d: "Sumber terbaca publik, attestAndSettle ter-verify.", tone: "flow" },
-    { ic: "ph:coins", t: "Token suriota", d: "ERC20 verified, address dari konfigurasi rantai.", tone: "gold" },
-    { ic: "ph:receipt", t: "Transaksi settlement", d: "submitReading dan attestAndSettle sebagai tx nyata.", tone: "watt" },
+    { ic: "ph:file-code", t: "Kontrak WattSettle", d: "Live di chain 97, sumber terverifikasi exact match di Sourcify.", tone: "flow" },
+    { ic: "ph:coins", t: "Token suriota", d: "ERC20 verified, dipakai ulang sebagai settlement token.", tone: "gold" },
+    { ic: "ph:receipt", t: "Settlement yang disetujui", d: "Agent AI membayar 103,95 suriota ke produsen, fee 1,05 ke treasury.", tone: "watt" },
   ],
 } as const;

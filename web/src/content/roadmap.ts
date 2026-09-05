@@ -13,7 +13,7 @@ export const now = {
   eyebrow: "Posisi sekarang",
   title: "Yang sudah ada sebagai fondasi",
   lead:
-    "Base sudah lulus 6 test dan berjalan on-chain. Inilah permukaan sekecil mungkin yang dibekukan untuk hackathon, dan menjadi pijakan setiap arah produk berikutnya.",
+    "Kontrak sudah lulus 20 test dan berjalan on-chain. Inilah permukaan sekecil mungkin yang dibekukan untuk hackathon, dan menjadi pijakan setiap arah produk berikutnya.",
   items: [
     { ic: "ph:plug", tone: "flow", t: "Satu signer device", d: "Perangkat menandatangani Reading kWh secara kriptografis di titik sumber." },
     { ic: "ph:cpu", tone: "volt", t: "Satu verifier AI otonom", d: "Agent Hermes menilai keabsahan reading lalu menuliskan alasannya on-chain." },

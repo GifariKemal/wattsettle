@@ -5,8 +5,10 @@ import { techHero, contract, guards, verifier, chainIntegration, token, proof } 
 
 const scanBase = site.chain.scan;
 const tokenUrl = `${scanBase}/token/${site.chain.token}`;
-const contractUrl = `${scanBase}/address/${site.chain.token}`;
-const txUrl = `${scanBase}/txs`;
+// Sebelumnya kedua tautan ini menunjuk ke alamat token yang sama, jadi tautan
+// "kontrak" tidak pernah benar-benar membuka kontrak WattSettle.
+const contractUrl = `${scanBase}/address/${site.chain.contract}`;
+const txUrl = `${scanBase}/tx/${site.chain.settleTx}`;
 const proofHref = [contractUrl, tokenUrl, txUrl];
 ---
 
@@ -166,6 +168,10 @@ const proofHref = [contractUrl, tokenUrl, txUrl];
         <p class="token-addr">
           <span class="addr-label">Address</span>
           <a href={tokenUrl} class="addr-link" target="_blank" rel="noopener">{site.chain.token}</a>
+        </p>
+        <p class="token-addr">
+          <span class="addr-label">Kontrak</span>
+          <a href={contractUrl} class="addr-link" target="_blank" rel="noopener">{site.chain.contract}</a>
         </p>
       </div>
     </div>
