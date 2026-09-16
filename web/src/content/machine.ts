@@ -24,21 +24,21 @@ export type Station = { key: string; title: string; sub: string; icon: "meter" |
 
 export const machine = {
   eyebrow: "Playground · Interaktif",
-  title: "Mesin settlement: main sendiri.",
+  title: "Mesin settlement",
   lead:
-    "Susun input, kirim ke rantai, lalu lihat AI menilai dan menyelesaikan pembayarannya sendiri. Beralih antara Opsi 5 (platform) dan Opsi 6 (Enovatek), mesin di dalamnya sama persis.",
-  hintHonest: "Tempatkan nilai di zona hijau (rentang wajar) → AI menyetujui dan membayar otomatis.",
-  hintTamper: "Aktifkan mode curang → kirim data mustahil → AI menangkap dan menolaknya.",
+    "Susun input, kirim ke rantai, lalu lihat agent menilai dan kontrak menyelesaikannya. Mode platform dan mode Enovatek memakai mesin yang sama, hanya sumber dan penerimanya berbeda.",
+  hintHonest: "Taruh nilai di zona hijau, rentang yang wajar, lalu kontrak menyetujui dan membayar.",
+  hintTamper: "Aktifkan mode curang, kirim angka yang mustahil, lalu lihat kontrak menolaknya.",
   stations: [
     { key: "meter", title: "Meter / Gateway", sub: "tanda-tangan EIP-712", icon: "meter" },
     { key: "contract", title: "Smart Contract", sub: "nonce · anti-replay", icon: "contract" },
-    { key: "ai", title: "AI Verifier", sub: "bounds · z-score · cross-source", icon: "ai" },
+    { key: "ai", title: "Agent verifier", sub: "bounds · z-score · cross-source", icon: "ai" },
     { key: "settle", title: "Settlement", sub: "auto-pay / refund", icon: "settle" },
   ] as Station[],
 
   modes: {
     "5": {
-      tab: "Opsi 5 · WattSettle",
+      tab: "Platform",
       accent: "watt" as const, // hijau
       payee: "Produsen",
       token: "suriota",
@@ -50,7 +50,7 @@ export const machine = {
       ] as Source[],
     },
     "6": {
-      tab: "Opsi 6 · Enovatek",
+      tab: "Enovatek",
       accent: "flow" as const, // cyan
       payee: "Enovatek",
       token: "suriota",
@@ -69,7 +69,7 @@ export const machine = {
     again: "Kirim lagi",
     honest: "Jujur",
     tamper: "Curang",
-    idle: "Susun input di kiri, lalu tekan “Kirim ke rantai”. AI verifier menuliskan alasannya, lalu menyelesaikan transaksinya sendiri.",
+    idle: "Susun input di kiri, lalu tekan “Kirim ke rantai”. Agent menuliskan angka dan alasannya, kontrak yang memutus.",
     statRuns: "dikirim",
     statPaid: "di-approve",
     statCaught: "fraud ditangkap",

@@ -1,48 +1,49 @@
 // Konten Beranda. Angka dari WattSettle build bible, jangan mengada-ada.
+// Suara: protocol docs. Kalimat pendek, klaim konkret, leksikon dikunci di docs/Voice.md.
 
 export const about = {
   eyebrow: "Apa itu WattSettle",
-  title: "Rel pembayaran on-chain untuk energi yang bisa dibuktikan",
+  title: "Settlement rail untuk energi terverifikasi",
   lead:
-    "WattSettle mengubah angka energi menjadi bukti, lalu membayarnya otomatis lewat AI, tanpa perlu ada pihak yang saling percaya. Perangkat di lapangan menandatangani kWh secara kriptografis, verifier AI otonom memeriksa kewajarannya, lalu smart contract menyelesaikan pembayaran. Semuanya tercatat di BNB Chain.",
+    "WattSettle membayar produsen energi hanya atas kWh yang terbukti sah. Perangkat menandatangani bacaan di titik sumber, agent menghitung ulang penyimpangannya, kontrak yang memutus dan membayar.",
   cards: [
     {
       ic: "ph:warning",
       tone: "heat",
       t: "Masalahnya",
-      d: "Smart contract buta terhadap dunia fisik. Ia terpaksa mempercayai angka dari sensor, padahal angka kWh mudah dipalsukan di lapisan software. Begitu angka palsu masuk, pembayaran otomatis akan mengeksekusi kebohongan itu dengan patuh.",
+      d: "Kontrak tidak bisa melihat dunia fisik. Ia membayar angka yang dilaporkan, dan angka kWh mudah dipalsukan sebelum sampai ke rantai. Pembayaran otomatis lalu mengeksekusi angka palsu itu dengan patuh.",
     },
     {
       ic: "ph:shield-check",
       tone: "watt",
       t: "Pendekatan WattSettle",
-      d: "Dua lapis pertahanan. Pertama, angka ditandatangani secara kriptografis di titik sumber sehingga tidak bisa diubah tanpa ketahuan. Kedua, verifier AI menuliskan alasan keputusannya on-chain sebelum kontrak membayar.",
+      d: "Dua gate, keduanya harus lolos. Tanda tangan EIP-712 mengunci angka di titik sumber. Kontrak menyimpan baseline sendiri dan menghitung penyimpangannya, sehingga agent hanya bisa memveto.",
     },
   ],
 } as const;
 
 export const loop = {
   eyebrow: "Satu loop",
-  title: "Reading ditandatangani, AI menilai, kontrak membayar",
+  title: "Ditandatangani, dihitung ulang, di-settle",
   lead:
-    "Empat langkah, semuanya on-chain. Tidak ada celah antara bukti fisik dan pembayaran karena yang di-settle adalah bacaan meter itu sendiri.",
+    "Empat langkah, seluruhnya on-chain. Yang di-settle adalah bacaan bertanda tangan itu sendiri, bukan klaim tentangnya.",
   steps: [
-    { ic: "ph:plug", tone: "flow", k: "01", t: "Device", d: "Perangkat menandatangani Reading kWh secara kriptografis (EIP-712) di titik sumber." },
-    { ic: "ph:file-text", tone: "gold", k: "02", t: "Kontrak", d: "submitReading memverifikasi tanda tangan dan menahan replay, lalu memancarkan event." },
-    { ic: "ph:cpu", tone: "volt", k: "03", t: "AI Verifier", d: "Agent otonom menghitung ulang delta dan anomali, menulis attestation on-chain." },
-    { ic: "ph:coins", tone: "watt", k: "04", t: "Settlement", d: "Kontrak membayar produsen dan memungut fee 1%, atau menolak dan mencatatnya." },
+    { ic: "ph:plug", tone: "flow", k: "01", t: "Perangkat", d: "Menandatangani Reading kWh dengan EIP-712 di titik sumber." },
+    { ic: "ph:file-text", tone: "gold", k: "02", t: "Kontrak", d: "submitReading memeriksa tanda tangan, menolak replay, lalu memancarkan event." },
+    { ic: "ph:cpu", tone: "volt", k: "03", t: "Agent", d: "Menghitung ulang delta terhadap baseline dan skor anomali, lalu menulis Attestation." },
+    { ic: "ph:coins", tone: "watt", k: "04", t: "Settlement", d: "Kontrak membayar produsen dan memungut fee 1 persen, atau menolak dan mencatatnya." },
   ],
 } as const;
 
 export const thesis = {
   eyebrow: "Kenapa berbeda",
-  quote: "Meter bukan lagi klaim yang harus dipercaya. Meter adalah transaksi yang bisa dibuktikan.",
+  quote: "Bacaan meter berhenti menjadi klaim yang harus dipercaya. Ia menjadi transaksi yang bisa dibuktikan.",
   body:
-    "Untuk data harga kripto, banyak sumber bisa saling cek. Untuk kerja fisik, tidak ada. WattSettle menutup lubang itu dengan dua lapis pertahanan: tanda tangan kriptografis di perangkat, lalu verifier AI yang menuliskan alasannya on-chain sebelum pembayaran jalan.",
+    "Harga kripto punya banyak sumber yang saling mengoreksi. Kerja fisik tidak punya satu pun. WattSettle menutup celah itu dengan dua gate: tanda tangan di perangkat, lalu perhitungan ulang yang ditulis ke rantai sebelum pembayaran jalan.",
 } as const;
 
 export const teasers = [
-  { href: "/cara-kerja", label: "Cara Kerja", d: "Konsep, loop end-to-end, dan arsitektur 3-layer.", ic: "ph:flow-arrow" },
-  { href: "/demo", label: "Demo", d: "Coba sendiri: kirim reading, lihat AI approve atau reject.", ic: "ph:play-circle" },
-  { href: "/enovatek", label: "Enovatek", d: "Cooling as a Service nyata dengan meter PM20H20Q.", ic: "ph:wind" },
+  { href: "/cara-kerja", label: "Cara Kerja", d: "Loop end to end dan arsitektur tiga layer.", ic: "ph:flow-arrow" },
+  { href: "/demo", label: "Demo", d: "Kirim reading, lihat kontrak approve atau reject.", ic: "ph:play-circle" },
+  { href: "/enovatek", label: "Enovatek", d: "Cooling as a Service dengan meter PM20H20Q.", ic: "ph:wind" },
 ] as const;

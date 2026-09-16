@@ -4,9 +4,9 @@
 export const site = {
   name: "WattSettle",
   tagline: "Bukti dulu, baru dibayar.",
-  title: "WattSettle · Rel settlement on-chain untuk energi terverifikasi",
+  title: "WattSettle · Settlement rail on-chain untuk energi terverifikasi",
   description:
-    "Angka energi mudah dipalsukan. WattSettle membuatnya dapat dibuktikan: perangkat menandatangani angkanya, AI otonom menilai keabsahannya, lalu smart contract menyelesaikan pembayaran, di BNB Chain.",
+    "WattSettle membayar produsen energi hanya atas kWh yang terbukti sah. Perangkat menandatangani bacaan dengan EIP-712, agent menghitung ulang penyimpangannya, kontrak di BNB Chain yang memutus dan membayar.",
   repo: "https://github.com/GifariKemal/wattsettle",
   chain: {
     name: "BNB Smart Chain Testnet",
@@ -38,25 +38,25 @@ export const site = {
 export const hero = {
   kicker: "DePIN · RWA · Agentic Finance di BNB Chain",
   // dipecah agar bisa di-stagger reveal per baris (baris tengah = aksen gradien)
-  headline: ["Angka energi mudah dipalsukan.", "Kami ubah jadi bukti,", "lalu dibayar otomatis oleh AI."],
+  headline: ["Perangkat menandatangani kWh.", "Agent menghitung ulang.", "Kontrak yang memutus dan membayar."],
   lead:
-    "WattSettle adalah rel settlement untuk energi fisik. Perangkat di lapangan menandatangani angka kWh secara kriptografis, sebuah verifier AI otonom memeriksa kewajarannya, lalu kontrak membayar produsen tanpa perlu saling percaya. Setiap langkah tercatat on-chain di BNB Chain.",
+    "WattSettle adalah settlement rail untuk energi fisik. Bacaan kWh ditandatangani di titik sumber, dihitung ulang oleh agent otonom, lalu dibayar oleh kontrak yang menyimpan aturannya sendiri di rantai. Live di BNB testnet.",
   ctas: [
     { href: "/demo", label: "Coba demonya", kind: "primary" as const },
     { href: "/cara-kerja", label: "Lihat cara kerja", kind: "ghost" as const },
   ],
   proof: [
-    { k: "On-chain", v: "BNB testnet", d: "kontrak verified di BscScan, tiap settlement tercatat di sana" },
-    { k: "AI otonom", v: "zero-click", d: "verifier menilai lalu membayar sendiri, tanpa tangan manusia" },
-    { k: "Hardware nyata", v: "SRT-MGATE", d: "gateway SURIOTA yang sudah dijual dan ter-deploy" },
+    { k: "Live", v: "chain 97", d: "kontrak verified di BscScan, 12 transaksi settlement publik" },
+    { k: "Otonom", v: "zero-click", d: "hanya agent yang memegang VERIFIER_ROLE, deployer sudah melepasnya" },
+    { k: "Perangkat nyata", v: "SRT-MGATE", d: "gateway SURIOTA yang sudah dijual dan terpasang" },
   ],
 } as const;
 
 export const footer = {
   eyebrow: "WattSettle × SURIOTA",
-  headline: ["Perusahaan nyata,", "energi nyata, on-chain."],
+  headline: ["Energi nyata,", "settlement on-chain."],
   lead:
-    "Perangkat menandatangani, AI menilai, kontrak membayar. Meter bukan lagi klaim yang harus dipercaya, melainkan transaksi yang bisa dibuktikan.",
+    "Perangkat menandatangani, agent menghitung ulang, kontrak membayar. Bacaan meter berhenti menjadi klaim dan menjadi transaksi.",
   cta: { href: "/demo", label: "Coba demonya" },
   bismillah: "بسم الله",
 } as const;
