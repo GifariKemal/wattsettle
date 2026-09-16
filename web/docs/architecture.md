@@ -88,7 +88,7 @@ flowchart LR
 
 | Quality | Target |
 |---|---|
-| Build | 18 pages plus sitemap |
+| Build | 7 pages plus sitemap |
 | Console | 0 warnings and 0 errors |
 | Security audit | 0 npm vulnerabilities |
 | Visual QA | Desktop and mobile screenshots |

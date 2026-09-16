@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "WattSettle — concept explainer (Opsi 5 & 6) untuk Indonesia Web3 Hackathon 2026",
+  "description": "WattSettle - situs produk untuk Indonesia Web3 Hackathon 2026, track Finance and Commerce",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",

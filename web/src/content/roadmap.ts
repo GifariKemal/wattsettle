@@ -13,10 +13,10 @@ export const now = {
   eyebrow: "Posisi sekarang",
   title: "Yang sudah ada sebagai fondasi",
   lead:
-    "Kontrak sudah lulus 20 test dan berjalan on-chain. Inilah permukaan sekecil mungkin yang dibekukan untuk hackathon, dan menjadi pijakan setiap arah produk berikutnya.",
+    "Kontrak berjalan on-chain di chain 97 dan lulus 37 test dengan coverage 100 persen di keempat sumbu, 31 unit test plus 6 invariant yang diuji terhadap 8192 panggilan acak. Inilah permukaan sekecil mungkin yang dibekukan untuk hackathon, dan menjadi pijakan setiap arah produk berikutnya.",
   items: [
     { ic: "ph:plug", tone: "flow", t: "Satu signer device", d: "Perangkat menandatangani Reading kWh secara kriptografis di titik sumber." },
-    { ic: "ph:cpu", tone: "volt", t: "Satu verifier AI otonom", d: "Agent Hermes menilai keabsahan reading lalu menuliskan alasannya on-chain." },
+    { ic: "ph:cpu", tone: "volt", t: "Satu verifier AI otonom", d: "Agent menilai keabsahan reading lalu menuliskan alasannya on-chain, terdaftar di Identity Registry ERC-8004 sebagai agentId 2116." },
     { ic: "ph:file-text", tone: "gold", t: "Satu attestation contract", d: "WattSettle.sol memverifikasi tanda tangan, menahan replay, dan mencatat hasilnya." },
     { ic: "ph:coins", tone: "watt", t: "Settlement loop dan fee on-chain", d: "Loop deterministik membayar produsen, memungut take-rate, dan menambah reputation counter." },
   ],
@@ -93,6 +93,7 @@ export const scope = {
       "Satu attestation contract dengan proteksi replay",
       "Satu settlement loop deterministik plus fee on-chain",
       "Satu reputation counter on-chain",
+      "Gate dua lapis, verifier hanya punya hak veto",
       "Integrasi ERC-8004 live sebagai act kedua",
     ],
   },

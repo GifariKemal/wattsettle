@@ -31,10 +31,10 @@ WattSettle is an interactive Astro deck for the Indonesia Web3 Hackathon 2026, F
 | Item | Decision |
 |---|---|
 | Main build | WattSettle x Enovatek |
-| Pivot candidate | AgentCart TrustPay |
 | Runtime | Static Astro site |
 | Interactivity | React islands |
-| Hosting target | `https://wattsettle.suriota.id` |
+| Hosting target | `https://web3.gifariksuryo.xyz` |
+| Deploy | Docker image (nginx) as an Easypanel compose service, Traefik terminates TLS |
 | Production headers | Header file in `public` and `vercel.json` |
 | QA command | `npm run test:qa` |
 
@@ -66,18 +66,36 @@ Local dev URL:
 http://127.0.0.1:4321
 ```
 
+## 🚢 Deploy
+
+The site ships as a container: Node builds the static output, nginx serves it, and Traefik
+on the VPS terminates TLS in front. Security headers are generated at image build time from
+`dist/_headers`, the same file the QA harness serves, so production can never drift from
+what the suite asserts.
+
+```bash
+# production build behind the real nginx config, at http://127.0.0.1:8098
+docker compose -f docker-compose.yml -f docker-compose.local.yml up -d --build
+```
+
+| Item | Value |
+|---|---|
+| Runtime | `nginx:alpine` serving `/usr/share/nginx/html` |
+| Host | Easypanel compose service on the SURIOTA VPS |
+| Domain | `https://web3.gifariksuryo.xyz` |
+| Health probe | `GET /healthz` returns `204` |
+
 ## 🗺️ Site Map
 
 | Route | Purpose |
 |---|---|
-| `/` | Opening thesis |
-| `/masalah` | Energy data trust problem |
-| `/simulator` | Approve and reject settlement demo |
-| `/opsi` | Opsi 5 and Opsi 6 comparison |
-| `/codex` | AgentCart TrustPay pivot page |
-| `/mesin` | Interactive settlement machine |
-| `/benchmark` | Scoring and decision rationale |
-| `/penutup` | Closing pitch |
+| `/` | Opening thesis and live on-chain state |
+| `/cara-kerja` | Signed reading, AI assessment, contract settlement |
+| `/demo` | Approve and reject settlement demo |
+| `/enovatek` | Cooling as a Service use case |
+| `/teknologi` | Contract, AI verifier, BNB Chain, token |
+| `/roadmap` | Current position and product direction |
+| `/tentang` | SURIOTA and contact |
 
 Full route list is defined in `src/content/nav.ts`.
 
@@ -102,8 +120,8 @@ Latest full validation:
 |---|---|
 | `npm run security:audit` | ✅ 0 vulnerabilities |
 | `npm run check` | ✅ 0 errors, 0 warnings |
-| `npm run build` | ✅ 18 pages plus sitemap |
-| `npm run test:qa` | ✅ 18 routes, 0 warnings, 6 screenshots |
+| `npm run build` | ✅ 7 pages plus sitemap |
+| `npm run test:qa` | ✅ 7 routes, 2 viewports, 0 warnings |
 | Security headers in E2E | ✅ Enforced |
 
 Artifacts live in `reports/qa`.

@@ -1,0 +1,16 @@
+# Situs sebagai container. Dua konsumen:
+#   lokal      docker compose -f docker-compose.yml -f docker-compose.local.yml up -d --build
+#              -> build produksi di http://127.0.0.1:8098, satu-satunya cara memeriksa
+#              header dan aturan cache dengan nginx yang sebenarnya.
+#   Easypanel  Compose service di VPS -> Traefik merutekan web3.gifariksuryo.xyz ke sini.
+#
+# Tanpa container_name dan tanpa published port di berkas ini: keduanya pilihan per-mesin
+# yang bentrok di host dengan banyak stack, dan Easypanel menolaknya.
+services:
+  web:
+    build:
+      context: .
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options: {max-size: "10m", max-file: "3"}
