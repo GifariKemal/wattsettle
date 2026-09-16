@@ -18,7 +18,7 @@ Date: 2026-07-07
 | Check | Result |
 |---|---|
 | `npm run check` | ✅ 0 errors, 0 warnings |
-| `npm run build` | ✅ 18 static pages plus sitemap |
+| `npm run build` | ✅ 7 static pages plus sitemap |
 | `npm run security:audit` | ✅ 0 vulnerabilities |
 | `node tests/e2e/qa-e2e.mjs` | ✅ PASS with headers enforced |
 | Console events | ✅ 0 warnings, 0 errors |
@@ -50,7 +50,7 @@ Date: 2026-07-07
 
 | Item | Status |
 |---|---|
-| Production target | `https://wattsettle.suriota.id` |
+| Production target | `https://web3.gifariksuryo.xyz` |
 | Hosting headers | Header file in `public` and `vercel.json` |
 | CI workflow template | `docs/github-actions-qa.yml` |
 | Release gate | `npm run security:audit` and `npm run test:qa` |

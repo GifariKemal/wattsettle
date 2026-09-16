@@ -1,0 +1,5 @@
+# Overlay khusus mesin lokal: buka port supaya build produksi bisa diperiksa di browser.
+services:
+  web:
+    ports:
+      - "127.0.0.1:8098:80"

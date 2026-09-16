@@ -13,20 +13,20 @@
 
 | Journey | Why it matters | Check |
 |---|---|---|
-| Page load for 18 routes | Pitch must be navigable | Route sweep |
+| Page load for 7 routes | Product story must be navigable | Route sweep |
+| Removed deck routes return 404 | Old pitch deck URLs must not linger | Negative route sweep |
 | Menu open and close | Main navigation control | Keyboard and click |
-| Keyboard deck navigation | Accessibility and presenter flow | Home, End, arrows |
+| Drawer navigation on mobile | Demo may run on a phone | Open, tap, assert URL |
 | Simulator approve and reject | Core product proof | Button flow and verdict |
-| Option toggle | Opsi 5 and 6 clarity | Toggle content assertion |
 | Settlement machine | Interactive demo credibility | Launch and reject path |
-| SWOT board | Strategy explanation | Tab checks |
+| On-chain link integrity | Rendered addresses and tx must match `src/content/site.ts` | Link comparison |
 | Mobile layout | Demo may run on phone | Viewport and overflow checks |
 
 ## 📊 Latest Result
 
 | Metric | Result |
 |---|---|
-| Routes checked | 18 |
+| Routes checked | 7 |
 | Console warnings | 0 |
 | Console errors | 0 |
 | Broken images | 0 |
@@ -38,11 +38,11 @@
 | View | Screenshot |
 |---|---|
 | Desktop home | `reports/qa/screenshots/desktop-home.png` |
-| Desktop Codex | `reports/qa/screenshots/desktop-codex.png` |
-| Desktop machine | `reports/qa/screenshots/desktop-mesin.png` |
+| Desktop demo | `reports/qa/screenshots/desktop-demo.png` |
+| Desktop technology | `reports/qa/screenshots/desktop-teknologi.png` |
 | Mobile home | `reports/qa/screenshots/mobile-home.png` |
-| Mobile Codex | `reports/qa/screenshots/mobile-codex.png` |
-| Mobile machine | `reports/qa/screenshots/mobile-mesin.png` |
+| Mobile demo | `reports/qa/screenshots/mobile-demo.png` |
+| Mobile technology | `reports/qa/screenshots/mobile-teknologi.png` |
 
 ## 🧯 Failure Handling
 

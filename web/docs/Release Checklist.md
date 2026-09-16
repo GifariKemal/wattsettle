@@ -8,7 +8,7 @@ Use this checklist before publishing or presenting the deck.
 |---|---|---|
 | 1 | `npm run security:audit` | 0 vulnerabilities |
 | 2 | `npm run check` | 0 errors and 0 warnings |
-| 3 | `npm run build` | 18 pages plus sitemap |
+| 3 | `npm run build` | 7 pages plus sitemap |
 | 4 | `npm run test:qa` | PASS with 0 warnings |
 
 ## 🔐 Security Gate
@@ -25,7 +25,7 @@ Use this checklist before publishing or presenting the deck.
 
 | Item | Pass condition |
 |---|---|
-| Canonical URL | Uses `https://wattsettle.suriota.id` |
+| Canonical URL | Uses `https://web3.gifariksuryo.xyz` |
 | Open Graph image | Resolves to `/og.png` |
 | Robots | Allows crawl and points to sitemap |
 | Sitemap | Includes all deck routes |
