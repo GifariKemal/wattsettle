@@ -7,7 +7,7 @@ export type SimNode = { title: string; sub: string };
 export const simNodes: SimNode[] = [
   { title: "Meter / Gateway", sub: "PM20H20Q · SRT-MGATE" },
   { title: "Smart Contract", sub: "submitReading()" },
-  { title: "AI Verifier", sub: "otonom · cron" },
+  { title: "Agent verifier", sub: "otonom · terjadwal" },
   { title: "Settlement", sub: "auto-pay / refund" },
 ];
 
@@ -33,7 +33,7 @@ export const scenarios: Record<"approve" | "reject", SimScenario> = {
       "bounds · z-score · cross-source",
       "+512 suriota · fee 1%",
     ],
-    ticks: ["mengirim…", "on-chain", "AI menilai…", "settled ✓"],
+    ticks: ["mengirim…", "on-chain", "agent menilai…", "settled ✓"],
     verdict: "APPROVE, pembacaan wajar dalam rentang fisik.",
     attestation: {
       approved: true,
@@ -45,7 +45,7 @@ export const scenarios: Record<"approve" | "reject", SimScenario> = {
       rulesetHash: "0x9f04…2e",
     },
     settlement: "+512 suriota → produsen · fee 1% → treasury",
-    note: "Signature valid, data lolos plausibilitas → dibayar otomatis, tanpa klik manusia.",
+    note: "Tanda tangan sah dan angkanya wajar. Kontrak membayar tanpa klik manusia.",
   },
   reject: {
     key: "reject",
@@ -55,7 +55,7 @@ export const scenarios: Record<"approve" | "reject", SimScenario> = {
       "malam · irradiance = 0 · TOLAK",
       "0 dibayar · penolakan tercatat",
     ],
-    ticks: ["mengirim…", "on-chain", "AI menilai…", "rejected ✕"],
+    ticks: ["mengirim…", "on-chain", "agent menilai…", "rejected ✕"],
     verdict: "REJECT, di luar batas fisik & kontradiksi cross-source.",
     attestation: {
       approved: false,
@@ -66,15 +66,15 @@ export const scenarios: Record<"approve" | "reject", SimScenario> = {
       reason: "exceeds nameplate · impossible",
     },
     settlement: "0 suriota · penolakan tercatat permanen on-chain",
-    note: "Signature valid, tapi data tak lolos plausibilitas → garbage-in ditolak.",
+    note: "Tanda tangan sah, tetapi angkanya mustahil secara fisik. Kontrak menolak membayar.",
   },
 };
 
 export const simulator = {
-  eyebrow: "Cara Kerja · Interaktif",
-  headline: "Coba sendiri: kirim pembacaan, biarkan AI menilai.",
+  eyebrow: "Interaktif",
+  headline: "Kirim pembacaan, lihat kontrak memutus.",
   lead:
-    "Data mengalir: dari meter, ke rantai, dinilai AI, lalu diselesaikan pembayarannya. Yang sah diterima, yang palsu ditolak, otomatis, langsung di layar.",
+    "Data mengalir dari meter ke rantai, dinilai agent, lalu diselesaikan. Yang wajar dibayar, yang mustahil ditolak, seluruhnya otomatis.",
   idle:
-    "Menunggu pembacaan… AI verifier akan menuliskan alasan keputusannya di sini, lalu menandatangani transaksinya sendiri.",
+    "Menunggu pembacaan. Agent akan menuliskan angka dan alasannya di sini, lalu mengirim transaksinya sendiri.",
 } as const;

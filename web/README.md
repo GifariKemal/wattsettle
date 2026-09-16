@@ -19,6 +19,7 @@ WattSettle is an interactive Astro deck for the Indonesia Web3 Hackathon 2026, F
 | Area | File |
 |---|---|
 | Architecture | [docs/architecture.md](docs/architecture.md) |
+| Voice and lexicon | [docs/Voice.md](docs/Voice.md) |
 | Project structure | [docs/project-structure.md](docs/project-structure.md) |
 | QA summary | [docs/qa-summary.md](docs/qa-summary.md) |
 | Security | [SECURITY.md](SECURITY.md) |

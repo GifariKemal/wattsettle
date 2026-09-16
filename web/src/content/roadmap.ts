@@ -5,7 +5,7 @@ export const intro = {
   eyebrow: "Roadmap pasca-hackathon",
   title: "Hackathon hanya langkah pertama dari rel yang jauh lebih panjang",
   lead:
-    "Produk sudah hidup di BNB Chain testnet, kontrak attestation, verifier AI otonom, dan demo end to end sudah jalan. Fondasi itu yang menahan seluruh arah di halaman ini. Semua yang di bawah adalah rencana, bukan klaim yang sudah selesai.",
+    "Kontrak, agent verifier, dan loop end to end sudah berjalan di BNB testnet. Itu fondasi yang menahan seluruh arah di halaman ini. Sisanya rencana, bukan klaim yang sudah selesai.",
 } as const;
 
 // Posisi sekarang: apa yang sudah ada sebagai fondasi.
@@ -16,7 +16,7 @@ export const now = {
     "Kontrak berjalan on-chain di chain 97 dan lulus 37 test dengan coverage 100 persen di keempat sumbu, 31 unit test plus 6 invariant yang diuji terhadap 8192 panggilan acak. Inilah permukaan sekecil mungkin yang dibekukan untuk hackathon, dan menjadi pijakan setiap arah produk berikutnya.",
   items: [
     { ic: "ph:plug", tone: "flow", t: "Satu signer device", d: "Perangkat menandatangani Reading kWh secara kriptografis di titik sumber." },
-    { ic: "ph:cpu", tone: "volt", t: "Satu verifier AI otonom", d: "Agent menilai keabsahan reading lalu menuliskan alasannya on-chain, terdaftar di Identity Registry ERC-8004 sebagai agentId 2116." },
+    { ic: "ph:cpu", tone: "volt", t: "Satu agent verifier otonom", d: "Agent menilai keabsahan reading lalu menuliskan alasannya on-chain, terdaftar di Identity Registry ERC-8004 sebagai agentId 2116." },
     { ic: "ph:file-text", tone: "gold", t: "Satu attestation contract", d: "WattSettle.sol memverifikasi tanda tangan, menahan replay, dan mencatat hasilnya." },
     { ic: "ph:coins", tone: "watt", t: "Settlement loop dan fee on-chain", d: "Loop deterministik membayar produsen, memungut take-rate, dan menambah reputation counter." },
   ],
@@ -27,7 +27,7 @@ export const timeline = {
   eyebrow: "Timeline indikatif",
   title: "Ke mana rel ini tumbuh setelah Demo Day",
   lead:
-    "Lima fase berurut. Setiap fase menaikkan ceiling tanpa mengubah moat inti, yaitu hardware nyata, domain OT, last mile trust, customer, dan timing regulasi.",
+    "Lima fase berurut. Tiap fase menaikkan ceiling tanpa mengubah fondasinya: hardware nyata, domain OT, last mile trust, customer, dan timing regulasi.",
   phases: [
     { k: "Q4 2026", tone: "flow", t: "Harden core", d: "Merapikan scope hackathon dan menutup finalist window.", sifat: "Melanjutkan scope hackathon" },
     { k: "Q1 2027", tone: "gold", t: "Pilot berbayar", d: "Beachhead komersial dengan case study dan fee yang live.", sifat: "Komersialisasi beachhead" },
@@ -42,7 +42,7 @@ export const directions = {
   eyebrow: "Arah produk",
   title: "Empat arah di atas moat yang sama",
   lead:
-    "Semuanya duduk di atas kombinasi lima hal langka yang sama dan memetakan langsung ke tesis RWA yang sudah diinvestasikan para juri. Semua ini roadmap, bukan scope demo.",
+    "Keempatnya duduk di atas fondasi yang sama dan memetakan langsung ke tesis RWA. Semuanya roadmap, bukan scope yang sudah berjalan.",
   cards: [
     {
       ic: "ph:bank",
@@ -84,12 +84,12 @@ export const scope = {
   eyebrow: "Scope yang jujur",
   title: "Apa yang sudah ada, apa yang direncanakan",
   lead:
-    "Roadmap yang baik dimulai dari garis yang jelas antara yang dikerjakan sekarang dan yang ditunda. Menyeret satu pun item rencana ke critical path hackathon adalah pelanggaran disiplin.",
+    "Roadmap dimulai dari garis yang jelas antara yang sudah berjalan dan yang ditunda. Garis itu dijaga tegas, tidak ada item rencana yang ikut diklaim sudah jadi.",
   done: {
     t: "Sudah ada sekarang",
     items: [
       "Satu signer device menandatangani Reading kWh",
-      "Satu verifier AI otonom menulis attestation on-chain",
+      "Satu agent verifier otonom menulis Attestation on-chain",
       "Satu attestation contract dengan proteksi replay",
       "Satu settlement loop deterministik plus fee on-chain",
       "Satu reputation counter on-chain",

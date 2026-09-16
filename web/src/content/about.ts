@@ -1,12 +1,13 @@
 // Konten halaman Tentang (About & Contact). Register produk, framing positif.
-// Sumber: 01 Latar Belakang.md (moat 5 hal, kenapa SURIOTA) + site.ts.
+// Sumber: 01 Latar Belakang.md (lima keunggulan, kenapa SURIOTA) + site.ts.
 // Tidak mengada-ada, tidak ada teardown kompetitor.
+// Suara: protocol docs. Leksikon dikunci di docs/Voice.md.
 
 export const intro = {
   eyebrow: "Tentang",
-  title: "Perusahaan energi nyata yang membawa kilowatt-hour ke on-chain.",
+  title: "Dibangun perusahaan energi yang perangkatnya sudah terpasang",
   lead:
-    "WattSettle dibangun oleh SURIOTA (PT Surya Inovasi Prioritas), perusahaan energi dan IoT industrial yang sudah mengapalkan perangkat, melayani customer, dan menjalankan infrastruktur AI sendiri. Kami tidak mensimulasikan dunia fisik, kami sudah berada di dalamnya.",
+    "WattSettle dibangun SURIOTA (PT Surya Inovasi Prioritas), perusahaan energi dan IoT industrial. Kami mengapalkan perangkat, melayani customer, dan menjalankan infrastruktur AI sendiri, jadi dunia fisik di sini tidak disimulasikan.",
 } as const;
 
 export const builder = {
@@ -15,22 +16,22 @@ export const builder = {
   role: "CEO & Founder",
   company: "PT Surya Inovasi Prioritas (SURIOTA)",
   body:
-    "SURIOTA menguasai seluruh rantai dari silikon sampai settlement, mulai dari firmware gateway, produk monitoring energi, verifier AI otonom, hingga kontrak di rantai. Tidak ada oracle, facilitator, atau vendor eksternal yang harus diajak berbagi margin atau yang bisa memblokir alur.",
+    "SURIOTA memegang seluruh rantai dari firmware gateway sampai kontrak settlement: produk monitoring energi, agent verifier, dan kontrak di rantai. Tidak ada oracle, facilitator, atau vendor eksternal yang berdiri di jalur kritis atau ikut mengambil margin.",
 } as const;
 
-// Moat sebagai 5 keunggulan yang dipegang sekaligus. Framing positif tentang SURIOTA saja.
+// Lima keunggulan yang dipegang sekaligus. Framing positif tentang SURIOTA saja.
 export const moat = {
   eyebrow: "Kenapa SURIOTA",
-  title: "Lima hal langka yang kami pegang sekaligus.",
+  title: "Lima hal langka yang kami pegang sekaligus",
   lead:
-    "Setiap keunggulan secara terpisah biasa saja. Kekuatannya lahir karena kelimanya berada pada satu pemain yang sama, di celah yang jarang ditempati siapa pun.",
+    "Satu per satu, kelimanya biasa saja. Kekuatannya muncul karena semuanya berada pada satu pemain, di celah yang jarang ditempati.",
   items: [
     {
       no: "01",
       ic: "ph:cpu",
       tone: "flow",
       title: "Hardware nyata",
-      body: "SRT-MGATE-1210, gateway ESP32 yang sudah dijual dan ter-deploy, menjadi device signer yang menandatangani angka kWh di titik sumber.",
+      body: "SRT-MGATE-1210, gateway ESP32 yang sudah dijual dan terpasang, menjadi device signer yang menandatangani angka kWh di titik sumber.",
     },
     {
       no: "02",
@@ -44,35 +45,35 @@ export const moat = {
       ic: "ph:map-pin",
       tone: "gold",
       title: "Last-mile physical trust",
-      body: "Membuktikan kerja fisik butuh perangkat plus pengalaman lapangan, sesuatu yang tidak bisa diselesaikan dengan kode saja.",
+      body: "Membuktikan kerja fisik butuh perangkat dan jam terbang lapangan. Bagian ini tidak bisa diselesaikan dengan kode saja.",
     },
     {
       no: "04",
       ic: "ph:handshake",
       tone: "watt",
       title: "Customer dan distribusi",
-      body: "Sudah ada pihak yang memasang meter dan membayar. Produk berdiri di atas installed base yang nyata, tanpa cold-start dari nol.",
+      body: "Sudah ada pihak yang memasang meter dan membayar. Produk berdiri di atas installed base yang nyata, tanpa cold start dari nol.",
     },
     {
       no: "05",
       ic: "ph:buildings",
       tone: "flow",
       title: "Timing regulasi",
-      body: "CBAM dan supervisi kripto OJK sama-sama aktif sejak Januari 2026, jendela yang tepat bagi perusahaan berlisensi yang men-settle energi metered on-chain.",
+      body: "CBAM dan supervisi kripto OJK sama-sama aktif sejak Januari 2026, jendela yang tepat bagi perusahaan berlisensi yang men-settle energi terukur on-chain.",
     },
   ],
 } as const;
 
 export const links = {
   eyebrow: "Tautan dan bukti",
-  title: "Semuanya terbuka untuk diperiksa.",
+  title: "Semuanya terbuka untuk diperiksa",
   lead:
-    "Kode sumber, kontrak di rantai, dan demo interaktif tersedia agar setiap klaim bisa dibuktikan langsung, bukan sekadar dipercaya.",
+    "Kode sumber, kontrak di rantai, dan demo interaktif tersedia supaya tiap klaim di situs ini bisa diperiksa langsung.",
 } as const;
 
 export const contact = {
   eyebrow: "Kontak",
-  title: "Mari bicara.",
+  title: "Mari bicara",
   body:
-    "Untuk kemitraan, pertanyaan teknis, atau peluang menaruh energi metered on-chain, hubungi builder langsung.",
+    "Untuk kemitraan, pertanyaan teknis, atau rencana menaruh energi terukur on-chain, hubungi builder langsung.",
 } as const;
